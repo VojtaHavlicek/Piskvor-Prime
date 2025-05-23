@@ -9,8 +9,7 @@ import SpriteKit
 import GameplayKit
 
 
-var current_player = Player.X
-var board_state:[[Player]] = Array(repeating: Array(repeating: Player.empty, count: BOARD_SIZE),  count:BOARD_SIZE)
+
 
 class Tile:SKSpriteNode {
     public var coordinates:(Int, Int)
@@ -30,6 +29,8 @@ class Tile:SKSpriteNode {
 class GameScene: SKScene {
     
     private var board:SKTileMapNode?
+    private var current_player = Player.X
+    private var board_state:[[Player]] = Array(repeating: Array(repeating: Player.empty, count: BOARD_SIZE),  count:BOARD_SIZE)
     
     override func didMove(to view: SKView) 
     {
@@ -81,9 +82,16 @@ class GameScene: SKScene {
                     board_state = applyMove(state: board_state, move: move, player: .X)
                     
                     // Check for win condition
-                    if checkWinCondition(state: board_state) != .empty {
-                        print("Player X won")
+                    var winner:Player? = checkWinCondition(state: board_state)
+                    
+                    if winner != nil {
+                        print("Winner \(winner!)")
                     }
+                    
+                    if checkDraw(state: board_state) {
+                        print("Draw!")
+                    }
+                    
                     
                     // --------- AI -----------
                     // Switches the player
@@ -101,8 +109,13 @@ class GameScene: SKScene {
                     board_state = applyMove(state: board_state, move: move, player: .O)
                     
                     // Check for win condition
-                    if checkWinCondition(state: board_state) != .empty {
-                        print("Player O won")
+                    winner = checkWinCondition(state: board_state)
+                    if winner != nil {
+                        print("Winner \(winner!)")
+                    }
+                    
+                    if checkDraw(state: board_state) {
+                        print("Draw !")
                     }
                     
                     // Switch the player
@@ -110,9 +123,6 @@ class GameScene: SKScene {
                 }
             }
         }
-        
-        
-       
     }
     
     func touchMoved(toPoint pos : CGPoint) {

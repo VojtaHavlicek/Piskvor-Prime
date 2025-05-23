@@ -7,10 +7,10 @@
 
 import Foundation
 
-let BOARD_SIZE = 8
+let BOARD_SIZE = 6
 let L = 5
 let WIN_UTIL = 100000
-let MAX_DEPTH = 1
+let MAX_DEPTH = 1 // It's super shallow, but it plays well anyway?
 
 enum Player: String {
     case X = "X"
@@ -236,13 +236,16 @@ func findBestMove(state: [[Player]], player: Player) -> Move? {
     return bestMove
 }
 
-func checkWinCondition(state:[[Player]]) -> Player
+func checkWinCondition(state:[[Player]]) -> Player?
 {
+    // Wincond patterns:
     let patterns:[([Player], Player)] = [(Array(repeating: .X, count: L), .X), (Array(repeating: .O, count: L), .O)]
+    
     let directions = [(0,1),(1,0),(1,1),(1,-1)]
     for row in 0..<BOARD_SIZE {
         for col in 0..<BOARD_SIZE {
             for (dx, dy) in directions {
+                // Winconds:
                 for (pattern, winner) in patterns {
                     var matched = true
                     for i in 0..<pattern.count {
@@ -261,5 +264,39 @@ func checkWinCondition(state:[[Player]]) -> Player
         }
     }
     
-    return Player.empty
+    return nil
+}
+
+func checkDraw(state:[[Player]]) -> Bool {
+    // Draw: if you don't find this pattern, it's a draw
+    let directions = [(0,1),(1,0),(1,1),(1,-1)]
+    for row in 0..<BOARD_SIZE {
+        for col in 0..<BOARD_SIZE {
+            for (dx, dy) in directions {
+                
+                var types:Set<Player> = Set()
+                var steps = 0
+                
+                // Winconds:
+                for i in 0..<L {
+                    let x = col + i * dx
+                    let y = row + i * dy
+                    
+                    if x < 0 || x >= BOARD_SIZE || y < 0 || y >= BOARD_SIZE {
+                        break
+                    }
+                    
+                    types.insert(state[y][x])
+                    steps += 1
+                }
+                
+                // Check if the streak is playable
+                if types.intersection([.O, .X]).count < 2 && steps == L{
+                    return false
+                }
+            }
+        }
+    }
+    
+    return true
 }
