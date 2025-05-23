@@ -79,7 +79,13 @@ class GameScene: SKScene {
                     
                     // Check that the information is sotred as row/col
                     board_state = applyMove(state: board_state, move: move, player: .X)
- 
+                    
+                    // Check for win condition
+                    if checkWinCondition(state: board_state) != .empty {
+                        print("Player X won")
+                    }
+                    
+                    // --------- AI -----------
                     // Switches the player
                     current_player = .O
                     
@@ -94,9 +100,13 @@ class GameScene: SKScene {
                     
                     board_state = applyMove(state: board_state, move: move, player: .O)
                     
+                    // Check for win condition
+                    if checkWinCondition(state: board_state) != .empty {
+                        print("Player O won")
+                    }
+                    
                     // Switch the player
                     current_player = .X
-                    
                 }
             }
         }

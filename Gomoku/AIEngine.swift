@@ -235,3 +235,31 @@ func findBestMove(state: [[Player]], player: Player) -> Move? {
 
     return bestMove
 }
+
+func checkWinCondition(state:[[Player]]) -> Player
+{
+    let patterns:[([Player], Player)] = [(Array(repeating: .X, count: L), .X), (Array(repeating: .O, count: L), .O)]
+    let directions = [(0,1),(1,0),(1,1),(1,-1)]
+    for row in 0..<BOARD_SIZE {
+        for col in 0..<BOARD_SIZE {
+            for (dx, dy) in directions {
+                for (pattern, winner) in patterns {
+                    var matched = true
+                    for i in 0..<pattern.count {
+                        let x = col + i * dx
+                        let y = row + i * dy
+                        if x < 0 || x >= BOARD_SIZE || y < 0 || y >= BOARD_SIZE || state[y][x] != pattern[i] {
+                            matched = false
+                            break
+                        }
+                    }
+                    if matched {
+                        return winner
+                    }
+                }
+            }
+        }
+    }
+    
+    return Player.empty
+}
