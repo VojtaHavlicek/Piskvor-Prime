@@ -5,9 +5,12 @@
 //  Created by Vojta Havlicek on 2/2/25.
 //
 
+// TODO: switch this to MCTS, but use the same heuristics?
+// Works well
+
 import Foundation
 
-let BOARD_SIZE = 6
+let BOARD_SIZE = 8
 let L = 5
 let WIN_UTIL = 100000
 let MAX_DEPTH = 1 // It's super shallow, but it plays well anyway?
@@ -236,7 +239,7 @@ func findBestMove(state: [[Player]], player: Player) -> Move? {
     return bestMove
 }
 
-func checkWinCondition(state:[[Player]]) -> Player?
+func checkWinCondition(state:[[Player]]) -> (Player, [(Int,Int)])?
 {
     // Wincond patterns:
     let patterns:[([Player], Player)] = [(Array(repeating: .X, count: L), .X), (Array(repeating: .O, count: L), .O)]
@@ -248,6 +251,7 @@ func checkWinCondition(state:[[Player]]) -> Player?
                 // Winconds:
                 for (pattern, winner) in patterns {
                     var matched = true
+                    var streak:[(Int,Int)] = []
                     for i in 0..<pattern.count {
                         let x = col + i * dx
                         let y = row + i * dy
@@ -255,9 +259,11 @@ func checkWinCondition(state:[[Player]]) -> Player?
                             matched = false
                             break
                         }
+                        
+                        streak.append((y,x))
                     }
                     if matched {
-                        return winner
+                        return (winner, streak)
                     }
                 }
             }

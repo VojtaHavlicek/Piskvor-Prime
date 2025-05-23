@@ -8,7 +8,12 @@
 import SpriteKit
 import GameplayKit
 
+enum GameState:String
+{
+    case Playing, Win, Draw
+}
 
+var game_state:GameState = .Playing
 
 
 class Tile:SKSpriteNode {
@@ -23,7 +28,6 @@ class Tile:SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
 
 
 class GameScene: SKScene {
@@ -53,8 +57,6 @@ class GameScene: SKScene {
                 dot.position = board!.centerOfTile(atColumn: col, row: row)
                 dot.isUserInteractionEnabled = false
                 addChild(dot)
-                
-                //print("Adding a tile at: \((row, col))")
             }
         }
     }
@@ -66,7 +68,13 @@ class GameScene: SKScene {
         for node in nodes_at_point {
             if node is Tile {
                 let tile = node as! Tile
-                // print("touched tile at \(tile.coordinates)")
+                
+                
+                // Check if I am clicking on an empty tile. If not, pass.
+                if board_state[tile.coordinates.0][tile.coordinates.1] != .empty{
+                    print("Placed already")
+                    break
+                }
                 
                 // Resolve the player logic
                 if current_player == Player.X {
@@ -77,15 +85,21 @@ class GameScene: SKScene {
                     addChild(stone)
                     
                     var move = Move(row: tile.coordinates.0, col: tile.coordinates.1)
-                    
-                    // Check that the information is sotred as row/col
                     board_state = applyMove(state: board_state, move: move, player: .X)
                     
                     // Check for win condition
-                    var winner:Player? = checkWinCondition(state: board_state)
-                    
-                    if winner != nil {
-                        print("Winner \(winner!)")
+                    if let (winner, streak) = checkWinCondition(state: board_state) {
+                        print("winner \(winner)")
+                        // highlight the streak here
+                        
+                        for (row, col) in streak {
+                            
+                            let dot:SKSpriteNode = SKSpriteNode(color: .yellow, size: CGSize(width: 10, height: 10) )
+                            dot.position = board!.centerOfTile(atColumn: col, row: row)
+                            dot.isUserInteractionEnabled = false
+                            addChild(dot)
+                            
+                        }
                     }
                     
                     if checkDraw(state: board_state) {
@@ -109,9 +123,18 @@ class GameScene: SKScene {
                     board_state = applyMove(state: board_state, move: move, player: .O)
                     
                     // Check for win condition
-                    winner = checkWinCondition(state: board_state)
-                    if winner != nil {
-                        print("Winner \(winner!)")
+                    if let (winner, streak) = checkWinCondition(state: board_state) {
+                        print("winner \(winner)")
+                        // highlight the streak here
+                        
+                        for (row, col) in streak {
+                            
+                            let dot:SKSpriteNode = SKSpriteNode(color: .yellow, size: CGSize(width: 10, height: 10) )
+                            dot.position = board!.centerOfTile(atColumn: col, row: row)
+                            dot.isUserInteractionEnabled = false
+                            addChild(dot)
+                            
+                        }
                     }
                     
                     if checkDraw(state: board_state) {
