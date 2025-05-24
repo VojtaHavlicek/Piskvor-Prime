@@ -19,9 +19,10 @@ var game_state:GameState = .Playing
 class Tile:SKSpriteNode {
     public var coordinates:(Int, Int)
     
-    init(color:UIColor, size:CGSize, coordinates: (Int, Int)) {
+    
+    init(texture:SKTexture? = nil, color:UIColor, size:CGSize, coordinates: (Int, Int)) {
         self.coordinates = coordinates
-        super.init(texture: nil, color: color, size: size)
+        super.init(texture: texture, color: color, size: size)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -41,22 +42,28 @@ class GameScene: SKScene {
         // Build the game board
         board = (self.childNode(withName: "board") as! SKTileMapNode)
         
-        // Add tiles
+        let sprites = SKTileSet(named: "sprites")
+        var tile_groups:[String:SKTileGroup] = [:]
+        
+        // Add tiles. TODO: do this on the tilemap directly.
         for row in 0..<BOARD_SIZE {
             for col in 0..<BOARD_SIZE {
-                let tile:Tile = Tile(color: .white,
+                
+                var texture_name = "light"
+                
+                
+                // TODO: correct this
+                if (col + row*(BOARD_SIZE-1)) % 2 == 0 {
+                   texture_name = "dark"
+                }
+                
+                let tile:Tile = Tile(texture: SKTexture(imageNamed: texture_name),
+                                     color: .clear,
                                      size: board!.tileSize,
                                      coordinates: (row, col))
                 tile.position = board!.centerOfTile(atColumn: col, row: row)
+                tile.zPosition = 0
                 addChild(tile)
-                
-                let w = 2.0*board!.tileSize.width / 3.0
-                let h = 2.0*board!.tileSize.height / 3.0
-                
-                let dot:SKSpriteNode = SKSpriteNode(color: .gray, size: CGSize(width: w, height: h) )
-                dot.position = board!.centerOfTile(atColumn: col, row: row)
-                dot.isUserInteractionEnabled = false
-                addChild(dot)
             }
         }
     }
@@ -80,8 +87,9 @@ class GameScene: SKScene {
                 if current_player == Player.X {
                     
                     // Places the stone
-                    var stone = SKSpriteNode(color: .red, size: CGSize(width: tile.size.width, height: tile.size.width))
+                    var stone = SKSpriteNode(texture: SKTexture(imageNamed: "blue"), size: CGSize(width: tile.size.width, height: tile.size.width))
                     stone.position = tile.position
+                    stone.zPosition = 10
                     addChild(stone)
                     
                     var move = Move(row: tile.coordinates.0, col: tile.coordinates.1)
@@ -116,8 +124,10 @@ class GameScene: SKScene {
                     print("Suggested move: \(move)")
                     
                     // Pack this into a function
-                    stone = SKSpriteNode(color: .blue, size: CGSize(width: tile.size.width, height: tile.size.width))
+                    stone = SKSpriteNode(texture: SKTexture(imageNamed: "red"), size: CGSize(width: tile.size.width, height: tile.size.width))
                     stone.position = board!.centerOfTile(atColumn: move.col, row: move.row)
+                    
+                    stone.zPosition = 10
                     addChild(stone)
                     
                     board_state = applyMove(state: board_state, move: move, player: .O)
@@ -132,7 +142,10 @@ class GameScene: SKScene {
                             let dot:SKSpriteNode = SKSpriteNode(color: .yellow, size: CGSize(width: 10, height: 10) )
                             dot.position = board!.centerOfTile(atColumn: col, row: row)
                             dot.isUserInteractionEnabled = false
+                            dot.zPosition = 12
                             addChild(dot)
+                            
+                            
                             
                         }
                     }

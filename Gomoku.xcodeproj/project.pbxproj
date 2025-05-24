@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		7F732BF72DDD4B820079BA4E /* BoardTileSet.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7F732BF62DDD4B820079BA4E /* BoardTileSet.sks */; };
+		7F732BF72DDD4B820079BA4E /* sprites.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7F732BF62DDD4B820079BA4E /* sprites.sks */; };
 		7F8D7BFF2D47575A00B5E1BD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8D7BFE2D47575A00B5E1BD /* AppDelegate.swift */; };
 		7F8D7C012D47575A00B5E1BD /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7F8D7C002D47575A00B5E1BD /* GameScene.sks */; };
 		7F8D7C032D47575A00B5E1BD /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7F8D7C022D47575A00B5E1BD /* Actions.sks */; };
@@ -40,7 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		7F732BF62DDD4B820079BA4E /* BoardTileSet.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = BoardTileSet.sks; sourceTree = "<group>"; };
+		7F732BF62DDD4B820079BA4E /* sprites.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = sprites.sks; sourceTree = "<group>"; };
 		7F8D7BFB2D47575A00B5E1BD /* Gomoku.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gomoku.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F8D7BFE2D47575A00B5E1BD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7F8D7C002D47575A00B5E1BD /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -115,7 +115,7 @@
 				7F8D7C0B2D47575B00B5E1BD /* Assets.xcassets */,
 				7F8D7C0D2D47575B00B5E1BD /* LaunchScreen.storyboard */,
 				7F8D7C312D500C7F00B5E1BD /* AIEngine.swift */,
-				7F732BF62DDD4B820079BA4E /* BoardTileSet.sks */,
+				7F732BF62DDD4B820079BA4E /* sprites.sks */,
 			);
 			path = Gomoku;
 			sourceTree = "<group>";
@@ -241,7 +241,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7F732BF72DDD4B820079BA4E /* BoardTileSet.sks in Resources */,
+				7F732BF72DDD4B820079BA4E /* sprites.sks in Resources */,
 				7F8D7C012D47575A00B5E1BD /* GameScene.sks in Resources */,
 				7F8D7C0A2D47575A00B5E1BD /* Base in Resources */,
 				7F8D7C0C2D47575B00B5E1BD /* Assets.xcassets in Resources */,
