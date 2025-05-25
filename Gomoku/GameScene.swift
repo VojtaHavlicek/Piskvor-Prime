@@ -34,16 +34,21 @@ class Tile:SKSpriteNode {
 class GameScene: SKScene {
     
     private var board:SKTileMapNode?
+    private var animation_state_machine:AnimationStateMachine?
     private var current_player = Player.X
     private var board_state:[[Player]] = Array(repeating: Array(repeating: Player.empty, count: BOARD_SIZE),  count:BOARD_SIZE)
     
-    override func didMove(to view: SKView) 
-    {
+    required init?(coder aDecoder: NSCoder) {
         // Build the game board
-        board = (self.childNode(withName: "board") as! SKTileMapNode)
+        super.init(coder: aDecoder)
         
-        let sprites = SKTileSet(named: "sprites")
-        var tile_groups:[String:SKTileGroup] = [:]
+        board = (self.childNode(withName: "board") as! SKTileMapNode)
+        // animation_state_machine = AnimationStateMachine(scene:self)
+    }
+    
+    override func didMove(to view: SKView)
+    {
+       
         
         // Add tiles. TODO: do this on the tilemap directly.
         for row in 0..<BOARD_SIZE {
@@ -62,6 +67,10 @@ class GameScene: SKScene {
                                      size: board!.tileSize,
                                      coordinates: (row, col))
                 tile.position = board!.centerOfTile(atColumn: col, row: row)
+                
+                // TODO: clean up
+                tile.position.x += board!.position.x
+                tile.position.y += board!.position.y
                 tile.zPosition = 0
                 addChild(tile)
             }
@@ -126,7 +135,8 @@ class GameScene: SKScene {
                     // Pack this into a function
                     stone = SKSpriteNode(texture: SKTexture(imageNamed: "red"), size: CGSize(width: tile.size.width, height: tile.size.width))
                     stone.position = board!.centerOfTile(atColumn: move.col, row: move.row)
-                    
+                    stone.position.x += board!.position.x
+                    stone.position.y += board!.position.y
                     stone.zPosition = 10
                     addChild(stone)
                     
@@ -141,6 +151,8 @@ class GameScene: SKScene {
                             
                             let dot:SKSpriteNode = SKSpriteNode(color: .yellow, size: CGSize(width: 10, height: 10) )
                             dot.position = board!.centerOfTile(atColumn: col, row: row)
+                            dot.position.x += board!.position.x
+                            dot.position.y += board!.position.y
                             dot.isUserInteractionEnabled = false
                             dot.zPosition = 12
                             addChild(dot)

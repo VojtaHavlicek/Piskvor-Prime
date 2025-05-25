@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7F4DBD2F2DE16A39004973C9 /* AnimationStateMachine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F4DBD2E2DE16A39004973C9 /* AnimationStateMachine.swift */; };
 		7F732BF72DDD4B820079BA4E /* sprites.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7F732BF62DDD4B820079BA4E /* sprites.sks */; };
 		7F8D7BFF2D47575A00B5E1BD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8D7BFE2D47575A00B5E1BD /* AppDelegate.swift */; };
 		7F8D7C012D47575A00B5E1BD /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 7F8D7C002D47575A00B5E1BD /* GameScene.sks */; };
@@ -40,6 +41,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7F4DBD2E2DE16A39004973C9 /* AnimationStateMachine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimationStateMachine.swift; sourceTree = "<group>"; };
 		7F732BF62DDD4B820079BA4E /* sprites.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = sprites.sks; sourceTree = "<group>"; };
 		7F8D7BFB2D47575A00B5E1BD /* Gomoku.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gomoku.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7F8D7BFE2D47575A00B5E1BD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -116,6 +118,7 @@
 				7F8D7C0D2D47575B00B5E1BD /* LaunchScreen.storyboard */,
 				7F8D7C312D500C7F00B5E1BD /* AIEngine.swift */,
 				7F732BF62DDD4B820079BA4E /* sprites.sks */,
+				7F4DBD2E2DE16A39004973C9 /* AnimationStateMachine.swift */,
 			);
 			path = Gomoku;
 			sourceTree = "<group>";
@@ -273,6 +276,7 @@
 			files = (
 				7F8D7C052D47575A00B5E1BD /* GameScene.swift in Sources */,
 				7F8D7C322D500C7F00B5E1BD /* AIEngine.swift in Sources */,
+				7F4DBD2F2DE16A39004973C9 /* AnimationStateMachine.swift in Sources */,
 				7F8D7C072D47575A00B5E1BD /* GameViewController.swift in Sources */,
 				7F8D7BFF2D47575A00B5E1BD /* AppDelegate.swift in Sources */,
 			);
