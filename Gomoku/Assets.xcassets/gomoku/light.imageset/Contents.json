@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "tile_light.png",
+      "filename" : "light.png",
       "idiom" : "universal",
       "scale" : "1x"
     },

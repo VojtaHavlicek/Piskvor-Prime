@@ -33,7 +33,7 @@ var gameStateCache = [String: Player?]()
 var evaluateStateCache = [String: Int]()
 var heuristicCache = [String: Int]()
 
-func getMoves(state: [[Player]], player:Player, topK: Int = 10) -> [Move] {
+func getMoves(state: [[Player]], player:Player, topK: Int = 3) -> [Move] {
     let key = state.flatMap { $0.map { $0.rawValue } }.joined()+"_\(player.rawValue)"
     if let cached = movesCache[key] {
         return cached
