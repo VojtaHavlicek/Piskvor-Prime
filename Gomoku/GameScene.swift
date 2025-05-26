@@ -34,7 +34,7 @@ class Tile:SKSpriteNode {
 class GameScene: SKScene {
     
     private var board:SKTileMapNode?
-    private var animation_state_machine:AnimationStateMachine?
+   //   private var animation_state_machine:AnimationStateMachine?
     private var current_player = Player.X
     private var board_state:[[Player]] = Array(repeating: Array(repeating: Player.empty, count: BOARD_SIZE),  count:BOARD_SIZE)
     

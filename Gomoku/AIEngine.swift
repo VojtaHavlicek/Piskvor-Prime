@@ -59,6 +59,9 @@ func getMoves(state: [[Player]]) -> [Move] {
             }
         }
     }
+    
+    // Subsample moves?
+    
 
     let result = allEmpty ? (0..<BOARD_SIZE).flatMap { row in (0..<BOARD_SIZE).map { col in Move(row: row, col: col) } } : Array(moves)
     movesCache[key] = result
@@ -126,7 +129,7 @@ func minimax(state: [[Player]], player: Player, depth: Int, alpha: inout Int, be
         return evaluateState(state: state, player: player)
     }
 
-    let moves = getMoves(state: state)
+    let moves = getMoves(state: state) // ??? TODO: Subsample the number of moves?
     if player == .X {
         var maxEval = Int.min
         for move in moves {
