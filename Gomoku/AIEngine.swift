@@ -10,14 +10,14 @@
 
 import Foundation
 
-let BOARD_SIZE = 8
+let BOARD_SIZE = 9
 let L = 5
 let WIN_UTIL = 100000
 let MAX_DEPTH = 1 // It's super shallow, but it plays well anyway?
 
 enum Player: String {
     case X = "X"
-    case O = "O"
+    case O = "O" // AI, MINIMIZING
     case empty = " "
 }
 
@@ -33,13 +33,13 @@ var gameStateCache = [String: Player?]()
 var evaluateStateCache = [String: Int]()
 var heuristicCache = [String: Int]()
 
-func getMoves(state: [[Player]]) -> [Move] {
-    let key = state.flatMap { $0.map { $0.rawValue } }.joined()
+func getMoves(state: [[Player]], player:Player, topK: Int = 10) -> [Move] {
+    let key = state.flatMap { $0.map { $0.rawValue } }.joined()+"_\(player.rawValue)"
     if let cached = movesCache[key] {
         return cached
     }
 
-    let radius = L / 2
+    let radius = 3
     var allEmpty = true
     var moves = Set<Move>()
 
@@ -51,7 +51,10 @@ func getMoves(state: [[Player]]) -> [Move] {
                     for s in -radius..<radius {
                         let newRow = row + r
                         let newCol = col + s
-                        if newRow >= 0 && newRow < BOARD_SIZE && newCol >= 0 && newCol < BOARD_SIZE && state[newRow][newCol] == .empty {
+                        guard newRow >= 0, newRow < BOARD_SIZE, newCol >= 0, newCol < BOARD_SIZE else { continue }
+                                
+                        if state[newRow][newCol] == .empty {
+                            let move = Move(row: newRow, col: newCol)
                             moves.insert(Move(row: newRow, col: newCol))
                         }
                     }
@@ -61,9 +64,27 @@ func getMoves(state: [[Player]]) -> [Move] {
     }
     
     // Subsample moves?
+    let result:[Move]
     
-
-    let result = allEmpty ? (0..<BOARD_SIZE).flatMap { row in (0..<BOARD_SIZE).map { col in Move(row: row, col: col) } } : Array(moves)
+    if allEmpty {
+        result = (0..<BOARD_SIZE).flatMap { row in (0..<BOARD_SIZE).map { col in Move(row: row, col: col) } }
+    } else {
+        let scored = moves.map { move in
+                    let newState = applyMove(state: state, move: move, player: player)
+                    let score = heuristic(state: newState, player: player)
+                    return (move, score)
+                }
+        
+        let sorted: [(Move, Int)]
+        if player == .X {
+            sorted = scored.sorted {$0.1 > $1.1}
+        }
+        else {
+            sorted = scored.sorted {$0.1 < $1.1}
+        }
+        
+        result = sorted.prefix(topK).map {$0.0}
+    }
     movesCache[key] = result
     return result
 }
@@ -79,6 +100,45 @@ func applyMove(state: [[Player]], move: Move, player: Player) -> [[Player]] {
     applyMoveCache[key] = newState
     return newState
 }
+
+func policyScore(state: [[Player]], move: Move, player: Player) -> Int {
+    // Policy scoring
+    /*let opponent: Player = (player == .X) ? .O : .X
+    var score = 0
+
+    let directions = [(0, 1), (1, 0), (1, 1), (1, -1)]
+    let (r, c) = (move.row, move.col)
+
+    for (dr, dc) in directions {
+        var countPlayer = 0
+        var countOpponent = 0
+
+        for i in -3...3 {
+            let nr = r + i * dr
+            let nc = c + i * dc
+            guard nr >= 0 && nr < BOARD_SIZE && nc >= 0 && nc < BOARD_SIZE else { continue }
+
+            switch state[nr][nc] {
+            case player: countPlayer += 1
+            case opponent: countOpponent += 1
+            default: break
+            }
+        }
+
+        // Favor extensions of your lines and blocking opponent lines
+        score += countPlayer * 10
+        score += countOpponent * 6
+    }*/
+    
+
+    // Small bias toward center of board
+    //let center = BOARD_SIZE / 2
+    //let distToCenter = abs(r - center) + abs(c - center)
+    //score += (BOARD_SIZE * 2 - distToCenter)
+
+    return evaluateState(state: state, player: player)
+}
+
 
 func getGameState(state: [[Player]]) -> Player? {
     let key = state.flatMap { $0.map { $0.rawValue } }.joined()
@@ -129,7 +189,7 @@ func minimax(state: [[Player]], player: Player, depth: Int, alpha: inout Int, be
         return evaluateState(state: state, player: player)
     }
 
-    let moves = getMoves(state: state) // ??? TODO: Subsample the number of moves?
+    let moves = getMoves(state: state, player: player) // ??? TODO: Subsample the number of moves?
     if player == .X {
         var maxEval = Int.min
         for move in moves {
@@ -222,7 +282,7 @@ func heuristic(state: [[Player]], player: Player) -> Int {
 func findBestMove(state: [[Player]], player: Player) -> Move? {
     var bestScore = player == .X ? Int.min : Int.max
     var bestMove: Move? = nil
-    let moves = getMoves(state: state)
+    let moves = getMoves(state: state, player: player)
 
     for move in moves {
         let newState = applyMove(state: state, move: move, player: player)

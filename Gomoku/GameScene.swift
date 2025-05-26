@@ -58,7 +58,7 @@ class GameScene: SKScene {
                 
                 
                 // TODO: correct this
-                if (col + row*(BOARD_SIZE-1)) % 2 == 0 {
+                if (col + row) % 2 == 0 {
                    texture_name = "dark"
                 }
                 
