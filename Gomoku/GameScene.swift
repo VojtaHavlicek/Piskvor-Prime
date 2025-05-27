@@ -8,12 +8,45 @@
 import SpriteKit
 import GameplayKit
 
-enum GameState:String
-{
-    case Playing, Win, Draw
+class Stone:SKSpriteNode {
+    // Places the stone
+    
+    var flash_textures:[SKTexture]
+    var flash_animation:SKAction?
+    
+    init(size:CGSize, atlas:String) {
+        let atlas = SKTextureAtlas(named: atlas)
+        let textures = atlas.textureNames.sorted().map {atlas.textureNamed($0)}
+        
+        // Flash textures
+        flash_textures = atlas.textureNames.filter {$0.contains("flash")}.sorted().map {atlas.textureNamed($0)}
+        
+        if Bool.random() {
+            flash_textures.reverse()
+        }
+        
+        if !flash_textures.isEmpty {
+            let sequence = SKAction.sequence([SKAction.wait(forDuration: TimeInterval(Float.random(in: 4...8))), SKAction.animate(with: flash_textures, timePerFrame: 0.03)])
+            flash_animation = SKAction.repeatForever(sequence)
+        }
+        
+        super.init(texture: textures[0], color: .clear, size: size)
+        zPosition = 10
+        
+        if flash_animation != nil {
+            run(flash_animation!)
+        }
+        
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    
+    
 }
-
-var game_state:GameState = .Playing
 
 
 class Tile:SKSpriteNode {
@@ -54,15 +87,27 @@ class GameScene: SKScene {
         for row in 0..<BOARD_SIZE {
             for col in 0..<BOARD_SIZE {
                 
-                var texture_name = "light"
-                
+                var texture_atlas_name = "light"
                 
                 // TODO: correct this
                 if (col + row) % 2 == 0 {
-                   texture_name = "dark"
+                   texture_atlas_name = "dark"
                 }
                 
-                let tile:Tile = Tile(texture: SKTexture(imageNamed: texture_name),
+                let atlas = SKTextureAtlas(named: texture_atlas_name)
+                let random_texture:SKTexture
+                let textures = atlas.textureNames.sorted().map {atlas.textureNamed($0)}
+                
+                if Float.random(in: 0..<1) > 0.95 {
+                    random_texture = textures[1...].randomElement()!
+                } else {
+                    random_texture = textures[0]
+                    print(atlas.textureNames[0])
+                }
+                
+               
+                
+                let tile:Tile = Tile(texture: random_texture,
                                      color: .clear,
                                      size: board!.tileSize,
                                      coordinates: (row, col))
@@ -96,7 +141,7 @@ class GameScene: SKScene {
                 if current_player == Player.X {
                     
                     // Places the stone
-                    var stone = SKSpriteNode(texture: SKTexture(imageNamed: "blue"), size: CGSize(width: tile.size.width, height: tile.size.width))
+                    var stone = Stone(size: tile.size, atlas: "blue")
                     stone.position = tile.position
                     stone.zPosition = 10
                     addChild(stone)
@@ -133,7 +178,7 @@ class GameScene: SKScene {
                     print("Suggested move: \(move)")
                     
                     // Pack this into a function
-                    stone = SKSpriteNode(texture: SKTexture(imageNamed: "red"), size: CGSize(width: tile.size.width, height: tile.size.width))
+                    stone = Stone(size: tile.size, atlas: "red")
                     stone.position = board!.centerOfTile(atColumn: move.col, row: move.row)
                     stone.position.x += board!.position.x
                     stone.position.y += board!.position.y
@@ -156,8 +201,6 @@ class GameScene: SKScene {
                             dot.isUserInteractionEnabled = false
                             dot.zPosition = 12
                             addChild(dot)
-                            
-                            
                             
                         }
                     }

@@ -237,12 +237,18 @@ func heuristic(state: [[Player]], player: Player) -> Int {
     let patterns: [([Player], Int)] = [
         ([.X, .X, .X, .X, .X], WIN_UTIL),
         ([.O, .O, .O, .O, .O], -WIN_UTIL),
-        ([.empty, .X, .X, .X, .X, .empty], WIN_UTIL / 10),
-        ([.empty, .O, .O, .O, .O, .empty], -WIN_UTIL / 10),
-        ([.empty, .X, .X, .X, .X], WIN_UTIL / 11),
-        ([.empty, .O, .O, .O, .O], -WIN_UTIL / 11),
-        ([.X, .X, .X, .X, .empty], WIN_UTIL / 11),
-        ([.O, .O, .O, .O, .empty], -WIN_UTIL / 11),
+        ([.empty, .X, .X, .X, .X, .empty], WIN_UTIL/2),
+        ([.empty, .O, .O, .O, .O, .empty], -WIN_UTIL/2),
+        ([.X, .X, .empty, .X, .X], WIN_UTIL/20),
+        ([.O, .O, .empty, .O, .O], -WIN_UTIL/20), // Add all of those
+        ([.X, .empty, .X, .X, .X], WIN_UTIL/20),
+        ([.O, .empty, .O, .O, .O], -WIN_UTIL/20), // Add all of those
+        ([.X, .X, .X, .empty, .X], WIN_UTIL/20),
+        ([.O, .O, .O, .empty, .O], -WIN_UTIL/20), // Add all of those
+        ([.empty, .X, .X, .X, .X], WIN_UTIL / 10),
+        ([.empty, .O, .O, .O, .O], -WIN_UTIL / 10),
+        ([.X, .X, .X, .X, .empty], WIN_UTIL / 10),
+        ([.O, .O, .O, .O, .empty], -WIN_UTIL / 10),
         ([.empty, .X, .X, .X, .empty], WIN_UTIL / 100),
         ([.empty, .O, .O, .O, .empty], -WIN_UTIL / 100),
         ([.empty, .X, .X, .empty], WIN_UTIL / 1000),
