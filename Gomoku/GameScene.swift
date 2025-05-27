@@ -186,44 +186,49 @@ class GameScene: SKScene {
                     // Switches the player
                     current_player = .O
                     
-                    // Run AI
-                    move = findBestMove(state: board_state, player: .O)!
-                    print("Suggested move: \(move)")
-                    
-                    // Pack this into a function
-                    stone = Stone(size: tile.size, atlas: "red")
-                    stone.position = board!.centerOfTile(atColumn: move.col, row: move.row)
-                    stone.position.x += board!.position.x
-                    stone.position.y += board!.position.y
-                    stone.zPosition = 10
-                    addChild(stone)
-                    
-                    board_state = applyMove(state: board_state, move: move, player: .O)
-                    stones[move] = stone // Add stone
-                    
-                    // Check for win condition
-                    if let (winner, streak) = checkWinCondition(state: board_state) {
-                        print("winner \(winner). Running highlight animation")
-                        // highlight the streak here
+                    isUserInteractionEnabled = false
+                    DispatchQueue.global(qos: .userInitiated).async { [self] in
+                        guard let move = findBestMove(state: board_state, player: .O) else { return }
                         
-                        for (row, col) in streak {
-                            if let stone = stones[Move(row:row, col:col)] {
-                                print("found the stone at \(row),\(col)")
-                                stone!.removeAllActions()
-                                stone!.run(stone!.highlight_animation!)
+                        
+                        DispatchQueue.main.async {
+                            [self] in
+                            print("Suggested move: \(move)")
+                    
+                            
+                            // Pack this into a function
+                            let stone = Stone(size: tile.size, atlas: "red")
+                            stone.position = board!.centerOfTile(atColumn: move.col, row: move.row)
+                            stone.position.x += board!.position.x
+                            stone.position.y += board!.position.y
+                            stone.zPosition = 10
+                            addChild(stone)
+                            
+                            board_state = applyMove(state: board_state, move: move, player: .O)
+                            stones[move] = stone // Add stone
+                            
+                            
+                            // Check for win condition
+                            if let (winner, streak) = checkWinCondition(state: board_state) {
+                                print("winner \(winner). Running highlight animation")
+                                // highlight the streak here
+                                
+                                for (row, col) in streak {
+                                    if let stone = stones[Move(row:row, col:col)] {
+                                        print("found the stone at \(row),\(col)")
+                                        stone!.removeAllActions()
+                                        stone!.run(stone!.highlight_animation!)
+                                    }
+                                }
+                            } else if checkDraw(state: board_state) {
+                                print("Draw !")
+                            } else {
+                                current_player = .X
                             }
+                            
+                            isUserInteractionEnabled = true
                         }
-                        
-                        break
                     }
-                    
-                    if checkDraw(state: board_state) {
-                        print("Draw !")
-                        break
-                    }
-                    
-                    // Switch the player
-                    current_player = .X
                 }
             }
         }
