@@ -39,7 +39,7 @@ class Stone:SKSpriteNode {
         print("highlight textures: \(highlight_textures)")
         
         if !highlight_textures.isEmpty {
-            let sequence = SKAction.animate(with: highlight_textures.reversed(), timePerFrame: 0.03)
+            let sequence = SKAction.animate(with: highlight_textures.reversed(), timePerFrame: 0.01)
             let rev_sequence = SKAction.animate(with: highlight_textures, timePerFrame: 0.03)
             highlight_animation = SKAction.repeatForever(SKAction.sequence([sequence, SKAction.wait(forDuration: 0.1), rev_sequence, SKAction.wait(forDuration: 0.5)]))
         }
