@@ -14,6 +14,9 @@ class Stone:SKSpriteNode {
     var flash_textures:[SKTexture]
     var flash_animation:SKAction?
     
+    var highlight_textures:[SKTexture]
+    var highlight_animation:SKAction?
+    
     init(size:CGSize, atlas:String) {
         let atlas = SKTextureAtlas(named: atlas)
         let textures = atlas.textureNames.sorted().map {atlas.textureNamed($0)}
@@ -30,14 +33,23 @@ class Stone:SKSpriteNode {
             flash_animation = SKAction.repeatForever(sequence)
         }
         
+        // Highlight textutes
+        highlight_textures = atlas.textureNames.filter {$0.contains("highlight")}.sorted().map {atlas.textureNamed($0)} // For some reason, the textures were reversed.
+        
+        print("highlight textures: \(highlight_textures)")
+        
+        if !highlight_textures.isEmpty {
+            let sequence = SKAction.animate(with: highlight_textures.reversed(), timePerFrame: 0.03)
+            let rev_sequence = SKAction.animate(with: highlight_textures, timePerFrame: 0.03)
+            highlight_animation = SKAction.repeatForever(SKAction.sequence([sequence, SKAction.wait(forDuration: 0.1), rev_sequence, SKAction.wait(forDuration: 0.5)]))
+        }
+        
         super.init(texture: textures[0], color: .clear, size: size)
         zPosition = 10
         
         if flash_animation != nil {
             run(flash_animation!)
         }
-        
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -67,6 +79,7 @@ class Tile:SKSpriteNode {
 class GameScene: SKScene {
     
     private var board:SKTileMapNode?
+    private var stones:[Move : Stone?] = [:]
    //   private var animation_state_machine:AnimationStateMachine?
     private var current_player = Player.X
     private var board_state:[[Player]] = Array(repeating: Array(repeating: Player.empty, count: BOARD_SIZE),  count:BOARD_SIZE)
@@ -102,10 +115,7 @@ class GameScene: SKScene {
                     random_texture = textures[1...].randomElement()!
                 } else {
                     random_texture = textures[0]
-                    print(atlas.textureNames[0])
                 }
-                
-               
                 
                 let tile:Tile = Tile(texture: random_texture,
                                      color: .clear,
@@ -148,6 +158,7 @@ class GameScene: SKScene {
                     
                     var move = Move(row: tile.coordinates.0, col: tile.coordinates.1)
                     board_state = applyMove(state: board_state, move: move, player: .X)
+                    stones[move] = stone // Add stone
                     
                     // Check for win condition
                     if let (winner, streak) = checkWinCondition(state: board_state) {
@@ -155,17 +166,19 @@ class GameScene: SKScene {
                         // highlight the streak here
                         
                         for (row, col) in streak {
-                            
-                            let dot:SKSpriteNode = SKSpriteNode(color: .yellow, size: CGSize(width: 10, height: 10) )
-                            dot.position = board!.centerOfTile(atColumn: col, row: row)
-                            dot.isUserInteractionEnabled = false
-                            addChild(dot)
-                            
+                            if let stone = stones[Move(row:row, col:col)] {
+                                print("found the stone at \(row),\(col)")
+                                stone!.removeAllActions()
+                                stone!.run(stone!.highlight_animation!)
+                            }
                         }
+                        
+                        break
                     }
                     
                     if checkDraw(state: board_state) {
                         print("Draw!")
+                        break
                     }
                     
                     
@@ -186,27 +199,27 @@ class GameScene: SKScene {
                     addChild(stone)
                     
                     board_state = applyMove(state: board_state, move: move, player: .O)
+                    stones[move] = stone // Add stone
                     
                     // Check for win condition
                     if let (winner, streak) = checkWinCondition(state: board_state) {
-                        print("winner \(winner)")
+                        print("winner \(winner). Running highlight animation")
                         // highlight the streak here
                         
                         for (row, col) in streak {
-                            
-                            let dot:SKSpriteNode = SKSpriteNode(color: .yellow, size: CGSize(width: 10, height: 10) )
-                            dot.position = board!.centerOfTile(atColumn: col, row: row)
-                            dot.position.x += board!.position.x
-                            dot.position.y += board!.position.y
-                            dot.isUserInteractionEnabled = false
-                            dot.zPosition = 12
-                            addChild(dot)
-                            
+                            if let stone = stones[Move(row:row, col:col)] {
+                                print("found the stone at \(row),\(col)")
+                                stone!.removeAllActions()
+                                stone!.run(stone!.highlight_animation!)
+                            }
                         }
+                        
+                        break
                     }
                     
                     if checkDraw(state: board_state) {
                         print("Draw !")
+                        break
                     }
                     
                     // Switch the player

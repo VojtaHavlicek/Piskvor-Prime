@@ -6,6 +6,7 @@
 //
 
 // TODO: switch this to MCTS, but use the same heuristics?
+// TODO: run AI in background? 
 // Works well
 
 import Foundation
