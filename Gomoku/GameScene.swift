@@ -7,6 +7,7 @@
 
 import SpriteKit
 import GameplayKit
+import AVFoundation
 
 class Stone:SKSpriteNode {
     // Places the stone
@@ -78,6 +79,9 @@ class Tile:SKSpriteNode {
 
 class GameScene: SKScene {
     
+    let speech_synth = AVSpeechSynthesizer()
+    private var game_log:GameLog!
+    
     private var board:SKTileMapNode?
     private var stones:[Move : Stone?] = [:]
    //   private var animation_state_machine:AnimationStateMachine?
@@ -92,10 +96,16 @@ class GameScene: SKScene {
         // animation_state_machine = AnimationStateMachine(scene:self)
     }
     
+    func speak(_ line: String) {
+        let utterance = AVSpeechUtterance(string: line)
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        utterance.rate = 0.4 // Adjust for effect
+        speech_synth.speak(utterance)
+    }
+    
     override func didMove(to view: SKView)
     {
-       
-        
+        // ---- BOARD ----
         // Add tiles. TODO: do this on the tilemap directly.
         for row in 0..<BOARD_SIZE {
             for col in 0..<BOARD_SIZE {
@@ -130,6 +140,11 @@ class GameScene: SKScene {
                 addChild(tile)
             }
         }
+        
+        // --- GAME LOG ---
+        game_log = GameLog(position: CGPoint(x: -300, y: -400))
+        addChild(game_log.getNode())
+        game_log.getRandomLog(.opening)
     }
     
     func touchDown(atPoint pos : CGPoint) {
@@ -143,7 +158,7 @@ class GameScene: SKScene {
                 
                 // Check if I am clicking on an empty tile. If not, pass.
                 if board_state[tile.coordinates.0][tile.coordinates.1] != .empty{
-                    print("Placed already")
+                    game_log.addMessage( "🤖 There is a stone here already...")
                     break
                 }
                 
@@ -160,6 +175,8 @@ class GameScene: SKScene {
                     board_state = applyMove(state: board_state, move: move, player: .X)
                     stones[move] = stone // Add stone
                     
+                    game_log.addMessage(": You placed a stone at (\(move.row), \(move.col))", style: .white)
+                    
                     // Check for win condition
                     if let (winner, streak) = checkWinCondition(state: board_state) {
                         print("winner \(winner)")
@@ -173,24 +190,34 @@ class GameScene: SKScene {
                             }
                         }
                         
+                        game_log.getRandomLog(.human_wins)
                         break
                     }
                     
                     if checkDraw(state: board_state) {
-                        print("Draw!")
+                        game_log.getRandomLog(.stalemate)
                         break
                     }
                     
+                   
                     
                     // --------- AI -----------
                     // Switches the player
                     current_player = .O
                     
+                    // If AI is winning, taunt
+                    if evaluateState(state: board_state, player: .O) < 0 {
+                        game_log.getRandomLog(.taunt)
+                    }
+                    
+                    
+                    game_log.getRandomLog(.thinking)
+                    
                     isUserInteractionEnabled = false
                     DispatchQueue.global(qos: .userInitiated).async { [self] in
                         guard let move = findBestMove(state: board_state, player: .O) else { return }
                         
-                        
+                  
                         DispatchQueue.main.async {
                             [self] in
                             print("Suggested move: \(move)")
@@ -207,6 +234,8 @@ class GameScene: SKScene {
                             board_state = applyMove(state: board_state, move: move, player: .O)
                             stones[move] = stone // Add stone
                             
+                            game_log.addMessage(": AI placed a stone at (\(move.row), \(move.col))", style: .white)
+                            
                             
                             // Check for win condition
                             if let (winner, streak) = checkWinCondition(state: board_state) {
@@ -220,8 +249,10 @@ class GameScene: SKScene {
                                         stone!.run(stone!.highlight_animation!)
                                     }
                                 }
+                                
+                                game_log.getRandomLog(.ai_wins)
                             } else if checkDraw(state: board_state) {
-                                print("Draw !")
+                                game_log.getRandomLog(.stalemate)
                             } else {
                                 current_player = .X
                             }

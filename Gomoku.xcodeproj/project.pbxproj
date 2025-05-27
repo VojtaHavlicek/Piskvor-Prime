@@ -21,6 +21,8 @@
 		7F8D7C232D47575B00B5E1BD /* GomokuUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8D7C222D47575B00B5E1BD /* GomokuUITests.swift */; };
 		7F8D7C252D47575B00B5E1BD /* GomokuUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8D7C242D47575B00B5E1BD /* GomokuUITestsLaunchTests.swift */; };
 		7F8D7C322D500C7F00B5E1BD /* AIEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F8D7C312D500C7F00B5E1BD /* AIEngine.swift */; };
+		7FE2D9402DE65112003586EF /* Robot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE2D93F2DE6510D003586EF /* Robot.swift */; };
+		7FE2D9422DE65236003586EF /* GameLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE2D9412DE65232003586EF /* GameLog.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +60,8 @@
 		7F8D7C222D47575B00B5E1BD /* GomokuUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GomokuUITests.swift; sourceTree = "<group>"; };
 		7F8D7C242D47575B00B5E1BD /* GomokuUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GomokuUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		7F8D7C312D500C7F00B5E1BD /* AIEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIEngine.swift; sourceTree = "<group>"; };
+		7FE2D93F2DE6510D003586EF /* Robot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Robot.swift; sourceTree = "<group>"; };
+		7FE2D9412DE65232003586EF /* GameLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLog.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +112,8 @@
 		7F8D7BFD2D47575A00B5E1BD /* Gomoku */ = {
 			isa = PBXGroup;
 			children = (
+				7FE2D9412DE65232003586EF /* GameLog.swift */,
+				7FE2D93F2DE6510D003586EF /* Robot.swift */,
 				7F8D7BFE2D47575A00B5E1BD /* AppDelegate.swift */,
 				7F8D7C002D47575A00B5E1BD /* GameScene.sks */,
 				7F8D7C022D47575A00B5E1BD /* Actions.sks */,
@@ -276,8 +282,10 @@
 			files = (
 				7F8D7C052D47575A00B5E1BD /* GameScene.swift in Sources */,
 				7F8D7C322D500C7F00B5E1BD /* AIEngine.swift in Sources */,
+				7FE2D9422DE65236003586EF /* GameLog.swift in Sources */,
 				7F4DBD2F2DE16A39004973C9 /* AnimationStateMachine.swift in Sources */,
 				7F8D7C072D47575A00B5E1BD /* GameViewController.swift in Sources */,
+				7FE2D9402DE65112003586EF /* Robot.swift in Sources */,
 				7F8D7BFF2D47575A00B5E1BD /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

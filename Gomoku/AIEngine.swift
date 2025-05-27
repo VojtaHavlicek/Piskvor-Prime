@@ -6,7 +6,7 @@
 //
 
 // TODO: switch this to MCTS, but use the same heuristics?
-// TODO: run AI in background? 
+// TODO: run AI in background?
 // Works well
 
 import Foundation
@@ -34,7 +34,7 @@ var gameStateCache = [String: Player?]()
 var evaluateStateCache = [String: Int]()
 var heuristicCache = [String: Int]()
 
-func getMoves(state: [[Player]], player:Player, topK: Int = 3) -> [Move] {
+func getMoves(state: [[Player]], player:Player, topK: Int = 5) -> [Move] {
     let key = state.flatMap { $0.map { $0.rawValue } }.joined()+"_\(player.rawValue)"
     if let cached = movesCache[key] {
         return cached
