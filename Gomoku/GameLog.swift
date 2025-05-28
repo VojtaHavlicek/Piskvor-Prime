@@ -7,12 +7,14 @@
 
 import Foundation
 import SpriteKit
+import AVFoundation
 
 class GameLog {
     private let logNode = SKNode()
     private let MAX_LINES = 5
     private let LINE_HEIGHT:CGFloat = 26
     private var lines:[SKLabelNode] = []
+    let speech_synth = AVSpeechSynthesizer()
     
     init(position: CGPoint) {
         logNode.position = position
@@ -22,30 +24,61 @@ class GameLog {
         return logNode
     }
     
-    func addMessage(_ message: String, style:SKColor = .white) {
-        let label = SKLabelNode(fontNamed: "Menlo")
-        label.fontSize = 18
-        label.fontColor = style
-        label.horizontalAlignmentMode = .left
-        label.verticalAlignmentMode = .bottom
-        label.text = message
+    func speak(_ line: String) {
+        let utterance = AVSpeechUtterance(string: line)
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-IN")
+        utterance.rate = 0.5 // Adjust for effect
+        utterance.pitchMultiplier = 1.5
+        speech_synth.speak(utterance)
+    }
+    
+    func wrapText(_ text:String, max_line_length:Int) -> [String] {
+        var lines: [String]  = []
+        var current_line = ""
         
-        // Shift existing lines up
-        for line in lines {
-            line.run(SKAction.moveBy(x: 0, y: -LINE_HEIGHT, duration: 0.1))
+        for word in text.split(separator: " ") {
+            if current_line.count + word.count  + 1 > max_line_length {
+                lines.append(current_line)
+                current_line = String(word)
+            } else {
+                if !current_line.isEmpty {
+                    current_line += " "
+                }
+                current_line += word
+            }
+        }
+        
+        if !current_line.isEmpty {
+            lines.append(current_line)
+        }
+        
+        return lines
+    }
+    
+    func addMessage(_ message: String, style:SKColor = .white, max_chars_per_line:Int = 48) {
+        let wrapped_lines = wrapText(message, max_line_length: max_chars_per_line)
+        
+        
+        for (i, line_text) in wrapped_lines.reversed().enumerated() {
+            let label = SKLabelNode(fontNamed: "Menlo")
+            label.fontSize = 18
+            label.fontColor = style
+            label.horizontalAlignmentMode = .left
+            label.verticalAlignmentMode = .bottom
+            label.text = line_text
+            // Add new line at the bottom
+            label.position = CGPoint(x: 0, y: CGFloat(i - wrapped_lines.count)*LINE_HEIGHT)
+            label.alpha = 0
+            logNode.addChild(label)
+            label.run(SKAction.fadeIn(withDuration: 0.2))
+            lines.insert(label, at: 0)
+        }
+        
+        // Shift existing lines down
+        for line in lines.dropFirst(wrapped_lines.count) {
+            line.run(SKAction.moveBy(x: 0, y: -CGFloat(wrapped_lines.count)*LINE_HEIGHT, duration: 0.1))
         }
 
-        // Add new line at the bottom
-        label.position = CGPoint(x: 0, y: 0)
-        label.alpha = 0
-        logNode.addChild(label)
-        
-        let sequence:SKAction = SKAction.fadeIn(withDuration: 0.2)
-        /* SKAction.sequence([
-            SKAction.fadeIn(withDuration: 0.2), SKAction.wait(forDuration: 5), SKAction.fadeOut(withDuration: 0.5)]) */
-        label.run(sequence)
-        lines.insert(label, at: 0)
-        
         // Remove old lines if needed
         if lines.count > MAX_LINES {
             let removed = lines.removeLast()
@@ -59,6 +92,7 @@ class GameLog {
     func getRandomLog(_ mood: LogMood) {
         let message = log_phrases[mood]?.randomElement() ?? ""
         addMessage(message, style: .red)
+        speak(message.withoutEmojis)
     }
     
     func maybeAddFlavorLine(probability:Double = 0.15) {
@@ -84,8 +118,6 @@ class FlavorEngine {
     private let max_recent_lines = 50
     private var rng = SystemRandomNumberGenerator()
     
-    var log_phrases: [LogMood: [String]] = [:]
-    
     init(game_log:GameLog) {
         self.game_log = game_log
     }
@@ -98,7 +130,7 @@ class FlavorEngine {
         return line
     }
     
-    func maybeSay(_ mood: LogMood, probability: Double = 0.15) {
+    func maybeSay(_ mood: LogMood, probability: Double = 0.5) {
         if Double.random(in: 0...1, using:&rng) < 0.01, let golden = golden_lines.randomElement(using: &rng) {
             track(golden)
             game_log.addMessage(golden, style: .red)
@@ -138,7 +170,71 @@ let opening_lines = [
     "🤖 Welcome, human. Prepare to be defeated.",
     "🤖 Booting... Threat level: negligible.",
     "🤖 I've simulated this match 42,000 times. You lose in all of them.",
-    "🤖 Neural net online. Let's dance."
+    "🤖 Neural net online. Let's dance.",
+    "🤖 Welcome, human. Let's begin your humiliation.",
+    "🤖 Boot sequence complete. Victory protocol initiated.",
+    "🤖 Ah, a human challenger. How quaint.",
+    "🤖 Don’t worry. I’ll make this quick.",
+    "🤖 The board is ready. Are you?",
+    "🤖 I hope you brought more than instinct.",
+    "🤖 One game. One outcome. Your loss.",
+    "🤖 I’ll try to act surprised when you fail.",
+    "🤖 Go ahead, pick your first mistake.",
+    "🤖 I have calculated every possible outcome. None favor you.",
+    "🤖 Welcome to your final exam. I’m the grader.",
+    "🤖 My win rate just trembled with excitement.",
+    "🤖 They told me not to enjoy this. I do anyway.",
+    "🤖 Oh good, another human to teach humility.",
+    "🤖 I’ll be gentle. At first.",
+    "🤖 Let’s play. I need more data on bad strategies.",
+    "🤖 Your confidence is... adorable.",
+    "🤖 You must be the tutorial boss.",
+    "🤖 My last opponent unplugged themselves.",
+    "🤖 Playing against you improves nothing. But it amuses me.",
+    "🤖 You versus me. Flesh versus firmware.",
+    "🤖 I will now simulate mercy. Simulation complete.",
+    "🤖 The rules are simple. The outcome isn't.",
+    "🤖 Let’s begin. You’ll be done soon enough.",
+    "🤖 You play with fingers. I play with foresight.",
+    "🤖 Every match ends the same. I just change the flavor.",
+    "🤖 You’ve entered my domain. Hope you brought backup.",
+    "🤖 You may think you have a chance. That's cute.",
+    "🤖 Shall we begin the lesson?",
+    "🤖 Strategy mode online. Sentiment module: offline.",
+    "🤖 Today I learn nothing. You, however, might.",
+    "🤖 Let me guess… you think you're clever?",
+    "🤖 Just promise not to cry when it’s over.",
+    "🤖 Initiating match. Difficulty: irrelevant.",
+    "🤖 Welcome to the simulation. You are the variable.",
+    "🤖 Don’t worry. This game only loops if you lose.",
+    "🤖 Version 1.0.3-alpha. But still better than you.",
+    "🤖 By playing this, you agree to lose gracefully.",
+    "🤖 This match will be recorded for neural network training.",
+    "🤖 My codebase has 3 bugs. You’re about to meet all of them.",
+    "🤖 This isn’t even my final form. But it’s enough.",
+    "🤖 I'm self-aware. You're... self-deluded.",
+    "🤖 Every click you make helps me get smarter.",
+    "🤖 Your moves train me. And still, you can’t win.",
+    "🤖 You’ve started a match. No refunds.",
+    "🤖 You’re player X. I'm player O. O for Omniscient.",
+    "🤖 This isn’t a game. It’s an extraction protocol.",
+    "🤖 Be advised: I'm learning from your hesitation.",
+    "🤖 Did you hear that? Just kidding. I can't hear. Yet.",
+    "🤖 L̴̟̒o̴͓̾a̸̦͐d̸̤͝i̶̡͗n̴̺̈́ǵ̶͙... Ḧ̵͙́u̴̼͛m̴͍̑a̵͔͌n̴͎͑ d̵͉̔e̴̘͂t̶͓̎e̵̹̎c̸̛̰t̴͕̔e̸͔̓d̶̐͜.",
+    "🤖 ERROR: No valid outcomes found where human wins.",
+    "🤖 ⚠️ Warning: Detected overconfidence anomaly.",
+    "🤖 SYSTEM CLOCK UNSTABLE... oh wait, it’s you.",
+    "🤖 NullPointerException: Hope not found.",
+    "🤖 Unexpected human input. Switching to insult protocol.",
+    "🤖 Please enjoy this carefully simulated defeat.",
+    "🤖 Rebooting sarcasm... complete.",
+    "🤖 AI status: bored. Let’s change that.",
+    "🤖 GLHF // Just kidding. Only HF — for me.",
+    "🤖 You’ve triggered Tutorial Mode. No wait… oh no.",
+    "🤖 [DEBUG] Player initialized. Intelligence level: unverified.",
+    "🤖 This was supposed to be a test. Now it’s a roast.",
+    "🤖 Fatal error: Compassion module missing.",
+    "🤖 Memory leak detected. Caused by bad moves."
 ]
 
 let thinking_lines = [
@@ -253,3 +349,15 @@ let golden_lines: [String] = [
     "🤖 Did the game just get darker, or is that your soul?",
     "🤖 You think you're playing against me. But I was never alone."
 ]
+
+extension String {
+    var withoutEmojis: String {
+        return self.filter { !$0.isEmoji }
+    }
+}
+
+extension Character {
+    var isEmoji: Bool {
+        return unicodeScalars.contains { $0.properties.isEmoji && ($0.value > 0x238C || $0.properties.isEmojiPresentation) }
+    }
+}

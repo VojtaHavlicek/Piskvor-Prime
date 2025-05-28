@@ -79,14 +79,17 @@ class Tile:SKSpriteNode {
 
 class GameScene: SKScene {
     
-    let speech_synth = AVSpeechSynthesizer()
+    
     private var game_log:GameLog!
+    private var flavor_engine:FlavorEngine!
     
     private var board:SKTileMapNode?
     private var stones:[Move : Stone?] = [:]
    //   private var animation_state_machine:AnimationStateMachine?
     private var current_player = Player.X
     private var board_state:[[Player]] = Array(repeating: Array(repeating: Player.empty, count: BOARD_SIZE),  count:BOARD_SIZE)
+    
+    private var human_inactivity_timer:Timer?
     
     required init?(coder aDecoder: NSCoder) {
         // Build the game board
@@ -95,13 +98,7 @@ class GameScene: SKScene {
         board = (self.childNode(withName: "board") as! SKTileMapNode)
         // animation_state_machine = AnimationStateMachine(scene:self)
     }
-    
-    func speak(_ line: String) {
-        let utterance = AVSpeechUtterance(string: line)
-        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
-        utterance.rate = 0.4 // Adjust for effect
-        speech_synth.speak(utterance)
-    }
+
     
     override func didMove(to view: SKView)
     {
@@ -145,6 +142,9 @@ class GameScene: SKScene {
         game_log = GameLog(position: CGPoint(x: -300, y: -400))
         addChild(game_log.getNode())
         game_log.getRandomLog(.opening)
+       
+        flavor_engine = FlavorEngine(game_log: game_log)
+      
     }
     
     func touchDown(atPoint pos : CGPoint) {
@@ -164,6 +164,8 @@ class GameScene: SKScene {
                 
                 // Resolve the player logic
                 if current_player == Player.X {
+                    // Cancel human inactivity timer
+                    human_inactivity_timer?.invalidate()
                     
                     // Places the stone
                     var stone = Stone(size: tile.size, atlas: "blue")
@@ -175,7 +177,7 @@ class GameScene: SKScene {
                     board_state = applyMove(state: board_state, move: move, player: .X)
                     stones[move] = stone // Add stone
                     
-                    game_log.addMessage(": You placed a stone at (\(move.row), \(move.col))", style: .white)
+                    game_log.addMessage("You: stone at (\(move.row), \(move.col))", style: .white)
                     
                     // Check for win condition
                     if let (winner, streak) = checkWinCondition(state: board_state) {
@@ -189,13 +191,15 @@ class GameScene: SKScene {
                                 stone!.run(stone!.highlight_animation!)
                             }
                         }
-                        
+                        game_log.addMessage("You win!", style: .white)
                         game_log.getRandomLog(.human_wins)
+                        human_inactivity_timer?.invalidate()
                         break
                     }
                     
                     if checkDraw(state: board_state) {
                         game_log.getRandomLog(.stalemate)
+                        human_inactivity_timer?.invalidate()
                         break
                     }
                     
@@ -207,11 +211,11 @@ class GameScene: SKScene {
                     
                     // If AI is winning, taunt
                     if evaluateState(state: board_state, player: .O) < 0 {
-                        game_log.getRandomLog(.taunt)
+                        flavor_engine.maybeSay(.taunt)
                     }
                     
                     
-                    game_log.getRandomLog(.thinking)
+                    flavor_engine.maybeSay(.thinking)
                     
                     isUserInteractionEnabled = false
                     DispatchQueue.global(qos: .userInitiated).async { [self] in
@@ -234,7 +238,7 @@ class GameScene: SKScene {
                             board_state = applyMove(state: board_state, move: move, player: .O)
                             stones[move] = stone // Add stone
                             
-                            game_log.addMessage(": AI placed a stone at (\(move.row), \(move.col))", style: .white)
+                            game_log.addMessage("AI: stone at (\(move.row), \(move.col))", style: .white)
                             
                             
                             // Check for win condition
@@ -249,21 +253,33 @@ class GameScene: SKScene {
                                         stone!.run(stone!.highlight_animation!)
                                     }
                                 }
-                                
+                                game_log.addMessage("AI wins!", style: .white)
                                 game_log.getRandomLog(.ai_wins)
+                                human_inactivity_timer?.invalidate()
                             } else if checkDraw(state: board_state) {
                                 game_log.getRandomLog(.stalemate)
+                                human_inactivity_timer?.invalidate()
                             } else {
                                 current_player = .X
                             }
                             
                             isUserInteractionEnabled = true
+                            
+                            startHumanInactivityTimer()
                         }
                     }
                 }
             }
         }
     }
+    
+    func startHumanInactivityTimer()
+    {
+        human_inactivity_timer?.invalidate() // Cancel existing
+        human_inactivity_timer = Timer.scheduledTimer(withTimeInterval: 4.0, repeats: false) { [weak self] _ in self?.flavor_engine.maybeSay(.interject, probability: 0.6) }
+        
+    }
+    
     
     func touchMoved(toPoint pos : CGPoint) {
         
