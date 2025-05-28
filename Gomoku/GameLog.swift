@@ -12,7 +12,7 @@ import AVFoundation
 class GameLog {
     private let logNode = SKNode()
     private let MAX_LINES = 4
-    private let LINE_HEIGHT:CGFloat = 26
+    private let LINE_HEIGHT:CGFloat = 32
     private var lines:[SKLabelNode] = []
     let speech_synth = AVSpeechSynthesizer()
     
@@ -75,7 +75,7 @@ class GameLog {
         
         for (i, line_text) in wrapped_lines.reversed().enumerated() {
             let label = SKLabelNode(fontNamed: "Menlo")
-            label.fontSize = 18
+            label.fontSize = 24
             label.fontColor = style
             label.horizontalAlignmentMode = .left
             label.verticalAlignmentMode = .bottom
