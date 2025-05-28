@@ -11,7 +11,7 @@ import AVFoundation
 
 class GameLog {
     private let logNode = SKNode()
-    private let MAX_LINES = 5
+    private let MAX_LINES = 4
     private let LINE_HEIGHT:CGFloat = 26
     private var lines:[SKLabelNode] = []
     let speech_synth = AVSpeechSynthesizer()
@@ -32,14 +32,17 @@ class GameLog {
         speech_synth.speak(utterance)
     }
     
-    func wrapText(_ text:String, max_line_length:Int) -> [String] {
+    func wrapText(_ text:String, max_line_length:Int, indent:String="") -> [String] {
         var lines: [String]  = []
         var current_line = ""
+        let words = text.split(separator: " ")
         
-        for word in text.split(separator: " ") {
-            if current_line.count + word.count  + 1 > max_line_length {
+        for word in words {
+            let next_word = String(word)
+            let line_length = current_line.isEmpty ? 0 : current_line.count + 1
+            if line_length + next_word.count > max_line_length {
                 lines.append(current_line)
-                current_line = String(word)
+                current_line = indent + next_word
             } else {
                 if !current_line.isEmpty {
                     current_line += " "
@@ -56,7 +59,18 @@ class GameLog {
     }
     
     func addMessage(_ message: String, style:SKColor = .white, max_chars_per_line:Int = 48) {
-        let wrapped_lines = wrapText(message, max_line_length: max_chars_per_line)
+        
+        
+        var clean_message:String
+        
+        if message.hasPrefix("🤖 ") {
+            clean_message = String(message.split(separator: " ").dropFirst().joined(separator: " "))
+        }else {
+            clean_message = message
+        }
+        
+        let wrapped_lines = wrapText(message,
+                                     max_line_length: max_chars_per_line)
         
         
         for (i, line_text) in wrapped_lines.reversed().enumerated() {
@@ -80,7 +94,7 @@ class GameLog {
         }
 
         // Remove old lines if needed
-        if lines.count > MAX_LINES {
+        while lines.count > MAX_LINES {
             let removed = lines.removeLast()
             removed.run(SKAction.sequence([
                 .fadeOut(withDuration: 0.2),
@@ -91,7 +105,7 @@ class GameLog {
     
     func getRandomLog(_ mood: LogMood) {
         let message = log_phrases[mood]?.randomElement() ?? ""
-        addMessage(message, style: .red)
+        addMessage(message, style: .white)
         speak(message.withoutEmojis)
     }
     
@@ -107,7 +121,7 @@ class GameLog {
         }
         
         if let message = flavor {
-            addMessage(message, style: .red)
+            addMessage(message, style: .white)
         }
     }
 }
@@ -133,12 +147,12 @@ class FlavorEngine {
     func maybeSay(_ mood: LogMood, probability: Double = 0.5) {
         if Double.random(in: 0...1, using:&rng) < 0.01, let golden = golden_lines.randomElement(using: &rng) {
             track(golden)
-            game_log.addMessage(golden, style: .red)
+            game_log.addMessage(golden, style: .white)
             return
         }
         
         if Double.random(in: 0...1, using:&rng) < probability, let line = get_line(for: mood) {
-            game_log.addMessage(line, style: .red)
+            game_log.addMessage(line, style: .white)
         }
     }
     

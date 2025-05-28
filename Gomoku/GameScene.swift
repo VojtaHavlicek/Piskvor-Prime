@@ -177,7 +177,7 @@ class GameScene: SKScene {
                     board_state = applyMove(state: board_state, move: move, player: .X)
                     stones[move] = stone // Add stone
                     
-                    game_log.addMessage("You: stone at (\(move.row), \(move.col))", style: .white)
+                    game_log.addMessage("🧠 Plays (\(move.row), \(move.col))", style: .gray)
                     
                     // Check for win condition
                     if let (winner, streak) = checkWinCondition(state: board_state) {
@@ -191,15 +191,14 @@ class GameScene: SKScene {
                                 stone!.run(stone!.highlight_animation!)
                             }
                         }
-                        game_log.addMessage("You win!", style: .white)
                         game_log.getRandomLog(.human_wins)
-                        human_inactivity_timer?.invalidate()
+                        stopHumanInactivityTaunts()
                         break
                     }
                     
                     if checkDraw(state: board_state) {
                         game_log.getRandomLog(.stalemate)
-                        human_inactivity_timer?.invalidate()
+                        stopHumanInactivityTaunts()
                         break
                     }
                     
@@ -238,7 +237,7 @@ class GameScene: SKScene {
                             board_state = applyMove(state: board_state, move: move, player: .O)
                             stones[move] = stone // Add stone
                             
-                            game_log.addMessage("AI: stone at (\(move.row), \(move.col))", style: .white)
+                            game_log.addMessage("🤖 Plays (\(move.row), \(move.col))", style: .gray)
                             
                             
                             // Check for win condition
@@ -253,12 +252,11 @@ class GameScene: SKScene {
                                         stone!.run(stone!.highlight_animation!)
                                     }
                                 }
-                                game_log.addMessage("AI wins!", style: .white)
                                 game_log.getRandomLog(.ai_wins)
-                                human_inactivity_timer?.invalidate()
+                                stopHumanInactivityTaunts()
                             } else if checkDraw(state: board_state) {
                                 game_log.getRandomLog(.stalemate)
-                                human_inactivity_timer?.invalidate()
+                                stopHumanInactivityTaunts()
                             } else {
                                 current_player = .X
                             }
@@ -278,6 +276,10 @@ class GameScene: SKScene {
         human_inactivity_timer?.invalidate() // Cancel existing
         human_inactivity_timer = Timer.scheduledTimer(withTimeInterval: 4.0, repeats: false) { [weak self] _ in self?.flavor_engine.maybeSay(.interject, probability: 0.6) }
         
+    }
+    
+    func stopHumanInactivityTaunts() {
+        human_inactivity_timer?.invalidate()
     }
     
     
