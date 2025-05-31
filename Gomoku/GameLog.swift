@@ -11,7 +11,7 @@ import AVFoundation
 
 class GameLog {
     private let logNode = SKNode()
-    private let MAX_LINES = 4
+    private let MAX_LINES = 5
     private let LINE_HEIGHT:CGFloat = 32
     private var lines:[SKLabelNode] = []
     let speech_synth = AVSpeechSynthesizer()
@@ -128,12 +128,14 @@ class GameLog {
 
 class FlavorEngine {
     private var game_log:GameLog
+    private var robot:RobotController
     private var used_lines:Set<String> = []
     private let max_recent_lines = 50
     private var rng = SystemRandomNumberGenerator()
     
-    init(game_log:GameLog) {
+    init(game_log:GameLog, robot:RobotController) {
         self.game_log = game_log
+        self.robot = robot
     }
     
     func get_line(for mood:LogMood) -> String? {
@@ -148,11 +150,15 @@ class FlavorEngine {
         if Double.random(in: 0...1, using:&rng) < 0.01, let golden = golden_lines.randomElement(using: &rng) {
             track(golden)
             game_log.addMessage(golden, style: .white)
+            print("Robot: bouncing mouth")
+            robot.bounce_mouth()
             return
         }
         
         if Double.random(in: 0...1, using:&rng) < probability, let line = get_line(for: mood) {
             game_log.addMessage(line, style: .white)
+            print("Robot: bouncing mouth")
+            robot.bounce_mouth()
         }
     }
     

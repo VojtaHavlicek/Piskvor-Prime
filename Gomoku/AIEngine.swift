@@ -11,7 +11,7 @@
 
 import Foundation
 
-let BOARD_SIZE = 9
+let BOARD_SIZE = 10
 let L = 5
 let WIN_UTIL = 100000
 let MAX_DEPTH = 1 // It's super shallow, but it plays well anyway?

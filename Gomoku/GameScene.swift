@@ -37,8 +37,6 @@ class Stone:SKSpriteNode {
         // Highlight textutes
         highlight_textures = atlas.textureNames.filter {$0.contains("highlight")}.sorted().map {atlas.textureNamed($0)} // For some reason, the textures were reversed.
         
-        print("highlight textures: \(highlight_textures)")
-        
         if !highlight_textures.isEmpty {
             let sequence = SKAction.animate(with: highlight_textures.reversed(), timePerFrame: 0.01)
             let rev_sequence = SKAction.animate(with: highlight_textures, timePerFrame: 0.03)
@@ -83,13 +81,27 @@ class GameScene: SKScene {
     private var game_log:GameLog!
     private var flavor_engine:FlavorEngine!
     
+    private var hud_layer:HUDLayer!
+    
     private var board:SKTileMapNode?
     private var stones:[Move : Stone?] = [:]
    //   private var animation_state_machine:AnimationStateMachine?
     private var current_player = Player.X
     private var board_state:[[Player]] = Array(repeating: Array(repeating: Player.empty, count: BOARD_SIZE),  count:BOARD_SIZE)
     
+    let robot = RobotController()
     private var human_inactivity_timer:Timer?
+    
+    enum GameState {
+        case waiting_for_player, ai_thinking, ai_playing, game_over(winner: Player?) // nil = draw
+    }
+    
+    private var current_state:GameState = .waiting_for_player {
+        didSet {
+            print("Game state changed to \(current_state). Updating the robot face.")
+            updateRobotForState(current_state)
+        }
+    }
     
     required init?(coder aDecoder: NSCoder) {
         // Build the game board
@@ -139,11 +151,25 @@ class GameScene: SKScene {
         }
         
         // --- GAME LOG ---
-        game_log = GameLog(position: CGPoint(x: -300, y: -400))
+        game_log = GameLog(position: CGPoint(x: -350, y: -400))
         addChild(game_log.getNode())
         game_log.getRandomLog(.opening)
        
-        flavor_engine = FlavorEngine(game_log: game_log)
+        flavor_engine = FlavorEngine(game_log: game_log, robot: robot)
+        
+        // --- ROBOT ---
+        robot.position = CGPoint(x: 0, y: 510)
+        robot.setScale(0.5)
+        addChild(robot)
+        
+        current_state = .waiting_for_player
+        
+        // --- HUD ---
+        hud_layer = HUDLayer()
+        hud_layer.position = CGPoint(x: 0, y: -620)
+        addChild(hud_layer)
+        
+        
       
     }
     
@@ -213,7 +239,7 @@ class GameScene: SKScene {
                         flavor_engine.maybeSay(.taunt)
                     }
                     
-                    
+                    current_state = .ai_thinking
                     flavor_engine.maybeSay(.thinking)
                     
                     isUserInteractionEnabled = false
@@ -237,6 +263,7 @@ class GameScene: SKScene {
                             board_state = applyMove(state: board_state, move: move, player: .O)
                             stones[move] = stone // Add stone
                             
+                            current_state = .ai_playing
                             game_log.addMessage("🤖 Plays (\(move.row), \(move.col))", style: .gray)
                             
                             
@@ -264,10 +291,38 @@ class GameScene: SKScene {
                             isUserInteractionEnabled = true
                             
                             startHumanInactivityTimer()
+                            current_state = .waiting_for_player
                         }
                     }
                 }
             }
+        }
+    }
+    
+    func updateRobotForState(_ state:GameState) {
+        print("Updating robot for state: \(state)")
+        robot.stopIdle()
+        
+        switch state {
+        case .waiting_for_player:
+            robot.setExpressionPreset(.smug)
+            robot.runIdle()
+        case .ai_thinking:
+            robot.setExpressionPreset(.thinking)
+        case .ai_playing:
+            robot.setExpressionPreset(.smug)
+            robot.bounce_mouth()
+            
+        case .game_over(let winner):
+            if winner == .O {
+                robot.setExpressionPreset(.winning)
+                robot.wiggle_head()
+            } else if winner == .X {
+                robot.setExpressionPreset(.losing)
+            } else {
+                robot.setExpressionPreset(.thinking)
+            }
+        
         }
     }
     
