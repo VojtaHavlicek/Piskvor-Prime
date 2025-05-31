@@ -58,9 +58,18 @@ class GameLog {
         return lines
     }
     
+    func clean() {
+        // Remove old lines if needed
+        while lines.count > 0 {
+            let removed = lines.removeLast()
+            removed.run(SKAction.sequence([
+                .fadeOut(withDuration: 0.2),
+                .removeFromParent()
+            ]))
+        }
+    }
+    
     func addMessage(_ message: String, style:SKColor = .white, max_chars_per_line:Int = 48) {
-        
-        
         var clean_message:String
         
         if message.hasPrefix("🤖 ") {

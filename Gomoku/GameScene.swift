@@ -74,14 +74,17 @@ class Tile:SKSpriteNode {
     }
 }
 
+enum GameState:Hashable {
+    case waiting_for_player, ai_thinking, ai_playing, game_over(winner: Player?) // nil = draw
+}
 
 class GameScene: SKScene {
     
     
     private var game_log:GameLog!
     private var flavor_engine:FlavorEngine!
-    
     private var hud_layer:HUDLayer!
+    private var status_label:StatusLabel!
     
     private var board:SKTileMapNode?
     private var stones:[Move : Stone?] = [:]
@@ -92,14 +95,13 @@ class GameScene: SKScene {
     let robot = RobotController()
     private var human_inactivity_timer:Timer?
     
-    enum GameState {
-        case waiting_for_player, ai_thinking, ai_playing, game_over(winner: Player?) // nil = draw
-    }
+ 
     
     private var current_state:GameState = .waiting_for_player {
         didSet {
             print("Game state changed to \(current_state). Updating the robot face.")
             updateRobotForState(current_state)
+            status_label.change_label(to: current_state)
         }
     }
     
@@ -151,26 +153,27 @@ class GameScene: SKScene {
         }
         
         // --- GAME LOG ---
-        game_log = GameLog(position: CGPoint(x: -350, y: -400))
+        game_log = GameLog(position: CGPoint(x: -350, y: -415))
         addChild(game_log.getNode())
         game_log.getRandomLog(.opening)
-       
         flavor_engine = FlavorEngine(game_log: game_log, robot: robot)
         
         // --- ROBOT ---
         robot.position = CGPoint(x: 0, y: 510)
         robot.setScale(0.5)
         addChild(robot)
-        
-        current_state = .waiting_for_player
-        
+    
         // --- HUD ---
         hud_layer = HUDLayer()
-        hud_layer.position = CGPoint(x: 0, y: -620)
+        hud_layer.position = CGPoint(x: 0, y: -630)
         addChild(hud_layer)
+        hud_layer.delegate = self
         
-        
-      
+        // --- STATUS LABEL --
+        status_label = StatusLabel()
+        status_label.position = CGPoint(x: 0, y: -400)
+        addChild(status_label)
+        status_label.zPosition = 10
     }
     
     func touchDown(atPoint pos : CGPoint) {
@@ -219,12 +222,14 @@ class GameScene: SKScene {
                         }
                         game_log.getRandomLog(.human_wins)
                         stopHumanInactivityTaunts()
+                        current_state = .game_over(winner: .X)
                         break
                     }
                     
                     if checkDraw(state: board_state) {
                         game_log.getRandomLog(.stalemate)
                         stopHumanInactivityTaunts()
+                        current_state = .game_over(winner: .none)
                         break
                     }
                     
@@ -281,9 +286,11 @@ class GameScene: SKScene {
                                 }
                                 game_log.getRandomLog(.ai_wins)
                                 stopHumanInactivityTaunts()
+                                current_state = .game_over(winner: .O)
                             } else if checkDraw(state: board_state) {
                                 game_log.getRandomLog(.stalemate)
                                 stopHumanInactivityTaunts()
+                                current_state = .game_over(winner: .none)
                             } else {
                                 current_player = .X
                             }
@@ -355,7 +362,9 @@ class GameScene: SKScene {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+        guard let touch = touches.first else { return }
+        let location = touch.location(in: self)
+        hud_layer.handleTouch(at: location)
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -365,5 +374,35 @@ class GameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+    }
+}
+
+
+extension GameScene: HUDDelegate {
+    func didTapNewGame() {
+        restartGame()
+    }
+
+    func didTapRematch() {
+        restartGame()
+    }
+
+    func restartGame() {
+        // Show surrender animation or log message
+    }
+
+    func didTapConcede() {
+        print("Concede tapped.")
+        stones.values.forEach { $0?.removeFromParent() }
+        stones.removeAll()
+        
+        board_state = Array(repeating: Array(repeating: Player.empty, count: BOARD_SIZE),  count:BOARD_SIZE)
+        game_log.clean()
+            
+        current_player = .X
+        current_state = .waiting_for_player
+        game_log.addMessage("🧠 Ready for a new match!")
+        robot.setExpressionPreset(.smug)
+        robot.runIdle()
     }
 }
