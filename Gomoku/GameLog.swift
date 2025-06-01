@@ -69,7 +69,7 @@ class GameLog {
         }
     }
     
-    func addMessage(_ message: String, style:SKColor = .white, max_chars_per_line:Int = 58) {
+    func addMessage(_ message: String, style:SKColor = .white, max_chars_per_line:Int = 52) {
         var clean_message:String
         
         if message.hasPrefix("🤖 ") {

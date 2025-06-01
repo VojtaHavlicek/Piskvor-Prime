@@ -154,8 +154,6 @@ class GameScene: SKScene {
         
         // --- GAME LOG ---
         game_log = GameLog(position: .zero)//GameLog(position: CGPoint(x: -338, y: -417))
-
-      
         
         if let maskGuide = childNode(withName: "crop_node") as? SKSpriteNode {
             let crop_node = SKCropNode()
@@ -181,7 +179,7 @@ class GameScene: SKScene {
         
         
         // --- ROBOT ---
-        robot.position = CGPoint(x: 0, y: 510)
+        robot.position = CGPoint(x: 0, y: 540)
         robot.setScale(0.5)
         addChild(robot)
     

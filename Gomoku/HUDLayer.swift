@@ -8,6 +8,75 @@
 import SpriteKit
 import Foundation
 
+enum DiodeType:String {
+    case red, blue
+}
+
+class Diode:SKSpriteNode {
+    
+    let diode_on:SKAction
+    let diode_off:SKAction
+    var type:DiodeType
+    
+    var state:Bool = false
+    
+    
+    init(diode_type:DiodeType, placeholder_node:SKNode) {
+        type = diode_type
+        
+        var atlas_name:String? = nil
+        if type == .red {
+            atlas_name = "red_diode"
+        } else if type == .blue {
+            atlas_name = "blue_diode"
+        }
+        
+        let diode_atlas = SKTextureAtlas(named: atlas_name!)
+        let textures:[SKTexture] = diode_atlas.textureNames.sorted().compactMap { diode_atlas.textureNamed($0) }
+       
+        
+        diode_on = SKAction.animate(with: textures, timePerFrame: 0.1)
+        diode_off = SKAction.animate(with: textures.reversed(), timePerFrame: 0.1)
+        
+        super.init(texture: textures[0], color: .clear, size: textures[0].size())
+        
+        self.position = placeholder_node.position
+        placeholder_node.removeFromParent()
+        
+        if state {
+            run(diode_on)
+        } else {
+            run(diode_off)
+        }
+    }
+    
+    func blink() {
+        let blink_action = SKAction.repeatForever(SKAction.sequence([diode_on, diode_off]))
+        run(blink_action)
+    }
+    
+    func toggle() {
+        if state {
+            run(diode_off)
+        } else {
+            run(diode_on)
+        }
+        state.toggle()
+    }
+    
+    func set_state(state:Bool) {
+        self.state = state
+        if state {
+            run(diode_on)
+        } else {
+            run(diode_off)
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("not implemented")
+    }
+}
 
 class StatusLabel:SKNode {
     
