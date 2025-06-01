@@ -153,10 +153,32 @@ class GameScene: SKScene {
         }
         
         // --- GAME LOG ---
-        game_log = GameLog(position: CGPoint(x: -350, y: -415))
-        addChild(game_log.getNode())
+        game_log = GameLog(position: .zero)//GameLog(position: CGPoint(x: -338, y: -417))
+
+      
+        
+        if let maskGuide = childNode(withName: "crop_node") as? SKSpriteNode {
+            let crop_node = SKCropNode()
+            crop_node.position = maskGuide.position
+            crop_node.zPosition = maskGuide.zPosition
+            
+            let mask = SKSpriteNode(color:.white, size: maskGuide.size)
+            mask.position = CGPoint.zero
+            mask.anchorPoint = maskGuide.anchorPoint
+            crop_node.maskNode = mask
+            
+            maskGuide.removeFromParent()
+            
+            crop_node.addChild(game_log.getNode())
+            addChild(crop_node)
+            
+        } else {
+            addChild(game_log.getNode())
+        }
+        
         game_log.getRandomLog(.opening)
         flavor_engine = FlavorEngine(game_log: game_log, robot: robot)
+        
         
         // --- ROBOT ---
         robot.position = CGPoint(x: 0, y: 510)
@@ -172,8 +194,9 @@ class GameScene: SKScene {
         // --- STATUS LABEL --
         status_label = StatusLabel()
         status_label.position = CGPoint(x: 0, y: -400)
-        addChild(status_label)
+        //addChild(status_label)
         status_label.zPosition = 10
+        
     }
     
     func touchDown(atPoint pos : CGPoint) {
