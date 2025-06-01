@@ -21,7 +21,7 @@ class Diode:SKSpriteNode {
     var state:Bool = false
     
     
-    init(diode_type:DiodeType, placeholder_node:SKNode) {
+    init(diode_type:DiodeType) {
         type = diode_type
         
         var atlas_name:String? = nil
@@ -35,22 +35,22 @@ class Diode:SKSpriteNode {
         let textures:[SKTexture] = diode_atlas.textureNames.sorted().compactMap { diode_atlas.textureNamed($0) }
        
         
-        diode_on = SKAction.animate(with: textures, timePerFrame: 0.1)
-        diode_off = SKAction.animate(with: textures.reversed(), timePerFrame: 0.1)
+        diode_on = SKAction.animate(with: textures, timePerFrame: 0.05)
+        diode_off = SKAction.animate(with: textures.reversed(), timePerFrame: 0.05)
         
         super.init(texture: textures[0], color: .clear, size: textures[0].size())
-        
-        self.position = placeholder_node.position
-        placeholder_node.removeFromParent()
         
         if state {
             run(diode_on)
         } else {
             run(diode_off)
         }
+        
+        setScale(0.413)
     }
     
     func blink() {
+        removeAllActions()
         let blink_action = SKAction.repeatForever(SKAction.sequence([diode_on, diode_off]))
         run(blink_action)
     }
@@ -80,28 +80,61 @@ class Diode:SKSpriteNode {
 
 class StatusLabel:SKNode {
     
-    private var label:SKLabelNode
+    //private var label:SKLabelNode
     private let labels:[GameState:String] = [.ai_thinking: "🤖 Thinking...", .waiting_for_player: "🧠 Your Turn", .game_over(winner: .O): "🤖 AI Wins!", .game_over(winner: .X): "🏆 Human Wins!", .game_over(winner: .none): "😒 Draw!"]
     
+    let blue:Diode
+    let red:Diode
+    
     override init() {
-        self.label = SKLabelNode(fontNamed: "Menlo")
+        /*self.label = SKLabelNode(fontNamed: "Menlo")
         self.label.text = labels[.ai_playing]
         self.label.fontSize = 16
         self.label.fontColor = .white
         self.label.verticalAlignmentMode = .center
-        self.label.horizontalAlignmentMode = .center
+        self.label.horizontalAlignmentMode = .center */
         
+        red = Diode(diode_type: .red)
+        blue = Diode(diode_type: .blue)
+        
+        red.position = CGPoint(x:-red.size.width/2, y:-red.size.width/2)
+        blue.position = CGPoint(x:blue.size.width/2, y:-blue.size.width/2)
+        
+        red.zPosition = 20
+        blue.zPosition = 20
+    
         super.init()
-        self.position = position
-        self.addChild(label)
+        
+        addChild(red)
+        addChild(blue)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func change_label(to state:GameState) {
-        self.label.text = labels[state]
+    func change_state(to state:GameState) {
+        switch state {
+        case .ai_thinking:
+            red.set_state(state: true)
+            blue.set_state(state: false)
+        case .ai_playing:
+            red.set_state(state: false)
+            blue.set_state(state: false)
+        case .waiting_for_player:
+            red.set_state(state: false)
+            blue.set_state(state: true)
+        case .game_over(winner: .O):
+            red.blink()
+            blue.set_state(state: false)
+        case .game_over(winner: .X):
+            blue.blink()
+            red.set_state(state: false)
+        case .game_over(winner: .none), .game_over(winner: .some(.empty)):
+            blue.set_state(state: false)
+            red.set_state(state: false)
+        }
+        
     }
 }
 

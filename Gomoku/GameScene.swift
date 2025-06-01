@@ -101,7 +101,7 @@ class GameScene: SKScene {
         didSet {
             print("Game state changed to \(current_state). Updating the robot face.")
             updateRobotForState(current_state)
-            status_label.change_label(to: current_state)
+            status_label.change_state(to: current_state)
         }
     }
     
@@ -189,10 +189,11 @@ class GameScene: SKScene {
         addChild(hud_layer)
         hud_layer.delegate = self
         
+        
         // --- STATUS LABEL --
         status_label = StatusLabel()
-        status_label.position = CGPoint(x: 0, y: -400)
-        //addChild(status_label)
+        status_label.position = CGPoint(x: 180, y: 440)
+        addChild(status_label)
         status_label.zPosition = 10
         
     }
