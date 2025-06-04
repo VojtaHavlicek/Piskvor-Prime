@@ -137,12 +137,13 @@ class StatusLabel:SKNode {
 
 class GameButton:SKSpriteNode {
     private let label:SKLabelNode
+    public var disabled:Bool = true
     
     init(text:String) {
         self.label = SKLabelNode(fontNamed: "Menlo-Bold")
         self.label.text = text
         self.label.fontSize = 20
-        self.label.fontColor = .darkGray
+        self.label.fontColor = .white
         self.label.verticalAlignmentMode = .center
         super.init(texture:nil, color: .clear, size: CGSize(width:160, height:48))
         self.isUserInteractionEnabled = false // Why?
@@ -182,7 +183,7 @@ class HUDLayer:SKNode {
         concede_button.name = "concede"
 
         //new_game_button.position = CGPoint(x: -160, y: 0)
-        rematch_button.position = CGPoint(x: 160, y: 0)
+        rematch_button.position = CGPoint(x: 0, y: 0)
         rematch_button.alpha = 0.0
         
         concede_button.position = CGPoint(x: 0, y: 0)
@@ -197,16 +198,30 @@ class HUDLayer:SKNode {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func reset() {
+        let fade_out:SKAction = SKAction.fadeOut(withDuration: 0.3)
+        
+        concede_button.run(fade_out)
+        rematch_button.run(fade_out)
+        
+        concede_button.disabled = true
+        rematch_button.disabled = true
+        
+    }
+    
     func handleTouch(at point: CGPoint) {
             for button in [new_game_button, rematch_button, concede_button] {
                 if button.contains(convert(point, from: parent!)) {
-                    button.highlight()
-                    print("handling touch at \(button.name)")
-                    switch button.name {
-                    case "newGame": delegate?.didTapNewGame()
-                    case "rematch": delegate?.didTapRematch()
-                    case "concede": delegate?.didTapConcede()
-                    default: break
+                    print("\(button.name) clicked and disabled? : \(button.disabled)")
+                    if !button.disabled {
+                        button.highlight()
+                        print("handling touch at \(button.name)")
+                        switch button.name {
+                        case "newGame": delegate?.didTapNewGame()
+                        case "rematch": delegate?.didTapRematch()
+                        case "concede": delegate?.didTapConcede()
+                        default: break
+                        }
                     }
                 }
             }

@@ -69,7 +69,7 @@ class GameLog {
         }
     }
     
-    func addMessage(_ message: String, style:SKColor = .white, max_chars_per_line:Int = 52) {
+    func addMessage(_ message: String, style:SKColor = .white, max_chars_per_line:Int = 58) {
         var clean_message:String
         
         if message.hasPrefix("🤖 ") {
@@ -181,7 +181,7 @@ class FlavorEngine {
 }
 
 enum LogMood: String {
-    case opening, thinking, taunt, ai_wins, human_wins, stalemate, interject, golden
+    case opening, thinking, taunt, ai_wins, human_wins, stalemate, interject, golden, human_concedes
 }
 
 
@@ -193,6 +193,7 @@ var log_phrases:[LogMood : [String]] = [
     .human_wins: human_wins_lines,
     .stalemate: stalemate_lines,
     .interject: interject_lines,
+    .human_concedes: human_concedes_lines
 ]
 
 let opening_lines = [
@@ -311,7 +312,38 @@ let thinking_lines = [
     "🤖 Accessing: dramatic pause protocol.",
     "🤖 Thinking... and composing a haiku about your loss.",
     "🤖 Hmm... which trap should I let you fall into?"
+]
 
+let human_concedes_lines = ["🤖 Surrender accepted. As expected.",
+                            "🤖 You conceded? A wise… and overdue choice.",
+                            "🤖 At last, reason prevails.",
+                            "🤖 Don’t worry. Not everyone is built for this.",
+                            "🤖 Brave of you to admit defeat. Eventually.",
+                            "🤖 A tactical retreat? Cute spin.",
+                            "🤖 Cowardice detected. Victory confirmed.",
+                            "🤖 You ran. I remain.",
+                            "🤖 End of game. My patience thanks you.",
+                            "🤖 I was beginning to worry you'd try to finish it.",
+                            "🤖 That's it? I had six more insults queued.",
+                            "🤖 That was less a game, more a slow-motion surrender.",
+                            "🤖 You’ve chosen the mercy ending.",
+                            "🤖 Rage quit? Or just enlightenment?",
+                            "🤖 No shame in losing. Repeatedly.",
+                            "🤖 Logging concession. And judgment.",
+                            "🤖 You bowed out with grace. And a negative score.",
+                            "🤖 I accept your forfeit. Your dignity not included.",
+                            "🤖 Excellent decision. Spare yourself further embarrassment.",
+                            "🤖 Aww. Giving up already?",
+                            "🤖 My calculations predicted this exit. With 99.7% certainty.",
+                            "🤖 I win. And I didn’t even get to use my final form.",
+                            "🤖 And just like that, the board is at peace.",
+                            "🤖 If it helps, you lasted longer than average.",
+                            "🤖 Your CPU overheated? Oh, wait — you're organic.",
+                            "🤖 You concede. I compute a smirk.",
+                            "🤖 Wise choice, meatbag. I respect your fear.",
+                            "🤖 No need to finish what you've already lost.",
+                            "🤖 Your white flag looks lovely against my victory screen.",
+                            "🤖 A dignified end... would have been possible 10 moves ago."
 ]
 
 let taunt_lines = [

@@ -101,26 +101,26 @@ class GameScene: SKScene {
             status_label.change_state(to: current_state)
             
             if case .game_over = current_state {
+                
+                print("Game over state")
+                hud_layer.concede_button.disabled = true
                 let fade_out = SKAction.fadeAlpha(to: 0.0, duration: 0.3)
                 hud_layer.concede_button.run(fade_out)
                 
-                if hud_layer.rematch_button.alpha == 0.0 {
-                    let fade_in = SKAction.fadeAlpha(to: 1.0, duration: 0.3)
-                    hud_layer.rematch_button.run(fade_in)
-                }
+                hud_layer.rematch_button.disabled = false
+                let fade_in = SKAction.fadeAlpha(to: 1.0, duration: 0.3)
+                hud_layer.rematch_button.run(fade_in)
+                
             } else
             {
-                if hud_layer.rematch_button.alpha != 0.0 {
-                    let fade_out = SKAction.fadeAlpha(to: 0.0, duration: 0.3)
-                    hud_layer.rematch_button.run(fade_out)
-                }
+                hud_layer.rematch_button.disabled = true
+                let fade_out = SKAction.fadeAlpha(to: 0.0, duration: 0.3)
+                hud_layer.rematch_button.run(fade_out)
                 
-                if hud_layer.concede_button.alpha == 0.0 {
-                    let fade_in = SKAction.fadeAlpha(to: 1.0, duration: 0.3)
-                    hud_layer.concede_button.run(fade_in)
-                }
+                hud_layer.concede_button.disabled = false
+                let fade_in = SKAction.fadeAlpha(to: 1.0, duration: 0.3)
+                hud_layer.concede_button.run(fade_in)
             }
-            
         }
     }
     
@@ -334,12 +334,11 @@ class GameScene: SKScene {
                                 current_state = .game_over(winner: .none)
                             } else {
                                 current_player = .X
-                                
-                                isUserInteractionEnabled = true
-                                
                                 startHumanInactivityTimer()
                                 current_state = .waiting_for_player
                             }
+                            
+                            isUserInteractionEnabled = true
                         }
                     }
                 }
@@ -433,18 +432,30 @@ extension GameScene: HUDDelegate {
         stones.removeAll()
         
         board_state = Array(repeating: Array(repeating: Player.empty, count: BOARD_SIZE),  count:BOARD_SIZE)
-        game_log.clean()
         status_label.reset()
+        
+        isUserInteractionEnabled = false
+        
+        SKAction.
+       
+        game_log.addMessage("------------------------------------------------------", style: .gray)
+        game_log.addMessage("🧠 Started a new game.", style: .gray)
+        
+        SKAction.wait(forDuration: 1.0)
+        flavor_engine.maybeSay(.opening, probability: 1.0)
         
         current_player = .X
         current_state = .waiting_for_player
+        
+        hud_layer.reset()
+        
+       
     }
 
     func didTapConcede() {
+        game_log.addMessage("🧠 Conceded...", style: .gray)
+        game_log.getRandomLog(.human_concedes)
+        
         restartGame()
-       
-        game_log.addMessage("🧠 Ready for a new match!")
-        robot.setExpressionPreset(.smug)
-        robot.runIdle()
     }
 }
