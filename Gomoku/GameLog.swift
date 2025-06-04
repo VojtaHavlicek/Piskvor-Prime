@@ -89,7 +89,7 @@ class GameLog {
         }
     }
     
-    func addMessage(_ message: String, style:SKColor = .white, max_chars_per_line:Int = 56) {
+    func addMessage(_ message: String, style:SKColor = .white, max_chars_per_line:Int = 46) {
         var clean_message:String
         
         if message.hasPrefix("🤖 ") {
@@ -104,7 +104,7 @@ class GameLog {
         
         for (i, line_text) in wrapped_lines.reversed().enumerated() {
             let label = SKLabelNode(fontNamed: "Menlo")
-            label.fontSize = 20
+            label.fontSize = 24
             label.fontColor = style
             label.horizontalAlignmentMode = .left
             label.verticalAlignmentMode = .bottom
