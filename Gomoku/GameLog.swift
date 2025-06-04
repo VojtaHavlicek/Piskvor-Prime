@@ -28,7 +28,7 @@ class GameLog {
         let utterance = AVSpeechUtterance(string: line)
         utterance.voice = AVSpeechSynthesisVoice(language: "en-IN")
         utterance.rate = 0.5 // Adjust for effect
-        utterance.pitchMultiplier = 1.5
+        utterance.pitchMultiplier = 1.6
         speech_synth.speak(utterance)
     }
     
@@ -69,7 +69,23 @@ class GameLog {
         }
     }
     
-    func addMessage(_ message: String, style:SKColor = .white, max_chars_per_line:Int = 58) {
+    func addEmptyLine() {
+        // Shift existing lines down
+        for line in lines.dropFirst() {
+            line.run(SKAction.moveBy(x: 0, y: -LINE_HEIGHT, duration: 0.1))
+        }
+
+        // Remove old lines if needed
+        while lines.count > MAX_LINES {
+            let removed = lines.removeLast()
+            removed.run(SKAction.sequence([
+                .fadeOut(withDuration: 0.2),
+                .removeFromParent()
+            ]))
+        }
+    }
+    
+    func addMessage(_ message: String, style:SKColor = .white, max_chars_per_line:Int = 56) {
         var clean_message:String
         
         if message.hasPrefix("🤖 ") {
@@ -115,7 +131,6 @@ class GameLog {
     func getRandomLog(_ mood: LogMood) {
         let message = log_phrases[mood]?.randomElement() ?? ""
         addMessage(message, style: .white)
-        speak(message.withoutEmojis)
     }
     
     func maybeAddFlavorLine(probability:Double = 0.15) {
@@ -159,14 +174,14 @@ class FlavorEngine {
         if Double.random(in: 0...1, using:&rng) < 0.01, let golden = golden_lines.randomElement(using: &rng) {
             track(golden)
             game_log.addMessage(golden, style: .white)
-            print("Robot: bouncing mouth")
+            game_log.speak(golden.withoutEmojis)
             robot.bounce_mouth()
             return
         }
         
         if Double.random(in: 0...1, using:&rng) < probability, let line = get_line(for: mood) {
             game_log.addMessage(line, style: .white)
-            print("Robot: bouncing mouth")
+            game_log.speak(line.withoutEmojis)
             robot.bounce_mouth()
         }
     }

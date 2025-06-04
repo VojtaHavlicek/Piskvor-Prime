@@ -101,8 +101,6 @@ class GameScene: SKScene {
             status_label.change_state(to: current_state)
             
             if case .game_over = current_state {
-                
-                print("Game over state")
                 hud_layer.concede_button.disabled = true
                 let fade_out = SKAction.fadeAlpha(to: 0.0, duration: 0.3)
                 hud_layer.concede_button.run(fade_out)
@@ -193,9 +191,8 @@ class GameScene: SKScene {
             addChild(game_log.getNode())
         }
         
-        game_log.getRandomLog(.opening)
         flavor_engine = FlavorEngine(game_log: game_log, robot: robot)
-        
+        flavor_engine.maybeSay(.opening, probability: 1.0)
         
         // --- ROBOT ---
         robot.position = CGPoint(x: 0, y: 540)
@@ -211,7 +208,7 @@ class GameScene: SKScene {
         
         // --- STATUS LABEL --
         status_label = StatusLabel()
-        status_label.position = CGPoint(x: 330, y: -360)
+        status_label.position = CGPoint(x: 307, y: -360)
         addChild(status_label)
         status_label.zPosition = 10
         
@@ -261,14 +258,14 @@ class GameScene: SKScene {
                                 stone!.run(stone!.highlight_animation!)
                             }
                         }
-                        game_log.getRandomLog(.human_wins)
+                        flavor_engine.maybeSay(.human_wins, probability: 1.0)
                         stopHumanInactivityTaunts()
                         current_state = .game_over(winner: .X)
                         break
                     }
                     
                     if checkDraw(state: board_state) {
-                        game_log.getRandomLog(.stalemate)
+                        flavor_engine.maybeSay(.stalemate, probability: 1.0)
                         stopHumanInactivityTaunts()
                         current_state = .game_over(winner: .none)
                         break
@@ -281,12 +278,20 @@ class GameScene: SKScene {
                     current_player = .O
                     
                     // If AI is winning, taunt
-                    if evaluateState(state: board_state, player: .O) < 0 {
-                        flavor_engine.maybeSay(.taunt)
-                    }
+                   
                     
                     current_state = .ai_thinking
-                    flavor_engine.maybeSay(.thinking)
+                    
+                    var taunted = false
+                    if evaluateState(state: board_state, player: .O) < 0 {
+                        flavor_engine.maybeSay(.taunt)
+                        taunted = true
+                    }
+                    
+                    if !taunted {
+                        flavor_engine.maybeSay(.thinking)
+                    }
+                    
                     
                     isUserInteractionEnabled = false
                     DispatchQueue.global(qos: .userInitiated).async { [self] in
@@ -325,11 +330,11 @@ class GameScene: SKScene {
                                         stone!.run(stone!.highlight_animation!)
                                     }
                                 }
-                                game_log.getRandomLog(.ai_wins)
+                                flavor_engine.maybeSay(.human_wins, probability: 1.0)
                                 stopHumanInactivityTaunts()
                                 current_state = .game_over(winner: .O)
                             } else if checkDraw(state: board_state) {
-                                game_log.getRandomLog(.stalemate)
+                                flavor_engine.maybeSay(.stalemate, probability: 1.0)
                                 stopHumanInactivityTaunts()
                                 current_state = .game_over(winner: .none)
                             } else {
@@ -434,27 +439,34 @@ extension GameScene: HUDDelegate {
         board_state = Array(repeating: Array(repeating: Player.empty, count: BOARD_SIZE),  count:BOARD_SIZE)
         status_label.reset()
         
+        stopHumanInactivityTaunts()
         isUserInteractionEnabled = false
+        self.hud_layer.reset()
         
-        SKAction.
        
-        game_log.addMessage("------------------------------------------------------", style: .gray)
-        game_log.addMessage("🧠 Started a new game.", style: .gray)
+        let wait_aciton = SKAction.wait(forDuration: 5.0)
+        let restart_action = SKAction.run {
+            self.game_log.addMessage("🧠 Started a new game.", style: .gray)
+            self.game_log.addEmptyLine()
+            
+            self.flavor_engine.maybeSay(.opening, probability: 1.0)
+            
+            self.current_player = .X
+            self.current_state = .waiting_for_player
+            self.hud_layer.reset()
+            
+            self.isUserInteractionEnabled = true
+        }
         
-        SKAction.wait(forDuration: 1.0)
-        flavor_engine.maybeSay(.opening, probability: 1.0)
+        run(SKAction.sequence([wait_aciton, restart_action]))
         
-        current_player = .X
-        current_state = .waiting_for_player
-        
-        hud_layer.reset()
         
        
     }
 
     func didTapConcede() {
         game_log.addMessage("🧠 Conceded...", style: .gray)
-        game_log.getRandomLog(.human_concedes)
+        flavor_engine.maybeSay(.human_concedes, probability: 1.0)
         
         restartGame()
     }
