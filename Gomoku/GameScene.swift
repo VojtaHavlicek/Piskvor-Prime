@@ -330,7 +330,7 @@ class GameScene: SKScene {
                                         stone!.run(stone!.highlight_animation!)
                                     }
                                 }
-                                flavor_engine.maybeSay(.human_wins, probability: 1.0)
+                                flavor_engine.maybeSay(.ai_wins, probability: 1.0)
                                 stopHumanInactivityTaunts()
                                 current_state = .game_over(winner: .O)
                             } else if checkDraw(state: board_state) {
