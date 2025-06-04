@@ -13,10 +13,13 @@ class Door {
     private var is_open:Bool = false // TODO: Switch on completion
     private var top:SKSpriteNode
     private var bottom:SKSpriteNode
+    
+    private var easter_egg_textures:[SKTexture] = []
+    private var easter_egg:SKSpriteNode?
 
     
     init(top:SKSpriteNode, bottom:SKSpriteNode, mask:SKSpriteNode) {
-        
+        // Prepare door
         let crop_node = SKCropNode()
         crop_node.position = mask.position
         mask.position = .zero
@@ -40,19 +43,57 @@ class Door {
         self.bottom = bottom
         
         ref.addChild(crop_node)
+        
+        // Prep easter eggs
+        let easter_egg_atlas:SKTextureAtlas = SKTextureAtlas(named: "easter_eggs")
+        easter_egg_textures = Array(easter_egg_atlas.textureNames.map { easter_egg_atlas.textureNamed($0) })
     }
     
     func open() {
+        
+        
         top.run(SKAction.moveBy(x: 0, y: top.size.height, duration: 0.5))
         bottom.run(SKAction.moveBy(x: 0, y: -bottom.size.height, duration: 0.5))
         is_open = true
+        
+        // Remove easter egg
+        if let egg = easter_egg {
+            egg.removeFromParent()
+            easter_egg = nil
+        }
     }
     
     func close() {
+        plant_easter_egg()
+        
         top.run(SKAction.moveBy(x: 0, y: -top.size.height, duration: 0.5))
         bottom.run(SKAction.moveBy(x: 0, y: bottom.size.height, duration: 0.5))
         is_open = false
+        
+       
     }
+    
+    func plant_easter_egg() {
+        // How to add this to the top texture? 
+        let overlay_size = top.frame.size
+        let egg_texture = easter_egg_textures.randomElement()!
+        let egg = SKSpriteNode(texture: egg_texture, size: overlay_size)
+        egg.position = .zero
+        egg.zPosition = top.zPosition + 1
+        egg.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        
+        // Waht the HACK 
+        egg.xScale = 1/top.xScale
+        egg.yScale = 1/top.yScale
+        
+        top.addChild(egg)
+        self.easter_egg = egg
+        
+        print("Planted solid red egg. Size: \(egg.size), top frame: \(top.frame.size)")
+        
+        
+    }
+    
     
 }
 

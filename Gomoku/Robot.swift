@@ -188,13 +188,16 @@ class RobotController:SKNode {
         idle_action = SKAction.repeatForever(sequence)
         runIdle()
     }
-    
-    func speak() {
-        bounce_mouth()
+   
+    func look_at_point(_ point: CGPoint) {
+        let dx = point.x - position.x
+        let dy = point.y - position.y
+        let angle = atan2(dy, dx)
+        
+        // TODO: rotate the eyes towards the point?
+        
     }
-    
-    
-    
+   
     func runIdle() {
         print("running idle")
         if let idle = idle_action {
