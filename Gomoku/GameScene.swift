@@ -416,8 +416,6 @@ class GameScene: SKScene {
             robot.setExpressionPreset(.thinking)
         case .ai_playing:
             robot.setExpressionPreset(.smug)
-            robot.bounce_mouth()
-            
         case .game_over(let winner):
             if winner == .O {
                 robot.setExpressionPreset(.winning)
