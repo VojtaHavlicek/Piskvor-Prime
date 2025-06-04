@@ -95,13 +95,32 @@ class GameScene: SKScene {
     let robot = RobotController()
     private var human_inactivity_timer:Timer?
     
- 
-    
     private var current_state:GameState = .waiting_for_player {
         didSet {
-            print("Game state changed to \(current_state). Updating the robot face.")
             updateRobotForState(current_state)
             status_label.change_state(to: current_state)
+            
+            if case .game_over = current_state {
+                let fade_out = SKAction.fadeAlpha(to: 0.0, duration: 0.3)
+                hud_layer.concede_button.run(fade_out)
+                
+                if hud_layer.rematch_button.alpha == 0.0 {
+                    let fade_in = SKAction.fadeAlpha(to: 1.0, duration: 0.3)
+                    hud_layer.rematch_button.run(fade_in)
+                }
+            } else
+            {
+                if hud_layer.rematch_button.alpha != 0.0 {
+                    let fade_out = SKAction.fadeAlpha(to: 0.0, duration: 0.3)
+                    hud_layer.rematch_button.run(fade_out)
+                }
+                
+                if hud_layer.concede_button.alpha == 0.0 {
+                    let fade_in = SKAction.fadeAlpha(to: 1.0, duration: 0.3)
+                    hud_layer.concede_button.run(fade_in)
+                }
+            }
+            
         }
     }
     
@@ -192,7 +211,7 @@ class GameScene: SKScene {
         
         // --- STATUS LABEL --
         status_label = StatusLabel()
-        status_label.position = CGPoint(x: 180, y: 440)
+        status_label.position = CGPoint(x: 330, y: -360)
         addChild(status_label)
         status_label.zPosition = 10
         
@@ -315,12 +334,12 @@ class GameScene: SKScene {
                                 current_state = .game_over(winner: .none)
                             } else {
                                 current_player = .X
+                                
+                                isUserInteractionEnabled = true
+                                
+                                startHumanInactivityTimer()
+                                current_state = .waiting_for_player
                             }
-                            
-                            isUserInteractionEnabled = true
-                            
-                            startHumanInactivityTimer()
-                            current_state = .waiting_for_player
                         }
                     }
                 }
@@ -410,19 +429,20 @@ extension GameScene: HUDDelegate {
     }
 
     func restartGame() {
-        // Show surrender animation or log message
-    }
-
-    func didTapConcede() {
-        print("Concede tapped.")
         stones.values.forEach { $0?.removeFromParent() }
         stones.removeAll()
         
         board_state = Array(repeating: Array(repeating: Player.empty, count: BOARD_SIZE),  count:BOARD_SIZE)
         game_log.clean()
-            
+        status_label.reset()
+        
         current_player = .X
         current_state = .waiting_for_player
+    }
+
+    func didTapConcede() {
+        restartGame()
+       
         game_log.addMessage("🧠 Ready for a new match!")
         robot.setExpressionPreset(.smug)
         robot.runIdle()

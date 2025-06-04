@@ -79,21 +79,10 @@ class Diode:SKSpriteNode {
 }
 
 class StatusLabel:SKNode {
-    
-    //private var label:SKLabelNode
-    private let labels:[GameState:String] = [.ai_thinking: "🤖 Thinking...", .waiting_for_player: "🧠 Your Turn", .game_over(winner: .O): "🤖 AI Wins!", .game_over(winner: .X): "🏆 Human Wins!", .game_over(winner: .none): "😒 Draw!"]
-    
     let blue:Diode
     let red:Diode
     
     override init() {
-        /*self.label = SKLabelNode(fontNamed: "Menlo")
-        self.label.text = labels[.ai_playing]
-        self.label.fontSize = 16
-        self.label.fontColor = .white
-        self.label.verticalAlignmentMode = .center
-        self.label.horizontalAlignmentMode = .center */
-        
         red = Diode(diode_type: .red)
         blue = Diode(diode_type: .blue)
         
@@ -111,6 +100,14 @@ class StatusLabel:SKNode {
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func reset() {
+        red.removeAllActions()
+        blue.removeAllActions()
+        
+        red.set_state(state: false)
+        blue.set_state(state: false)
     }
     
     func change_state(to state:GameState) {
@@ -144,10 +141,10 @@ class GameButton:SKSpriteNode {
     init(text:String) {
         self.label = SKLabelNode(fontNamed: "Menlo-Bold")
         self.label.text = text
-        self.label.fontSize = 24
-        self.label.fontColor = .white
+        self.label.fontSize = 20
+        self.label.fontColor = .darkGray
         self.label.verticalAlignmentMode = .center
-        super.init(texture:nil, color: .darkGray, size: CGSize(width:160, height:64))
+        super.init(texture:nil, color: .clear, size: CGSize(width:160, height:48))
         self.isUserInteractionEnabled = false // Why?
         self.addChild(label)
     }
@@ -174,22 +171,25 @@ class HUDLayer:SKNode {
     weak var delegate: HUDDelegate?
     
     let new_game_button = GameButton(text: "New Game")
-    let rematch_button = GameButton(text: "Rematch")
-    let concede_button = GameButton(text: "Concede")
+    let rematch_button = GameButton(text: "REMATCH")
+    let concede_button = GameButton(text: "CONCEDE")
     
     override init() {
         super.init()
         
         //new_game_button.name = "newGame"
-       // rematch_button.name = "rematch"
+        rematch_button.name = "rematch"
         concede_button.name = "concede"
 
         //new_game_button.position = CGPoint(x: -160, y: 0)
-        //rematch_button.position = CGPoint(x: 160, y: 0)
+        rematch_button.position = CGPoint(x: 160, y: 0)
+        rematch_button.alpha = 0.0
+        
         concede_button.position = CGPoint(x: 0, y: 0)
+        concede_button.alpha = 0.0
 
         //addChild(new_game_button)
-        //addChild(rematch_button)
+        addChild(rematch_button)
         addChild(concede_button)
     }
     
