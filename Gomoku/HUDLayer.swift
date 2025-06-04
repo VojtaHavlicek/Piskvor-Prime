@@ -142,7 +142,7 @@ class GameButton:SKSpriteNode {
     init(text:String) {
         self.label = SKLabelNode(fontNamed: "Menlo-Bold")
         self.label.text = text
-        self.label.fontSize = 20
+        self.label.fontSize = 24
         self.label.fontColor = .white
         self.label.verticalAlignmentMode = .center
         super.init(texture:nil, color: .clear, size: CGSize(width:160, height:48))
