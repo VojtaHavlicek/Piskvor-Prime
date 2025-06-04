@@ -33,8 +33,6 @@ class Door {
         top.position = CGPoint(x: 0, y: top.size.height/2)
         bottom.position = CGPoint(x:0, y: -bottom.size.height/2)
         
-        
-        
         crop_node.addChild(top)
         crop_node.addChild(bottom)
         
@@ -45,14 +43,14 @@ class Door {
     }
     
     func open() {
-        top.run(SKAction.moveBy(x: 0, y: top.size.height, duration: 1.5))
-        bottom.run(SKAction.moveBy(x: 0, y: -bottom.size.height, duration: 1.5))
+        top.run(SKAction.moveBy(x: 0, y: top.size.height, duration: 0.5))
+        bottom.run(SKAction.moveBy(x: 0, y: -bottom.size.height, duration: 0.5))
         is_open = true
     }
     
     func close() {
-        top.run(SKAction.moveBy(x: 0, y: -top.size.height, duration: 1.5))
-        bottom.run(SKAction.moveBy(x: 0, y: bottom.size.height, duration: 1.5))
+        top.run(SKAction.moveBy(x: 0, y: -top.size.height, duration: 0.5))
+        bottom.run(SKAction.moveBy(x: 0, y: bottom.size.height, duration: 0.5))
         is_open = false
     }
     
