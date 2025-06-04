@@ -9,7 +9,7 @@ import Foundation
 import SpriteKit
 
 enum RobotState {
-    case Idle, Thinking, Winning, Losing
+    case Idle, Thinking, Winning, Losing, Laughing
 }
 
 /* Animation template */
@@ -72,7 +72,7 @@ class RobotController:SKNode {
  
         
         let lightbulb_atlas = SKTextureAtlas(named: "lightbulb")
-        lightbulb_textures = Array(lightbulb_atlas.textureNames.map { lightbulb_atlas.textureNamed($0) })
+        lightbulb_textures = Array(lightbulb_atlas.textureNames.sorted().map { lightbulb_atlas.textureNamed($0) }).reversed()
         lightbulb = SKSpriteNode(texture: lightbulb_textures[0])
         lightbulb.zPosition = 5
         
@@ -126,9 +126,8 @@ class RobotController:SKNode {
     }
     
     func bounce_mouth() {
-        print("bouncing mouth")
-        let up = SKAction.moveBy(x: 0, y: 20, duration: 0.15)
-        let down = SKAction.moveBy(x: 0, y: -20, duration: 0.15)
+        let up = SKAction.moveBy(x: 0, y: 10, duration: 0.1)
+        let down = SKAction.moveBy(x: 0, y: -10, duration: 0.1)
         mouth.run(SKAction.repeat(SKAction.sequence([up,down]), count: 3))
     }
     
@@ -145,6 +144,40 @@ class RobotController:SKNode {
         let rotate_right = SKAction.rotate(byAngle: -.pi/10, duration: 0.05)
         let reset = SKAction.rotate(byAngle: 0, duration: 0.05)
         run(SKAction.sequence([rotate_left, rotate_right, reset]))
+    }
+    
+    func laugh(){
+        // Mouth up and head down
+        // Head up mouth down
+        // Head down mouth down
+        // mouth up
+        let basic_interval = 0.1
+        let bob_unit = 10.0
+        
+        let mouth_up = SKAction.moveBy(x: 0, y: bob_unit, duration: basic_interval)
+        let mouth_down = SKAction.moveBy(x:0, y:-bob_unit, duration: basic_interval)
+        let mouth_wair = SKAction.wait(forDuration: basic_interval)
+        
+        let head_up = SKAction.moveBy(x: 0, y: bob_unit, duration: basic_interval)
+        let head_down = SKAction.moveBy(x:0, y:-bob_unit, duration: basic_interval)
+        let head_wait = SKAction.wait(forDuration: basic_interval)
+        
+        let eyes_up = SKAction.moveBy(x: 0, y: bob_unit/2, duration: basic_interval)
+        let eyes_down = SKAction.moveBy(x: 0, y: -bob_unit/2, duration: basic_interval)
+        
+        
+        let head_sequence = SKAction.sequence([head_down, head_up, head_up, head_down, head_down, head_up])
+        let mouth_sequence = SKAction.sequence([mouth_up, mouth_up, mouth_down, mouth_up, mouth_down, mouth_down])
+        let eyes_sequence = SKAction.sequence([eyes_down, eyes_up, eyes_up, eyes_down, eyes_down, eyes_up])
+        
+        body.run(SKAction.repeat(head_sequence, count:7))
+        mouth.run(SKAction.repeat(mouth_sequence, count:7))
+        left_eye.run(SKAction.repeat(eyes_sequence, count:7))
+        right_eye.run(SKAction.repeat(eyes_sequence, count:7))
+        lightbulb.run(SKAction.repeat(head_sequence, count:7))
+        
+        
+        lightbulb.run(SKAction.repeat(SKAction.sequence([SKAction.animate(with: lightbulb_textures, timePerFrame: basic_interval/5), SKAction.animate(with: lightbulb_textures.reversed(), timePerFrame: basic_interval/5)]), count: 10))
     }
     
     private func setupIdleAnimation() {

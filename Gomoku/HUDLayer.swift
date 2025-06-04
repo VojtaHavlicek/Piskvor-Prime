@@ -136,7 +136,7 @@ class StatusLabel:SKNode {
 }
 
 class GameButton:SKSpriteNode {
-    private let label:SKLabelNode
+    public let label:SKLabelNode
     public var disabled:Bool = true
     
     init(text:String) {
@@ -166,11 +166,13 @@ protocol HUDDelegate: AnyObject {
     func didTapNewGame()
     func didTapRematch()
     func didTapConcede()
+    func didTapMute()
 }
 
 class HUDLayer:SKNode {
     weak var delegate: HUDDelegate?
     
+    let mute_button = GameButton(text: "🔊")
     let new_game_button = GameButton(text: "New Game")
     let rematch_button = GameButton(text: "REMATCH")
     let concede_button = GameButton(text: "CONCEDE")
@@ -181,6 +183,7 @@ class HUDLayer:SKNode {
         //new_game_button.name = "newGame"
         rematch_button.name = "rematch"
         concede_button.name = "concede"
+        mute_button.name = "mute"
 
         //new_game_button.position = CGPoint(x: -160, y: 0)
         rematch_button.position = CGPoint(x: 0, y: 0)
@@ -189,6 +192,11 @@ class HUDLayer:SKNode {
         concede_button.position = CGPoint(x: 0, y: 0)
         concede_button.alpha = 0.0
 
+        
+        mute_button.position = CGPoint(x:320, y:0)
+        mute_button.disabled = false
+        
+        addChild(mute_button)
         //addChild(new_game_button)
         addChild(rematch_button)
         addChild(concede_button)
@@ -210,7 +218,7 @@ class HUDLayer:SKNode {
     }
     
     func handleTouch(at point: CGPoint) {
-            for button in [new_game_button, rematch_button, concede_button] {
+            for button in [new_game_button, rematch_button, concede_button, mute_button] {
                 if button.contains(convert(point, from: parent!)) {
                     print("\(button.name) clicked and disabled? : \(button.disabled)")
                     if !button.disabled {
@@ -220,6 +228,7 @@ class HUDLayer:SKNode {
                         case "newGame": delegate?.didTapNewGame()
                         case "rematch": delegate?.didTapRematch()
                         case "concede": delegate?.didTapConcede()
+                        case "mute": delegate?.didTapMute()
                         default: break
                         }
                     }

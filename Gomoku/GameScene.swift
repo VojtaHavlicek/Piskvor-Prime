@@ -9,6 +9,55 @@ import SpriteKit
 import GameplayKit
 import AVFoundation
 
+class Door {
+    private var is_open:Bool = false // TODO: Switch on completion
+    private var top:SKSpriteNode
+    private var bottom:SKSpriteNode
+
+    
+    init(top:SKSpriteNode, bottom:SKSpriteNode, mask:SKSpriteNode) {
+        
+        let crop_node = SKCropNode()
+        crop_node.position = mask.position
+        mask.position = .zero
+        crop_node.maskNode = mask
+        crop_node.zPosition = mask.zPosition
+        
+        let ref = top.parent!
+        
+        top.removeFromParent()
+        bottom.removeFromParent()
+        
+        mask.removeFromParent()
+        
+        top.position = CGPoint(x: 0, y: top.size.height/2)
+        bottom.position = CGPoint(x:0, y: -bottom.size.height/2)
+        
+        
+        
+        crop_node.addChild(top)
+        crop_node.addChild(bottom)
+        
+        self.top = top
+        self.bottom = bottom
+        
+        ref.addChild(crop_node)
+    }
+    
+    func open() {
+        top.run(SKAction.moveBy(x: 0, y: top.size.height, duration: 1.5))
+        bottom.run(SKAction.moveBy(x: 0, y: -bottom.size.height, duration: 1.5))
+        is_open = true
+    }
+    
+    func close() {
+        top.run(SKAction.moveBy(x: 0, y: -top.size.height, duration: 1.5))
+        bottom.run(SKAction.moveBy(x: 0, y: bottom.size.height, duration: 1.5))
+        is_open = false
+    }
+    
+}
+
 class Stone:SKSpriteNode {
     // Places the stone
     
@@ -54,9 +103,6 @@ class Stone:SKSpriteNode {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
-    
 }
 
 
@@ -85,6 +131,7 @@ class GameScene: SKScene {
     private var flavor_engine:FlavorEngine!
     private var hud_layer:HUDLayer!
     private var status_label:StatusLabel!
+    private var door:Door?
     
     private var board:SKTileMapNode?
     private var stones:[Move : Stone?] = [:]
@@ -211,6 +258,13 @@ class GameScene: SKScene {
         status_label.position = CGPoint(x: 307, y: -360)
         addChild(status_label)
         status_label.zPosition = 10
+        
+        // --- DOOR ---
+        let door_top = childNode(withName: "door_top") as! SKSpriteNode
+        let door_bottom = childNode(withName: "door_bottom") as! SKSpriteNode
+        let door_mask = childNode(withName: "door_mask") as! SKSpriteNode
+        door = Door(top: door_top, bottom: door_bottom, mask: door_mask)
+        door?.open()
         
     }
     
@@ -369,7 +423,7 @@ class GameScene: SKScene {
         case .game_over(let winner):
             if winner == .O {
                 robot.setExpressionPreset(.winning)
-                robot.wiggle_head()
+                robot.laugh()
             } else if winner == .X {
                 robot.setExpressionPreset(.losing)
             } else {
@@ -425,6 +479,16 @@ class GameScene: SKScene {
 
 
 extension GameScene: HUDDelegate {
+    func didTapMute() {
+        game_log.muted.toggle()
+        
+        if game_log.muted {
+            hud_layer.mute_button.label.text = "🔇"
+        } else {
+            hud_layer.mute_button.label.text = "🔊"
+        }
+    }
+    
     func didTapNewGame() {
         restartGame()
     }
@@ -434,6 +498,8 @@ extension GameScene: HUDDelegate {
     }
 
     func restartGame() {
+        door?.close() // -> Add on completion.
+        
         stones.values.forEach { $0?.removeFromParent() }
         stones.removeAll()
         
@@ -444,7 +510,8 @@ extension GameScene: HUDDelegate {
         isUserInteractionEnabled = false
         self.hud_layer.reset()
         
-       
+        
+        
         let wait_aciton = SKAction.wait(forDuration: 5.0)
         let restart_action = SKAction.run {
             self.game_log.addMessage("🧠 Started a new game.", style: .gray)
@@ -456,6 +523,7 @@ extension GameScene: HUDDelegate {
             self.current_state = .waiting_for_player
             self.hud_layer.reset()
             
+            self.door?.open()
             self.isUserInteractionEnabled = true
         }
         

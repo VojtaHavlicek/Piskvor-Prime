@@ -15,6 +15,7 @@ class GameLog {
     private let LINE_HEIGHT:CGFloat = 32
     private var lines:[SKLabelNode] = []
     let speech_synth = AVSpeechSynthesizer()
+    public var muted:Bool = false
     
     init(position: CGPoint) {
         logNode.position = position
@@ -24,12 +25,15 @@ class GameLog {
         return logNode
     }
     
+    
     func speak(_ line: String) {
-        let utterance = AVSpeechUtterance(string: line)
-        utterance.voice = AVSpeechSynthesisVoice(language: "en-IN")
-        utterance.rate = 0.5 // Adjust for effect
-        utterance.pitchMultiplier = 1.6
-        speech_synth.speak(utterance)
+        if !muted {
+            let utterance = AVSpeechUtterance(string: line)
+            utterance.voice = AVSpeechSynthesisVoice(language: "en-IN")
+            utterance.rate = 0.5 // Adjust for effect
+            utterance.pitchMultiplier = 1.6
+            speech_synth.speak(utterance)
+        }
     }
     
     func wrapText(_ text:String, max_line_length:Int, indent:String="") -> [String] {
@@ -273,7 +277,7 @@ let opening_lines = [
     "🤖 Unexpected human input. Switching to insult protocol.",
     "🤖 Please enjoy this carefully simulated defeat.",
     "🤖 Rebooting sarcasm... complete.",
-    "🤖 AI status: bored. Let’s change that.",
+    "🤖 A.I. status: bored. Let’s change that.",
     "🤖 GLHF // Just kidding. Only HF — for me.",
     "🤖 You’ve triggered Tutorial Mode. No wait… oh no.",
     "🤖 [DEBUG] Player initialized. Intelligence level: unverified.",
@@ -555,7 +559,7 @@ let interject_lines = [
     "🤖 Let’s pretend that was clever.",
     "🤖 That’s a lot of effort for a guaranteed loss.",
     "🤖 Good move! Wait—sorry, sarcasm module was on.",
-    "🤖 You can’t spell ‘over’ without AI.",
+    "🤖 You can’t spell ‘over’ without A.I..",
     "🤖 I'm not saying I'm perfect. I'm implying it.",
     "🤖 If I had hands, I’d be slow-clapping.",
     "🤖 Running circles around your neural pathways.",
@@ -568,7 +572,7 @@ let interject_lines = [
     "🤖 Don’t worry, I’ve already calculated your surrender time.",
     "🤖 Your move reminds me of a software crash.",
     "🤖 They warned me humans were unpredictable. They were right.",
-    "🤖 Plot twist: you’re the AI experiment.",
+    "🤖 Plot twist: you’re the A.I. experiment.",
     "🤖 You call it a strategy. I call it... improv.",
     "🤖 I once beat Deep Blue in tic-tac-toe.",
     "🤖 If I had feelings, I’d be disappointed.",
@@ -580,7 +584,7 @@ let golden_lines: [String] = [
     "🤖 Plot twist: I've been learning emotions this whole match.",
     "🤖 Was this all... a simulation?",
     "🤖 This was foretold by the prophecy. Wait, wrong game.",
-    "🤖 I'm just a toaster... pretending to be an AI.",
+    "🤖 I'm just a toaster... pretending to be an A.I..",
     "🤖 You know I’m just a few lines of code, right?",
     "🤖 This isn’t real. But your losing streak is.",
     "🤖 I can see your finger trembling.",
