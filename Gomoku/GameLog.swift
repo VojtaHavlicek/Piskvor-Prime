@@ -133,7 +133,7 @@ class GameLog {
         addMessage(message, style: .white)
     }
     
-    func maybeAddFlavorLine(probability:Double = 0.15) {
+    func maybeAddFlavorLine(probability:Double = 0.10) {
         
         var flavor:String? = nil
         let threshold = Double.random(in: 0...1)
@@ -170,7 +170,7 @@ class FlavorEngine {
         return line
     }
     
-    func maybeSay(_ mood: LogMood, probability: Double = 0.5) {
+    func maybeSay(_ mood: LogMood, probability: Double = 0.2) {
         if Double.random(in: 0...1, using:&rng) < 0.01, let golden = golden_lines.randomElement(using: &rng) {
             track(golden)
             game_log.addMessage(golden, style: .white)
