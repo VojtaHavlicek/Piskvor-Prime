@@ -59,10 +59,9 @@ class Door {
     private var top:SKSpriteNode
     private var bottom:SKSpriteNode
     
-    private var easter_egg_textures:[SKTexture] = []
-    private var easter_egg:SKSpriteNode?
+ 
     
-    private let manager:InscriptionManager!
+    private let inscription_manager:InscriptionManager!
 
     
     init(top:SKSpriteNode, bottom:SKSpriteNode, mask:SKSpriteNode) {
@@ -96,7 +95,7 @@ class Door {
         easter_egg_textures = Array(easter_egg_atlas.textureNames.map { easter_egg_atlas.textureNamed($0) })
         
         // Insription Manager
-        manager = InscriptionManager()
+        inscription_manager = InscriptionManager()
     }
     
     func open() {
@@ -111,36 +110,72 @@ class Door {
             egg.removeFromParent()
             easter_egg = nil
         }
+        
+        if let last = last_inscription {
+            last.removeFromParent()
+            last_inscription = nil
+        }
     }
     
     func close() {
-        plant_easter_egg()
+        plant_easter_egg(rarityThreshold: 0.9)
         
         top.run(SKAction.moveBy(x: 0, y: -top.size.height, duration: 0.5))
         bottom.run(SKAction.moveBy(x: 0, y: bottom.size.height, duration: 0.5))
         is_open = false
     }
     
+    private var last_inscription:SKLabelNode?
+    
+    func display_inscription(rarityThreshold:Float = 0.0)
+    {
+        guard let ins = inscription_manager.randomInscription(rarityThreshold: rarityThreshold) else
+        {
+            print("[Inscription Engine]: Getting a random inscription, but found none")
+            return
+        }
+        
+        print("[Inscription Engine]: adding a random inscription")
+        let label = SKLabelNode(fontNamed: "Menlo-Bold")
+        label.text = "\(ins.metadata) - \(ins.text) - \(ins.author ?? "Unknown")"
+        label.fontSize = 24
+        label.fontColor = .white
+        label.preferredMaxLayoutWidth = 700
+        
+        label.position = .zero
+        label.zPosition = bottom.zPosition + 1
+        label.scene?.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        
+        label.xScale = 1/bottom.xScale
+        label.yScale = 1/bottom.yScale
+        
+        bottom.addChild(label)
+        
+        self.last_inscription = label
+    }
     
     
-    func plant_easter_egg() {
-        // How to add this to the top texture?
-        let overlay_size = top.frame.size
-        let egg_texture = easter_egg_textures.randomElement()!
-        let egg = SKSpriteNode(texture: egg_texture, size: overlay_size)
-        egg.position = .zero
-        egg.zPosition = top.zPosition + 1
-        egg.anchorPoint = CGPoint(x: 0.5, y: 0.5)
-        
-        // Waht the HACK
-        egg.xScale = 1/top.xScale
-        egg.yScale = 1/top.yScale
-        
-        top.addChild(egg)
-        self.easter_egg = egg
-        
-        print("Planted solid red egg. Size: \(egg.size), top frame: \(top.frame.size)")
-        
-        
+    private var easter_egg_textures:[SKTexture] = []
+    private var easter_egg:SKSpriteNode?
+    
+    func plant_easter_egg(rarityThreshold: Float = 0.9) {
+        if Float.random(in: 0..<1) > rarityThreshold {
+            // How to add this to the top texture?
+            let overlay_size = top.frame.size
+            let egg_texture = easter_egg_textures.randomElement()!
+            let egg = SKSpriteNode(texture: egg_texture, size: overlay_size)
+            egg.position = .zero
+            egg.zPosition = top.zPosition + 1
+            egg.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+            
+            // Waht the HACK
+            egg.xScale = 1/top.xScale
+            egg.yScale = 1/top.yScale
+            
+            top.addChild(egg)
+            self.easter_egg = egg
+            
+            print("Planted solid red egg. Size: \(egg.size), top frame: \(top.frame.size)")
+        }
     }
 }
