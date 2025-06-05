@@ -205,7 +205,6 @@ class GameScene: SKScene {
         addChild(hud_layer)
         hud_layer.delegate = self
         
-        
         // --- STATUS LABEL --
         status_label = StatusLabel()
         status_label.position = CGPoint(x: 307, y: -360)
@@ -460,16 +459,17 @@ extension GameScene: HUDDelegate {
             
             
             let wait_action = SKAction.sequence([SKAction.repeat(SKAction.sequence([SKAction.wait(forDuration: 0.5), SKAction.run {self.game_log.addEmptyLine()} ]), count: 5), SKAction.wait(forDuration: 4.0)])
+            
             let restart_action = SKAction.run {
                 
                 self.game_log.addEmptyLine()
                 self.game_log.addMessage("🧠 Started a new game.", style: .gray)
                 
                 // Show [NEW GAME BUTTON on the door]
-                self.door?.open()
+                let fade_in = SKAction.fadeAlpha(to: 1.0, duration: 0.3)
+                self.hud_layer.run(fade_in)
                 
-                self.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
-                                   SKAction.run {
+                self.door?.open{
                     self.flavor_engine.maybeSay(.opening, probability: 1.0)
                     
                     self.current_player = .X
@@ -477,7 +477,8 @@ extension GameScene: HUDDelegate {
                     self.hud_layer.reset()
                     
                     self.isUserInteractionEnabled = true
-                }]))
+                }
+                    
             }
             
             self.run(SKAction.sequence([wait_action, restart_action]))

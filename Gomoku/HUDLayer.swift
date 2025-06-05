@@ -198,12 +198,11 @@ class HUDLayer:SKNode {
         concede_button.position = CGPoint(x: 0, y: 0)
         concede_button.alpha = 0.0
 
-        
         mute_button.position = CGPoint(x:320, y:0)
         mute_button.disabled = false
         
         addChild(mute_button)
-        //addChild(new_game_button)
+        addChild(new_game_button)
         addChild(rematch_button)
         addChild(concede_button)
     }

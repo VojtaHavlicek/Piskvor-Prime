@@ -111,12 +111,6 @@ class Door {
     
     
     func open(completion: (() -> Void)? = nil) {
-        top.run(SKAction.sequence([SKAction.moveBy(x: 0, y: top.size.height, duration: 0.5), SKAction.run {
-            self.is_open = true
-            completion?()
-        }]))
-        bottom.run(SKAction.moveBy(x: 0, y: -bottom.size.height, duration: 0.5))
-       
         // Remove easter egg
         if let egg = easter_egg {
             egg.removeFromParent()
@@ -127,9 +121,14 @@ class Door {
             last.removeFromParent()
             last_inscription = nil
         }
+        
+        top.run(SKAction.sequence([SKAction.moveBy(x: 0, y: top.size.height, duration: 0.5), SKAction.run {
+            self.is_open = true
+            completion?()
+        }]))
+        bottom.run(SKAction.moveBy(x: 0, y: -bottom.size.height, duration: 0.5))
     }
-    
-    
+
     func close(completion: (() -> Void)? = nil) {
         plant_easter_egg(rarityThreshold: 0.9)
         display_inscription(rarityThreshold: Float.random(in: 0.11...1.0))
