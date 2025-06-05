@@ -246,109 +246,115 @@ class GameScene: SKScene {
                     stone.zPosition = 10
                     addChild(stone)
                     
+                   
+                    
+                    
                     var move = Move(row: tile.coordinates.0, col: tile.coordinates.1)
                     board_state = applyMove(state: board_state, move: move, player: .X)
                     stones[move] = stone // Add stone
                     
                     game_log.addMessage("🧠 Plays (\(move.row), \(move.col))", style: .gray)
                     
-                    // Check for win condition
-                    if let (winner, streak) = checkWinCondition(state: board_state) {
-                        for (row, col) in streak {
-                            if let stone = stones[Move(row:row, col:col)] {
-                                stone!.removeAllActions()
-                                stone!.run(stone!.highlight_animation!)
-                            }
-                        }
-                        flavor_engine.maybeSay(.human_wins, probability: 1.0)
-                        stopHumanInactivityTaunts()
-                        current_state = .game_over(winner: .X)
-                        game_log.addMessage("🧠 Wins!", style: .gray)
-                        break
-                    }
-                    
-                    if checkDraw(state: board_state) {
-                        flavor_engine.maybeSay(.stalemate, probability: 1.0)
-                        stopHumanInactivityTaunts()
-                        current_state = .game_over(winner: .none)
-                        game_log.addMessage("🦐 Stalemate", style: .gray)
-                        break
-                    }
-                    
-                   
-                    
-                    // --------- AI -----------
-                    // Switches the player
-                    current_player = .O
-                    
-                    // If AI is winning, taunt
-                    
-                    run(SKAction.wait(forDuration: 0.2)) // Wait a little
-                   
-                    
-                    current_state = .ai_thinking
-                    
-                    var taunted = false
-                    if evaluateState(state: board_state, player: .O) < 0 {
-                        flavor_engine.maybeSay(.taunt)
-                        taunted = true
-                    }
-                    
-                    if !taunted {
-                        flavor_engine.maybeSay(.thinking)
-                    }
-                    
-                    
-                    isUserInteractionEnabled = false
-                    DispatchQueue.global(qos: .userInitiated).async { [self] in
-                        guard let move = findBestMove(state: board_state, player: .O) else { return }
-                        
-                  
-                        DispatchQueue.main.async {
-                            [self] in
-                           
-   
-                            // Pack this into a function
-                            let stone = Stone(size: tile.size, atlas: "red")
-                            stone.position = board!.centerOfTile(atColumn: move.col, row: move.row)
-                            stone.position.x += board!.position.x
-                            stone.position.y += board!.position.y
-                            stone.zPosition = 10
-                            addChild(stone)
-                            
-                            board_state = applyMove(state: board_state, move: move, player: .O)
-                            stones[move] = stone // Add stone
-                            
-                            current_state = .ai_playing
-                            game_log.addMessage("🤖 Plays (\(move.row), \(move.col))", style: .gray)
-                            
-                            
-                            // Check for win condition
-                            if let (winner, streak) = checkWinCondition(state: board_state) {
-                                // highlight the streak here
-                                
-                                for (row, col) in streak {
-                                    if let stone = stones[Move(row:row, col:col)] {
-                                        stone!.removeAllActions()
-                                        stone!.run(stone!.highlight_animation!)
-                                    }
+                    stone.setScale(1.5)
+                    stone.run(SKAction.scale(to: 1.0, duration: 0.1)) { [self] in
+                        // Check for win condition
+                        if let (winner, streak) = checkWinCondition(state: board_state) {
+                            for (row, col) in streak {
+                                if let stone = stones[Move(row:row, col:col)] {
+                                    stone!.removeAllActions()
+                                    stone!.run(stone!.highlight_animation!)
                                 }
-                                flavor_engine.maybeSay(.ai_wins, probability: 1.0)
-                                stopHumanInactivityTaunts()
-                                current_state = .game_over(winner: .O)
-                                game_log.addMessage("🤖 Wins!", style: .gray)
-                            } else if checkDraw(state: board_state) {
-                                flavor_engine.maybeSay(.stalemate, probability: 1.0)
-                                stopHumanInactivityTaunts()
-                                current_state = .game_over(winner: .none)
-                                game_log.addMessage("🦐 Stalemate", style: .gray)
-                            } else {
-                                current_player = .X
-                                startHumanInactivityTimer()
-                                current_state = .waiting_for_player
                             }
+                            flavor_engine.maybeSay(.human_wins, probability: 1.0)
+                            stopHumanInactivityTaunts()
+                            current_state = .game_over(winner: .X)
+                            game_log.addMessage("🧠 Wins!", style: .gray)
+                            return
+                        }
+                        
+                        if checkDraw(state: board_state) {
+                            flavor_engine.maybeSay(.stalemate, probability: 1.0)
+                            stopHumanInactivityTaunts()
+                            current_state = .game_over(winner: .none)
+                            game_log.addMessage("🦐 Stalemate", style: .gray)
+                            return
+                        }
+                        
+                        // --------- AI -----------
+                        // Switches the player
+                        current_player = .O
+                        
+                        // If AI is winning, taunt
+                        
+                        run(SKAction.wait(forDuration: 0.2)) // Wait a little
+                        
+                        
+                        current_state = .ai_thinking
+                        
+                        var taunted = false
+                        if evaluateState(state: board_state, player: .O) < 0 {
+                            flavor_engine.maybeSay(.taunt)
+                            taunted = true
+                        }
+                        
+                        if !taunted {
+                            flavor_engine.maybeSay(.thinking)
+                        }
+                        
+                        
+                        isUserInteractionEnabled = false
+                        DispatchQueue.global(qos: .userInitiated).async { [self] in
+                            guard let move = findBestMove(state: board_state, player: .O) else { return }
                             
-                            isUserInteractionEnabled = true
+                            
+                            DispatchQueue.main.async {
+                                [self] in
+                                
+                                
+                                // Pack this into a function
+                                let stone = Stone(size: tile.size, atlas: "red")
+                                stone.position = board!.centerOfTile(atColumn: move.col, row: move.row)
+                                stone.position.x += board!.position.x
+                                stone.position.y += board!.position.y
+                                stone.zPosition = 10
+                                addChild(stone)
+                                
+                                board_state = applyMove(state: board_state, move: move, player: .O)
+                                stones[move] = stone // Add stone
+                                
+                                current_state = .ai_playing
+                                game_log.addMessage("🤖 Plays (\(move.row), \(move.col))", style: .gray)
+                                
+                                stone.setScale(1.5)
+                                stone.run(SKAction.scale(to: 1.0, duration: 0.1)) { [self] in
+                                    // Check for win condition
+                                    if let (_, streak) = checkWinCondition(state: board_state) {
+                                        // highlight the streak here
+                                        
+                                        for (row, col) in streak {
+                                            if let stone = stones[Move(row:row, col:col)] {
+                                                stone!.removeAllActions()
+                                                stone!.run(stone!.highlight_animation!)
+                                            }
+                                        }
+                                        flavor_engine.maybeSay(.ai_wins, probability: 1.0)
+                                        stopHumanInactivityTaunts()
+                                        current_state = .game_over(winner: .O)
+                                        game_log.addMessage("🤖 Wins!", style: .gray)
+                                    } else if checkDraw(state: board_state) {
+                                        flavor_engine.maybeSay(.stalemate, probability: 1.0)
+                                        stopHumanInactivityTaunts()
+                                        current_state = .game_over(winner: .none)
+                                        game_log.addMessage("🦐 Stalemate", style: .gray)
+                                    } else {
+                                        current_player = .X
+                                        startHumanInactivityTimer()
+                                        current_state = .waiting_for_player
+                                    }
+                                    
+                                    isUserInteractionEnabled = true
+                                }
+                            }
                         }
                     }
                 }
