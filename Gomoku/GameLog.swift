@@ -104,7 +104,7 @@ class GameLog {
         
         for (i, line_text) in wrapped_lines.reversed().enumerated() {
             let label = SKLabelNode(fontNamed: "Menlo")
-            label.fontSize = 24
+            label.fontSize = 22
             label.fontColor = style
             label.horizontalAlignmentMode = .left
             label.verticalAlignmentMode = .bottom

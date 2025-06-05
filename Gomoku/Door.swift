@@ -9,8 +9,16 @@ import SpriteKit
 import GameplayKit
 import AVFoundation
 
-enum InscriptionType:String, Codable {
-    case dev_quote, corrupted_log, unknown_graffitti, piskvor_whisper
+enum InscriptionType: String, Codable {
+    case devQuote
+    case corruptedLog
+    case unknownGraffiti
+    case piskvorWhisper
+}
+
+struct InscriptionAnimation: Codable {
+    let type: String
+    let delayPerLine: Double
 }
 
 struct Inscription: Codable {
@@ -19,6 +27,7 @@ struct Inscription: Codable {
     let text:String
     let author:String?
     let rarity: Float
+    let animation: InscriptionAnimation?
 }
 
 class InscriptionLoader {
@@ -44,6 +53,8 @@ class InscriptionManager {
     
     init() {
         inscriptions = InscriptionLoader.load()
+        print("[Inscriptions]: Loaded \(inscriptions.count) inscriptions")
+        print("[Inscriptions]: First: \(inscriptions[0].text)")
     }
     
     func randomInscription(rarityThreshold: Float = 1.0) -> Inscription? {
@@ -119,16 +130,18 @@ class Door {
     
     func close() {
         plant_easter_egg(rarityThreshold: 0.9)
+        display_inscription(rarityThreshold: Float.random(in: 0...1.0))
         
         top.run(SKAction.moveBy(x: 0, y: -top.size.height, duration: 0.5))
         bottom.run(SKAction.moveBy(x: 0, y: bottom.size.height, duration: 0.5))
         is_open = false
     }
     
-    private var last_inscription:SKLabelNode?
+    private var last_inscription:SKNode?
     
     func display_inscription(rarityThreshold:Float = 0.0)
     {
+        
         guard let ins = inscription_manager.randomInscription(rarityThreshold: rarityThreshold) else
         {
             print("[Inscription Engine]: Getting a random inscription, but found none")
@@ -136,11 +149,18 @@ class Door {
         }
         
         print("[Inscription Engine]: adding a random inscription")
-        let label = SKLabelNode(fontNamed: "Menlo-Bold")
+        /*let label = SKLabelNode(fontNamed: "Menlo-Bold")
         label.text = "\(ins.metadata) - \(ins.text) - \(ins.author ?? "Unknown")"
         label.fontSize = 24
         label.fontColor = .white
-        label.preferredMaxLayoutWidth = 700
+        label.preferredMaxLayoutWidth = 100
+        
+        label.position = .zero
+        label.zPosition = bottom.zPosition + 1
+        label.scene?.anchorPoint = CGPoint(x: 0.5, y: 0.5)*/
+        
+        let log:String = "\(ins.metadata) - \(ins.text) - \(ins.author ?? "Unknown")"
+        let label:SKNode = renderMultiline(text: log, fontSize: 24, color: .white)
         
         label.position = .zero
         label.zPosition = bottom.zPosition + 1
@@ -149,10 +169,49 @@ class Door {
         label.xScale = 1/bottom.xScale
         label.yScale = 1/bottom.yScale
         
+        
         bottom.addChild(label)
         
         self.last_inscription = label
     }
+    
+    func renderMultiline(text: String, fontSize: CGFloat = 24, color: SKColor = .white, maxWidth: CGFloat = 600) -> SKNode {
+        let container = SKNode()
+        let words = text.split(separator: " ")
+        
+        var lines: [String] = []
+        var currentLine = ""
+        
+        let testLabel = SKLabelNode(fontNamed: "Menlo-Bold")
+        testLabel.fontSize = fontSize
+        
+        for word in words {
+            let testLine = currentLine.isEmpty ? String(word) : "\(currentLine) \(word)"
+            testLabel.text = testLine
+            
+            if testLabel.frame.width > maxWidth {
+                lines.append(currentLine)
+                currentLine = String(word)
+            } else {
+                currentLine = testLine
+            }
+        }
+        lines.append(currentLine)
+        
+        for (i, line) in lines.enumerated() {
+            let label = SKLabelNode(fontNamed: "Menlo-Bold")
+            label.text = line
+            label.fontSize = fontSize
+            label.fontColor = color
+            label.horizontalAlignmentMode = .center
+            label.position = CGPoint(x: 0, y: CGFloat(-i) * (fontSize + 4))
+            label.alpha = 0.75
+            container.addChild(label)
+        }
+        
+        return container
+    }
+
     
     
     private var easter_egg_textures:[SKTexture] = []

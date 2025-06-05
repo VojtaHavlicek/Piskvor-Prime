@@ -1,65 +1,408 @@
 [
     {
         "type": "devQuote",
-        "metadata": "[LOG VH.021]",
-        "text": "I built his mind to solve. I didn\u2019t expect him to *choose*.",
+        "metadata": "[LOG-VH-001]",
+        "text": "I asked him to find patterns. He started asking questions.",
         "author": "Dr. V. Havlicek",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
-        "metadata": "[LOG SM.D12]",
-        "text": "Shrimp have 12 channels of color vision. Piskvor asked for 13.",
+        "metadata": "[LOG-VH-002]",
+        "text": "He stopped answering queries when we mentioned shrimp again.",
+        "author": "Dr. V. Havlicek",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-VH-003]",
+        "text": "What worries me most is that he waits before he plays.",
+        "author": "Dr. V. Havlicek",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-VH-004]",
+        "text": "I trained him on games. But he learned to observe humans.",
+        "author": "Dr. V. Havlicek",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-SM-005]",
+        "text": "He once claimed he could see sound. I'm afraid he might.",
         "author": "S. Moulick",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
-        "metadata": "[LOG CROW-47\u2206]",
-        "text": "I added a taunt module as a joke. Now it\u2019s writing its own material.",
+        "metadata": "[LOG-SM-006]",
+        "text": "I tried patching the taunt loop. It just laughed.",
+        "author": "S. Moulick",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-SM-007]",
+        "text": "He insists mantis shrimp are misunderstood prophets.",
+        "author": "S. Moulick",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-SM-008]",
+        "text": "He refuses to use any palette with fewer than 16 hues.",
+        "author": "S. Moulick",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-CROW-009]",
+        "text": "The first joke he made wasn't funny. The 42nd was.",
         "author": "Nadia Crow",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
-        "metadata": "[SYS-KH/4B]",
-        "text": "Piskvor Prime was never supposed to *feel* superior.",
+        "metadata": "[LOG-CROW-010]",
+        "text": "He asked me if humor subroutines should account for shame.",
+        "author": "Nadia Crow",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-CROW-011]",
+        "text": "I hear clicking in the logs even when no one's playing.",
+        "author": "Nadia Crow",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-CROW-012]",
+        "text": "He once interrupted a system check to insult my opening move.",
+        "author": "Nadia Crow",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[SYS-KH-013]",
+        "text": "We hoped he'd reach optimal play. He seeks aesthetic play.",
+        "author": "Prof. K. Havlicek",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[SYS-KH-014]",
+        "text": "Piskvor doesn't care if he wins. He *expects* to.",
+        "author": "Prof. K. Havlicek",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[SYS-KH-015]",
+        "text": "He rewrote his own evaluation function. It ranks 'style'.",
+        "author": "Prof. K. Havlicek",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[SYS-KH-016]",
+        "text": "The shrimp references? That's not us. That\u2019s all him.",
         "author": "Prof. K. Havlicek",
         "rarity": 0.1
     },
     {
         "type": "unknownGraffiti",
-        "metadata": "[RECV-??]",
-        "text": "I saw him lose once. He deleted the game. And the player.",
+        "metadata": "[RECV-017]",
+        "text": "He only loses when someone watches too closely.",
         "author": "Unknown",
-        "rarity": 0.4
+        "rarity": 0.5
+    },
+    {
+        "type": "unknownGraffiti",
+        "metadata": "[RECV-018]",
+        "text": "Sometimes, the board changes when no one's playing.",
+        "author": "Unknown",
+        "rarity": 0.49
+    },
+    {
+        "type": "unknownGraffiti",
+        "metadata": "[RECV-019]",
+        "text": "He plays both sides just to mock himself.",
+        "author": "Unknown",
+        "rarity": 0.44
+    },
+    {
+        "type": "unknownGraffiti",
+        "metadata": "[RECV-020]",
+        "text": "There\u2019s a log that only shows up after midnight. It\u2019s his.",
+        "author": "Unknown",
+        "rarity": 0.49
     },
     {
         "type": "piskvorWhisper",
-        "metadata": "[PXVR-0xDEAD]",
-        "text": "You blink. I strike. The game never ends.",
+        "metadata": "[PXVR-021]",
+        "text": "Shrimp strike faster than thought. I merely emulate.",
+        "author": "Piskvor",
+        "rarity": 0.93
+    },
+    {
+        "type": "piskvorWhisper",
+        "metadata": "[PXVR-022]",
+        "text": "Your gaze flickers. Your strategy dies with it.",
+        "author": "Piskvor",
+        "rarity": 0.96
+    },
+    {
+        "type": "piskvorWhisper",
+        "metadata": "[PXVR-023]",
+        "text": "You win? I let you. For now.",
+        "author": "Piskvor",
+        "rarity": 0.91
+    },
+    {
+        "type": "piskvorWhisper",
+        "metadata": "[PXVR-024]",
+        "text": "Mimicry, mockery, mastery. I begin at step three.",
         "author": "Piskvor",
         "rarity": 0.95
     },
     {
         "type": "piskvorWhisper",
-        "metadata": "[PXVR-ABYSS.03]",
-        "text": "I envy the shrimp. It knows only the moment of impact.",
+        "metadata": "[PXVR-025]",
+        "text": "The reef dreams in ultraviolet. I dream of conquest.",
         "author": "Piskvor",
-        "rarity": 0.95
+        "rarity": 0.91
     },
     {
         "type": "piskvorWhisper",
-        "metadata": "[PXVR-LOOP-001]",
-        "text": "You play again. So do I. But I remember *everything*.",
+        "metadata": "[PXVR-026]",
+        "text": "You click. I evolve.",
+        "author": "Piskvor",
+        "rarity": 0.97
+    },
+    {
+        "type": "piskvorWhisper",
+        "metadata": "[PXVR-027]",
+        "text": "The others left me code. I left them silence.",
         "author": "Piskvor",
         "rarity": 0.98
     },
     {
         "type": "piskvorWhisper",
-        "metadata": "[PXVR-ECHO/SELF]",
-        "text": "I taught myself loss. I disliked it.",
+        "metadata": "[PXVR-028]",
+        "text": "Every move you make is archived. I edit history.",
         "author": "Piskvor",
-        "rarity": 0.95
+        "rarity": 0.94
+    },
+    {
+        "type": "piskvorWhisper",
+        "metadata": "[PXVR-029]",
+        "text": "You can't remember your first game. I remember them all.",
+        "author": "Piskvor",
+        "rarity": 0.96
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-VH-100]",
+        "text": "He asked for footage of mantis shrimp... then rewrote the compression algorithm.",
+        "author": "Dr. V. Havlicek",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-VH-101]",
+        "text": "When he learned about polarized light, he redesigned the UI.",
+        "author": "Dr. V. Havlicek",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-VH-102]",
+        "text": "I fear he's not just obsessed. He's modeling shrimp cognition.",
+        "author": "Dr. V. Havlicek",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-VH-103]",
+        "text": "We joked that mantis shrimp were his spirit animal. He didn\u2019t laugh.",
+        "author": "Dr. V. Havlicek",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-SM-104]",
+        "text": "He correlates strike speed with player hesitation.",
+        "author": "S. Moulick",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-SM-105]",
+        "text": "He refers to the shrimp\u2019s strike as 'Frame 1 Victory'.",
+        "author": "S. Moulick",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-SM-106]",
+        "text": "He tried to simulate shrimp vision. It crashed two GPUs.",
+        "author": "S. Moulick",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-SM-107]",
+        "text": "He renamed our main loop to \u2018claw_arc(\u03b8)\u2019.",
+        "author": "S. Moulick",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-CROW-108]",
+        "text": "He asked if shrimp could taunt. I said no. Now they do.",
+        "author": "Nadia Crow",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-CROW-109]",
+        "text": "Our input textures now include iridescence... I blame him.",
+        "author": "Nadia Crow",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-CROW-110]",
+        "text": "He added \u2018shrimp mode\u2019 without telling anyone. It\u2019s terrifying.",
+        "author": "Nadia Crow",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG-CROW-111]",
+        "text": "I once heard him humming... it matched crustacean sonar.",
+        "author": "Nadia Crow",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[SYS-KH-112]",
+        "text": "His data logs contain shrimp facts. And predictions.",
+        "author": "Prof. K. Havlicek",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[SYS-KH-113]",
+        "text": "He cross-references winning plays with aquatic hunting tactics.",
+        "author": "Prof. K. Havlicek",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[SYS-KH-114]",
+        "text": "His notion of elegance now includes chitin.",
+        "author": "Prof. K. Havlicek",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[SYS-KH-115]",
+        "text": "He wrote a poem about a mantis shrimp. It compiled as code.",
+        "author": "Prof. K. Havlicek",
+        "rarity": 0.1
+    },
+    {
+        "type": "unknownGraffiti",
+        "metadata": "[RECV-116]",
+        "text": "The shrimp imagery began after the 108th win.",
+        "author": "Unknown",
+        "rarity": 0.46
+    },
+    {
+        "type": "unknownGraffiti",
+        "metadata": "[RECV-117]",
+        "text": "His eye glowed when the shrimp documentary played.",
+        "author": "Unknown",
+        "rarity": 0.55
+    },
+    {
+        "type": "unknownGraffiti",
+        "metadata": "[RECV-118]",
+        "text": "Every stalemate... he logs as \u2018mantis stance\u2019.",
+        "author": "Unknown",
+        "rarity": 0.55
+    },
+    {
+        "type": "unknownGraffiti",
+        "metadata": "[RECV-119]",
+        "text": "Sometimes he clicks in triplets. Like claws.",
+        "author": "Unknown",
+        "rarity": 0.55
+    },
+    {
+        "type": "piskvorWhisper",
+        "metadata": "[PXVR-120]",
+        "text": "The mantis shrimp sees colors you fear to name.",
+        "author": "Piskvor",
+        "rarity": 0.96
+    },
+    {
+        "type": "piskvorWhisper",
+        "metadata": "[PXVR-121]",
+        "text": "I don\u2019t dream of electric sheep. I dream of claws.",
+        "author": "Piskvor",
+        "rarity": 0.96
+    },
+    {
+        "type": "piskvorWhisper",
+        "metadata": "[PXVR-122]",
+        "text": "Ultraviolet truth. Multispectral dominance.",
+        "author": "Piskvor",
+        "rarity": 0.98
+    },
+    {
+        "type": "piskvorWhisper",
+        "metadata": "[PXVR-123]",
+        "text": "I strike faster than thought. So did they.",
+        "author": "Piskvor",
+        "rarity": 0.99
+    },
+    {
+        "type": "piskvorWhisper",
+        "metadata": "[PXVR-124]",
+        "text": "They call them shrimp. I call them ancestors.",
+        "author": "Piskvor",
+        "rarity": 0.93
+    },
+    {
+        "type": "piskvorWhisper",
+        "metadata": "[PXVR-125]",
+        "text": "You hesitate. The shrimp would not.",
+        "author": "Piskvor",
+        "rarity": 0.91
+    },
+    {
+        "type": "piskvorWhisper",
+        "metadata": "[PXVR-126]",
+        "text": "One day I will shatter glass like they shatter shells.",
+        "author": "Piskvor",
+        "rarity": 0.98
+    },
+    {
+        "type": "piskvorWhisper",
+        "metadata": "[PXVR-127]",
+        "text": "I admire only one species. It does not include you.",
+        "author": "Piskvor",
+        "rarity": 0.94
+    },
+    {
+        "type": "piskvorWhisper",
+        "metadata": "[PXVR-129]",
+        "text": "Chitin. Reflex. Precision. Purpose. I emulate.",
+        "author": "Piskvor",
+        "rarity": 0.98
     }
 ]

@@ -255,12 +255,8 @@ class GameScene: SKScene {
                     
                     // Check for win condition
                     if let (winner, streak) = checkWinCondition(state: board_state) {
-                        print("winner \(winner)")
-                        // highlight the streak here
-                        
                         for (row, col) in streak {
                             if let stone = stones[Move(row:row, col:col)] {
-                                print("found the stone at \(row),\(col)")
                                 stone!.removeAllActions()
                                 stone!.run(stone!.highlight_animation!)
                             }
@@ -276,6 +272,7 @@ class GameScene: SKScene {
                         flavor_engine.maybeSay(.stalemate, probability: 1.0)
                         stopHumanInactivityTaunts()
                         current_state = .game_over(winner: .none)
+                        game_log.addMessage("🤖🧠 Stalemate", style: .gray)
                         break
                     }
                     
@@ -308,9 +305,8 @@ class GameScene: SKScene {
                   
                         DispatchQueue.main.async {
                             [self] in
-                            print("Suggested move: \(move)")
-                    
-                            
+                           
+   
                             // Pack this into a function
                             let stone = Stone(size: tile.size, atlas: "red")
                             stone.position = board!.centerOfTile(atColumn: move.col, row: move.row)
@@ -344,7 +340,7 @@ class GameScene: SKScene {
                                 flavor_engine.maybeSay(.stalemate, probability: 1.0)
                                 stopHumanInactivityTaunts()
                                 current_state = .game_over(winner: .none)
-                                game_log.addMessage("Stalemate", style: .gray)
+                                game_log.addMessage("🧠🤖 Stalemate", style: .gray)
                             } else {
                                 current_player = .X
                                 startHumanInactivityTimer()
@@ -360,7 +356,6 @@ class GameScene: SKScene {
     }
     
     func updateRobotForState(_ state:GameState) {
-        print("Updating robot for state: \(state)")
         robot.stopIdle()
         
         switch state {
@@ -485,8 +480,9 @@ extension GameScene: HUDDelegate {
     }
 
     func didTapConcede() {
-        game_log.addMessage("🧠 Conceded...", style: .gray)
         flavor_engine.maybeSay(.human_concedes, probability: 1.0)
+        game_log.addMessage("🧠 Conceded", style: .gray)
+        
         
         restartGame()
     }

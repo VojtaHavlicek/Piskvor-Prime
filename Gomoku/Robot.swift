@@ -199,9 +199,7 @@ class RobotController:SKNode {
     }
    
     func runIdle() {
-        print("running idle")
         if let idle = idle_action {
-            print("idle action still not nil")
             run(idle, withKey: "idle")
         }
     }
