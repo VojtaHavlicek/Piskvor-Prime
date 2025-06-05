@@ -130,7 +130,7 @@ class Door {
     
     func close() {
         plant_easter_egg(rarityThreshold: 0.9)
-        display_inscription(rarityThreshold: Float.random(in: 0...1.0))
+        display_inscription(rarityThreshold: Float.random(in: 0.11...1.0))
         
         top.run(SKAction.moveBy(x: 0, y: -top.size.height, duration: 0.5))
         bottom.run(SKAction.moveBy(x: 0, y: bottom.size.height, duration: 0.5))
@@ -148,6 +148,7 @@ class Door {
             return
         }
         
+        print(ins)
         print("[Inscription Engine]: adding a random inscription")
         /*let label = SKLabelNode(fontNamed: "Menlo-Bold")
         label.text = "\(ins.metadata) - \(ins.text) - \(ins.author ?? "Unknown")"
@@ -159,23 +160,54 @@ class Door {
         label.zPosition = bottom.zPosition + 1
         label.scene?.anchorPoint = CGPoint(x: 0.5, y: 0.5)*/
         
-        let log:String = "\(ins.metadata) - \(ins.text) - \(ins.author ?? "Unknown")"
-        let label:SKNode = renderMultiline(text: log, fontSize: 24, color: .white)
+        let node:SKNode = SKNode()
         
-        label.position = .zero
+        
+        let log: String = "\(ins.metadata):"
+        let (log_label, _) = renderMultiline(text: log, fontSize: 24, color: .white, maxWidth: 350, justify: .right)
+        log_label.position = CGPoint(x:-100/bottom.xScale, y:0)
+        log_label.zPosition = bottom.zPosition + 1
+        log_label.scene?.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        
+        log_label.xScale = 1/bottom.xScale
+        log_label.yScale = 1/bottom.yScale
+        
+        node.addChild(log_label)
+        
+        let quote:String = "\(ins.text)"
+        let (label, num_lines):(SKNode, Int) = renderMultiline(text: quote, fontSize: 24, color: .white, maxWidth: 350)
+        
+        label.position = CGPoint(x:-80/bottom.xScale, y:0)
         label.zPosition = bottom.zPosition + 1
         label.scene?.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
         label.xScale = 1/bottom.xScale
         label.yScale = 1/bottom.yScale
         
+        node.addChild(label)
         
-        bottom.addChild(label)
+        let label_height = label.calculateAccumulatedFrame().height
         
-        self.last_inscription = label
+        print("Label bounds: \(label.bounds), label frame: \(label.frame), label height: \(label_height)")
+        
+        let author:String = "-- \(ins.author ?? "Unknown")"
+        let (author_label, _) = renderMultiline(text: author, fontSize: 24, color: .white, maxWidth: 350, justify: .right)
+        author_label.position = CGPoint(x:200/bottom.xScale, y:-(CGFloat(num_lines+1)*(24+4))/bottom.yScale)
+        author_label.zPosition = bottom.zPosition + 1
+        
+        author_label.xScale = 1/bottom.xScale
+        author_label.yScale = 1/bottom.yScale
+        
+        node.addChild(author_label)
+        node.position = CGPoint(x: 0.0, y: 100/bottom.yScale)
+        node.alpha = 0.5
+        
+        bottom.addChild(node)
+        
+        self.last_inscription = node
     }
     
-    func renderMultiline(text: String, fontSize: CGFloat = 24, color: SKColor = .white, maxWidth: CGFloat = 600) -> SKNode {
+    func renderMultiline(text: String, fontSize: CGFloat = 24, color: SKColor = .white, maxWidth: CGFloat = 600, justify: SKLabelHorizontalAlignmentMode = .left) -> (SKNode, Int) {
         let container = SKNode()
         let words = text.split(separator: " ")
         
@@ -203,13 +235,13 @@ class Door {
             label.text = line
             label.fontSize = fontSize
             label.fontColor = color
-            label.horizontalAlignmentMode = .center
+            label.horizontalAlignmentMode = justify
             label.position = CGPoint(x: 0, y: CGFloat(-i) * (fontSize + 4))
             label.alpha = 0.75
             container.addChild(label)
         }
         
-        return container
+        return (container, lines.count)
     }
 
     

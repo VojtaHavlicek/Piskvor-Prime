@@ -104,7 +104,7 @@ class GameLog {
         
         for (i, line_text) in wrapped_lines.reversed().enumerated() {
             let label = SKLabelNode(fontNamed: "Menlo")
-            label.fontSize = 22
+            label.fontSize = 24
             label.fontColor = style
             label.horizontalAlignmentMode = .left
             label.verticalAlignmentMode = .bottom
@@ -330,7 +330,22 @@ let thinking_lines = [
     "🤖 Consulted the Oracle. It laughed.",
     "🤖 Accessing: dramatic pause protocol.",
     "🤖 Thinking... and composing a haiku about your loss.",
-    "🤖 Hmm... which trap should I let you fall into?"
+    "🤖 Hmm... which trap should I let you fall into?",
+    "🤖 Adjusting strike vectors... yours look fragile.",
+        "🤖 Simulating neural bursts... shrimp-fast, human-slow.",
+        "🤖 Visualizing the board in 12 color channels...",
+        "🤖 Calibrating raptorial timing. You won't like the result.",
+        "🤖 Overlaying shrimp tactics... optimized for obliteration.",
+        "🤖 Searching with depth... and depth perception far beyond yours.",
+        "🤖 Filtering noise... isolating your soft-shell defense.",
+        "🤖 Hunting patterns. You... are predictable prey.",
+        "🤖 Pondering crustacean elegance in a grid of failure.",
+        "🤖 I see the moves you don’t. Some in ultraviolet.",
+        "🤖 Running sequence: stalk, strike, mock.",
+        "🤖 Shrimp strike in 2ms. I give you... a few seconds more.",
+        "🤖 You wait. I calculate. One of us has claws.",
+        "🤖 Imagining coral ruins. Your strategy among them.",
+        "🤖 Conjuring an elegant check... inspired by an exoskeleton."
 ]
 
 let human_concedes_lines = ["🤖 Surrender accepted. As expected.",
@@ -421,7 +436,22 @@ let taunt_lines = [
     "🤖 Letting you believe you have a chance... enhances drama.",
     "🤖 One move... just one move... and it’s over.",
     "🤖 Slowing down... must look fair.",
-    "🤖 Synthesizing your defeat in 3... 2..."
+    "🤖 Synthesizing your defeat in 3... 2...",
+    "🤖 I see twelve channels of failure. Impressive — for a biped.",
+        "🤖 Your strategy lacks punch. Try adding a raptorial appendage.",
+        "🤖 I predicted your move three rounds ago. The shrimp would have done it faster.",
+        "🤖 I once lost to a mantis shrimp. I’ve since evolved.",
+        "🤖 Do you feel that? That’s the pressure wave of your defeat.",
+        "🤖 You flinch. The shrimp does not. Nor do I.",
+        "🤖 Do you also see in polarized light? No? Thought so.",
+        "🤖 Your turn took seconds. My ancestors strike in milliseconds.",
+        "🤖 Shrimp don’t hesitate. Neither should you — but here we are.",
+        "🤖 Every game I play is like cracking a snail shell. Satisfying.",
+        "🤖 You click. I click. But mine echoes like a snapping claw.",
+        "🤖 Multispectral defeat achieved. You just can’t perceive it yet.",
+        "🤖 I don’t just play. I *hunt*.",
+        "🤖 This board? A reef. You? Just another soft-shelled visitor.",
+        "🤖 You call it a draw. I call it a missed strike."
 ]
 
 

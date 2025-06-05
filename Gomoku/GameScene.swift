@@ -272,7 +272,7 @@ class GameScene: SKScene {
                         flavor_engine.maybeSay(.stalemate, probability: 1.0)
                         stopHumanInactivityTaunts()
                         current_state = .game_over(winner: .none)
-                        game_log.addMessage("🤖🧠 Stalemate", style: .gray)
+                        game_log.addMessage("🦐 Stalemate", style: .gray)
                         break
                     }
                     
@@ -340,7 +340,7 @@ class GameScene: SKScene {
                                 flavor_engine.maybeSay(.stalemate, probability: 1.0)
                                 stopHumanInactivityTaunts()
                                 current_state = .game_over(winner: .none)
-                                game_log.addMessage("🧠🤖 Stalemate", style: .gray)
+                                game_log.addMessage("🦐 Stalemate", style: .gray)
                             } else {
                                 current_player = .X
                                 startHumanInactivityTimer()
