@@ -1,0 +1,146 @@
+//
+//  Door.swift
+//  Gomoku
+//
+//  Created by Vojta Havlicek on 6/5/25.
+//
+
+import SpriteKit
+import GameplayKit
+import AVFoundation
+
+enum InscriptionType:String, Codable {
+    case dev_quote, corrupted_log, unknown_graffitti, piskvor_whisper
+}
+
+struct Inscription: Codable {
+    let type:InscriptionType
+    let metadata:String
+    let text:String
+    let author:String?
+    let rarity: Float
+}
+
+class InscriptionLoader {
+    static func load() -> [Inscription] {
+        guard let url = Bundle.main.url(forResource: "inscriptions", withExtension: "json") else {
+            print("Could not find inscriptions.json")
+            return[]
+        }
+        
+        do {
+            let data = try Data(contentsOf: url)
+            let decoded = try JSONDecoder().decode([Inscription].self, from: data)
+            return decoded
+        } catch {
+            print(" Error loading inscriptions.json")
+            return []
+        }
+    }
+}
+
+class InscriptionManager {
+    private var inscriptions:[Inscription] = []
+    
+    init() {
+        inscriptions = InscriptionLoader.load()
+    }
+    
+    func randomInscription(rarityThreshold: Float = 1.0) -> Inscription? {
+        let filtered = inscriptions.filter { $0.rarity <= rarityThreshold }
+        return filtered.randomElement()
+    }
+}
+
+
+
+class Door {
+    private var is_open:Bool = false // TODO: Switch on completion
+    private var top:SKSpriteNode
+    private var bottom:SKSpriteNode
+    
+    private var easter_egg_textures:[SKTexture] = []
+    private var easter_egg:SKSpriteNode?
+    
+    private let manager:InscriptionManager!
+
+    
+    init(top:SKSpriteNode, bottom:SKSpriteNode, mask:SKSpriteNode) {
+        // Prepare door
+        let crop_node = SKCropNode()
+        crop_node.position = mask.position
+        mask.position = .zero
+        crop_node.maskNode = mask
+        crop_node.zPosition = mask.zPosition
+        
+        let ref = top.parent!
+        
+        top.removeFromParent()
+        bottom.removeFromParent()
+        
+        mask.removeFromParent()
+        
+        top.position = CGPoint(x: 0, y: top.size.height/2)
+        bottom.position = CGPoint(x:0, y: -bottom.size.height/2)
+        
+        crop_node.addChild(top)
+        crop_node.addChild(bottom)
+        
+        self.top = top
+        self.bottom = bottom
+        
+        ref.addChild(crop_node)
+        
+        // Prep easter eggs
+        let easter_egg_atlas:SKTextureAtlas = SKTextureAtlas(named: "easter_eggs")
+        easter_egg_textures = Array(easter_egg_atlas.textureNames.map { easter_egg_atlas.textureNamed($0) })
+        
+        // Insription Manager
+        manager = InscriptionManager()
+    }
+    
+    func open() {
+        
+        
+        top.run(SKAction.moveBy(x: 0, y: top.size.height, duration: 0.5))
+        bottom.run(SKAction.moveBy(x: 0, y: -bottom.size.height, duration: 0.5))
+        is_open = true
+        
+        // Remove easter egg
+        if let egg = easter_egg {
+            egg.removeFromParent()
+            easter_egg = nil
+        }
+    }
+    
+    func close() {
+        plant_easter_egg()
+        
+        top.run(SKAction.moveBy(x: 0, y: -top.size.height, duration: 0.5))
+        bottom.run(SKAction.moveBy(x: 0, y: bottom.size.height, duration: 0.5))
+        is_open = false
+    }
+    
+    
+    
+    func plant_easter_egg() {
+        // How to add this to the top texture?
+        let overlay_size = top.frame.size
+        let egg_texture = easter_egg_textures.randomElement()!
+        let egg = SKSpriteNode(texture: egg_texture, size: overlay_size)
+        egg.position = .zero
+        egg.zPosition = top.zPosition + 1
+        egg.anchorPoint = CGPoint(x: 0.5, y: 0.5)
+        
+        // Waht the HACK
+        egg.xScale = 1/top.xScale
+        egg.yScale = 1/top.yScale
+        
+        top.addChild(egg)
+        self.easter_egg = egg
+        
+        print("Planted solid red egg. Size: \(egg.size), top frame: \(top.frame.size)")
+        
+        
+    }
+}

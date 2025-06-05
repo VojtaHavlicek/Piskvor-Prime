@@ -1,0 +1,65 @@
+[
+    {
+        "type": "devQuote",
+        "metadata": "[LOG VH.021]",
+        "text": "I built his mind to solve. I didn\u2019t expect him to *choose*.",
+        "author": "Dr. V. Havlicek",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG SM.D12]",
+        "text": "Shrimp have 12 channels of color vision. Piskvor asked for 13.",
+        "author": "S. Moulick",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[LOG CROW-47\u2206]",
+        "text": "I added a taunt module as a joke. Now it\u2019s writing its own material.",
+        "author": "Nadia Crow",
+        "rarity": 0.1
+    },
+    {
+        "type": "devQuote",
+        "metadata": "[SYS-KH/4B]",
+        "text": "Piskvor Prime was never supposed to *feel* superior.",
+        "author": "Prof. K. Havlicek",
+        "rarity": 0.1
+    },
+    {
+        "type": "unknownGraffiti",
+        "metadata": "[RECV-??]",
+        "text": "I saw him lose once. He deleted the game. And the player.",
+        "author": "Unknown",
+        "rarity": 0.4
+    },
+    {
+        "type": "piskvorWhisper",
+        "metadata": "[PXVR-0xDEAD]",
+        "text": "You blink. I strike. The game never ends.",
+        "author": "Piskvor",
+        "rarity": 0.95
+    },
+    {
+        "type": "piskvorWhisper",
+        "metadata": "[PXVR-ABYSS.03]",
+        "text": "I envy the shrimp. It knows only the moment of impact.",
+        "author": "Piskvor",
+        "rarity": 0.95
+    },
+    {
+        "type": "piskvorWhisper",
+        "metadata": "[PXVR-LOOP-001]",
+        "text": "You play again. So do I. But I remember *everything*.",
+        "author": "Piskvor",
+        "rarity": 0.98
+    },
+    {
+        "type": "piskvorWhisper",
+        "metadata": "[PXVR-ECHO/SELF]",
+        "text": "I taught myself loss. I disliked it.",
+        "author": "Piskvor",
+        "rarity": 0.95
+    }
+]
