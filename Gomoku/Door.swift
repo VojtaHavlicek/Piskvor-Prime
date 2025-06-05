@@ -109,13 +109,14 @@ class Door {
         inscription_manager = InscriptionManager()
     }
     
-    func open() {
-        
-        
-        top.run(SKAction.moveBy(x: 0, y: top.size.height, duration: 0.5))
+    
+    func open(completion: (() -> Void)? = nil) {
+        top.run(SKAction.sequence([SKAction.moveBy(x: 0, y: top.size.height, duration: 0.5), SKAction.run {
+            self.is_open = true
+            completion?()
+        }]))
         bottom.run(SKAction.moveBy(x: 0, y: -bottom.size.height, duration: 0.5))
-        is_open = true
-        
+       
         // Remove easter egg
         if let egg = easter_egg {
             egg.removeFromParent()
@@ -128,13 +129,16 @@ class Door {
         }
     }
     
-    func close() {
+    
+    func close(completion: (() -> Void)? = nil) {
         plant_easter_egg(rarityThreshold: 0.9)
         display_inscription(rarityThreshold: Float.random(in: 0.11...1.0))
         
-        top.run(SKAction.moveBy(x: 0, y: -top.size.height, duration: 0.5))
+        top.run(SKAction.sequence([SKAction.moveBy(x: 0, y: -top.size.height, duration: 0.5), SKAction.run {
+            self.is_open = false
+            completion?()
+        }]))
         bottom.run(SKAction.moveBy(x: 0, y: bottom.size.height, duration: 0.5))
-        is_open = false
     }
     
     private var last_inscription:SKNode?

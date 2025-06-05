@@ -283,6 +283,8 @@ class GameScene: SKScene {
                     current_player = .O
                     
                     // If AI is winning, taunt
+                    
+                    run(SKAction.wait(forDuration: 0.2)) // Wait a little
                    
                     
                     current_state = .ai_thinking
@@ -444,39 +446,42 @@ extension GameScene: HUDDelegate {
     }
 
     func restartGame() {
-        door?.close() // -> Add on completion.
-        
-        stones.values.forEach { $0?.removeFromParent() }
-        stones.removeAll()
-        
-        board_state = Array(repeating: Array(repeating: Player.empty, count: BOARD_SIZE),  count:BOARD_SIZE)
         status_label.reset()
         
         stopHumanInactivityTaunts()
         isUserInteractionEnabled = false
         self.hud_layer.reset()
         
-        
-        
-        let wait_aciton = SKAction.wait(forDuration: 5.0)
-        let restart_action = SKAction.run {
-            self.game_log.addMessage("🧠 Started a new game.", style: .gray)
-            self.game_log.addEmptyLine()
+        door?.close {
+            self.stones.values.forEach { $0?.removeFromParent() }
+            self.stones.removeAll()
             
-            self.flavor_engine.maybeSay(.opening, probability: 1.0)
+            self.board_state = Array(repeating: Array(repeating: Player.empty, count: BOARD_SIZE),  count:BOARD_SIZE)
             
-            self.current_player = .X
-            self.current_state = .waiting_for_player
-            self.hud_layer.reset()
             
-            self.door?.open()
-            self.isUserInteractionEnabled = true
+            let wait_action = SKAction.sequence([SKAction.repeat(SKAction.sequence([SKAction.wait(forDuration: 0.5), SKAction.run {self.game_log.addEmptyLine()} ]), count: 5), SKAction.wait(forDuration: 4.0)])
+            let restart_action = SKAction.run {
+                
+                self.game_log.addEmptyLine()
+                self.game_log.addMessage("🧠 Started a new game.", style: .gray)
+                
+                // Show [NEW GAME BUTTON on the door]
+                self.door?.open()
+                
+                self.run(SKAction.sequence([SKAction.wait(forDuration: 0.5),
+                                   SKAction.run {
+                    self.flavor_engine.maybeSay(.opening, probability: 1.0)
+                    
+                    self.current_player = .X
+                    self.current_state = .waiting_for_player
+                    self.hud_layer.reset()
+                    
+                    self.isUserInteractionEnabled = true
+                }]))
+            }
+            
+            self.run(SKAction.sequence([wait_action, restart_action]))
         }
-        
-        run(SKAction.sequence([wait_aciton, restart_action]))
-        
-        
-       
     }
 
     func didTapConcede() {

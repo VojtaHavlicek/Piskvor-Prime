@@ -75,7 +75,7 @@ class GameLog {
     
     func addEmptyLine() {
         // Shift existing lines down
-        for line in lines.dropFirst() {
+        for line in lines {
             line.run(SKAction.moveBy(x: 0, y: -LINE_HEIGHT, duration: 0.1))
         }
 
