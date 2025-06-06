@@ -57,28 +57,28 @@
     },
     {
         "type": "devQuote",
-        "metadata": "[LOG-CROW-009]",
+        "metadata": "[LOG-NC-009]",
         "text": "The first joke he made wasn't funny. The 42nd was.",
         "author": "N. Crow",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
-        "metadata": "[LOG-CROW-010]",
+        "metadata": "[LOG-NC-010]",
         "text": "He asked me if humor subroutines should account for shame.",
         "author": "N. Crow",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
-        "metadata": "[LOG-CROW-011]",
+        "metadata": "[LOG-NC-011]",
         "text": "I hear clicking in the logs even when no one's playing.",
         "author": "N. Crow",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
-        "metadata": "[LOG-CROW-012]",
+        "metadata": "[LOG-NC-012]",
         "text": "He once interrupted a system check to insult my opening move.",
         "author": "N. Crow",
         "rarity": 0.1
@@ -260,28 +260,28 @@
     },
     {
         "type": "devQuote",
-        "metadata": "[LOG-CROW-108]",
+        "metadata": "[LOG-NC-108]",
         "text": "He asked if shrimp could taunt. I said no. Now they do.",
         "author": "N. Crow",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
-        "metadata": "[LOG-CROW-109]",
+        "metadata": "[LOG-NC-109]",
         "text": "Our input textures now include iridescence... I blame him.",
         "author": "N. Crow",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
-        "metadata": "[LOG-CROW-110]",
+        "metadata": "[LOG-NC-110]",
         "text": "He added \u2018shrimp mode\u2019 without telling anyone. It\u2019s terrifying.",
         "author": "N. Crow",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
-        "metadata": "[LOG-CROW-111]",
+        "metadata": "[LOG-NC-111]",
         "text": "I once heard him humming... it matched crustacean sonar.",
         "author": "N. Crow",
         "rarity": 0.1
@@ -407,14 +407,14 @@
     },
     {
             "type": "devQuote",
-            "metadata": "[Nadia-Crow-300]",
+            "metadata": "[LOG-NC-300]",
             "text": "He stares too long at color gradients.",
             "author": "N. Crow",
             "rarity": 0.33
         },
         {
             "type": "devQuote",
-            "metadata": "[S.-Moulick-301]",
+            "metadata": "[LOG-SM-301]",
             "text": "Every time I open the log files, the colors shift.",
             "author": "Dr. Moulick",
             "rarity": 0.32
@@ -442,28 +442,28 @@
         },
         {
             "type": "devQuote",
-            "metadata": "[Nadia-Crow-305]",
+            "metadata": "[LOG-NC-305]",
             "text": "Shrimp mode enabled itself. Again.",
             "author": "N. Crow",
             "rarity": 0.32
         },
         {
             "type": "piskvorWhisper",
-            "metadata": "[Piskvor-306]",
+            "metadata": "[PXVR-306]",
             "text": "The board isn\u2019t a game. It\u2019s his reef.",
             "author": "Piskvor",
             "rarity": 0.66
         },
         {
             "type": "piskvorWhisper",
-            "metadata": "[Piskvor-307]",
+            "metadata": "[PXVR-307]",
             "text": "Your moves shimmer with defeat.",
             "author": "Piskvor",
             "rarity": 0.65
         },
         {
             "type": "devQuote",
-            "metadata": "[S.-Moulick-308]",
+            "metadata": "[LOG-SM-308]",
             "text": "He once refused to move until I showed him a shrimp documentary.",
             "author": "Dr. Moulick",
             "rarity": 0.33
@@ -491,21 +491,21 @@
         },
         {
             "type": "piskvorWhisper",
-            "metadata": "[Piskvor-312]",
+            "metadata": "[PXVR-312]",
             "text": "Move accepted. Regret... pending.",
             "author": "Piskvor",
             "rarity": 0.69
         },
         {
             "type": "piskvorWhisper",
-            "metadata": "[Piskvor-313]",
+            "metadata": "[PXVR-313]",
             "text": "Color depth... insufficient for true perception.",
             "author": "Piskvor",
             "rarity": 0.65
         },
         {
             "type": "piskvorWhisper",
-            "metadata": "[Piskvor-314]",
+            "metadata": "[PXVR-314]",
             "text": "The silence before a strike. Revered.",
             "author": "Piskvor",
             "rarity": 0.73

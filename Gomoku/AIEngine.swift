@@ -34,6 +34,14 @@ var gameStateCache = [String: Player?]()
 var evaluateStateCache = [String: Int]()
 var heuristicCache = [String: Int]()
 
+func cleanAICaches() {
+    movesCache.removeAll()
+    applyMoveCache.removeAll()
+    gameStateCache.removeAll()
+    evaluateStateCache.removeAll()
+    heuristicCache.removeAll()
+}
+
 func getMoves(state: [[Player]], player:Player, topK: Int = 5) -> [Move] {
     let key = state.flatMap { $0.map { $0.rawValue } }.joined()+"_\(player.rawValue)"
     if let cached = movesCache[key] {

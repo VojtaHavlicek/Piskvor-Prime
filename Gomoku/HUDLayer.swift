@@ -172,7 +172,7 @@ protocol HUDDelegate: AnyObject {
 class HUDLayer:SKNode {
     weak var delegate: HUDDelegate?
     
-    let mute_button = GameButton(text: "🔊")
+    let mute_button = GameButton(text: "MUTE")
     let new_game_button = GameButton(text: "NEW GAME")
     let rematch_button = GameButton(text: "REMATCH")
     let concede_button = GameButton(text: "CONCEDE")
@@ -186,7 +186,7 @@ class HUDLayer:SKNode {
         mute_button.name = "mute"
         new_game_button.name = "newGame"
 
-        new_game_button.position = CGPoint(x: 0, y: 150)
+        new_game_button.position = CGPoint(x: 0, y: 160)
         new_game_button.alpha = 0.0
         new_game_button.disabled = true
         new_game_button.zPosition = 30
@@ -197,7 +197,7 @@ class HUDLayer:SKNode {
         concede_button.position = CGPoint(x: 0, y: 0)
         concede_button.alpha = 0.0
 
-        mute_button.position = CGPoint(x:320, y:0)
+        mute_button.position = CGPoint(x:300, y:0)
         mute_button.disabled = false
         
         addChild(mute_button)

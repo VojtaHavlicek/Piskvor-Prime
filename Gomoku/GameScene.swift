@@ -436,9 +436,9 @@ extension GameScene: HUDDelegate {
         game_log.muted.toggle()
         
         if game_log.muted {
-            hud_layer.mute_button.label.text = "🔇"
+            hud_layer.mute_button.label.text = "UNMUTE"
         } else {
-            hud_layer.mute_button.label.text = "🔊"
+            hud_layer.mute_button.label.text = "MUTE"
         }
     }
     
@@ -480,6 +480,8 @@ extension GameScene: HUDDelegate {
         door?.close { [self] in
             stones.values.forEach { $0?.removeFromParent() }
             stones.removeAll()
+            
+            cleanAICaches() // Cleans AI caches so that the game does not replay
             
             board_state = Array(repeating: Array(repeating: Player.empty, count: BOARD_SIZE),  count:BOARD_SIZE)
             
