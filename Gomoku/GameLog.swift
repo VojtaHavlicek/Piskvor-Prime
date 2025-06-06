@@ -15,6 +15,7 @@ class GameLog {
     private let LINE_HEIGHT:CGFloat = 32
     private var lines:[SKLabelNode] = []
     let speech_synth = AVSpeechSynthesizer()
+    private var buttonActions: [String: () -> Void] = [:]
     public var muted:Bool = false
     
     init(position: CGPoint) {
@@ -72,6 +73,8 @@ class GameLog {
             ]))
         }
     }
+    
+    
     
     func addEmptyLine() {
         // Shift existing lines down
@@ -131,6 +134,34 @@ class GameLog {
             ]))
         }
     }
+    
+    func addButton(label: String, position: CGPoint, action: @escaping () -> Void) {
+            let bg = SKSpriteNode(color: .darkGray, size: CGSize(width: 120, height: 36))
+            bg.position = position
+            bg.zPosition = 5
+            bg.name = "button:\(label)"
+
+            let text = SKLabelNode(text: label)
+            text.fontName = "Menlo-Bold"
+            text.fontSize = 14
+            text.verticalAlignmentMode = .center
+            text.horizontalAlignmentMode = .center
+            text.zPosition = 6
+            bg.addChild(text)
+
+            buttonActions[bg.name!] = action
+            logNode.addChild(bg)
+        }
+
+        func handleTouch(_ location: CGPoint) {
+            let nodesAtPoint = logNode.nodes(at: location)
+            for node in nodesAtPoint {
+                if let name = node.name, let action = buttonActions[name] {
+                    action()
+                    return
+                }
+            }
+        }
     
     func getRandomLog(_ mood: LogMood) {
         let message = log_phrases[mood]?.randomElement() ?? ""

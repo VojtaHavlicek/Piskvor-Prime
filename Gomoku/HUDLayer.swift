@@ -186,11 +186,10 @@ class HUDLayer:SKNode {
         mute_button.name = "mute"
         new_game_button.name = "newGame"
 
-        new_game_button.position = CGPoint(x: -160, y: 0)
+        new_game_button.position = CGPoint(x: 0, y: 150)
         new_game_button.alpha = 0.0
         new_game_button.disabled = true
-        
-        
+        new_game_button.zPosition = 30
         
         rematch_button.position = CGPoint(x: 0, y: 0)
         rematch_button.alpha = 0.0
@@ -205,6 +204,8 @@ class HUDLayer:SKNode {
         addChild(new_game_button)
         addChild(rematch_button)
         addChild(concede_button)
+        
+        zPosition = 30
     }
     
     required init?(coder: NSCoder) {

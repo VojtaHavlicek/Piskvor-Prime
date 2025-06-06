@@ -68,7 +68,7 @@ class InscriptionManager {
 class Door {
     private var is_open:Bool = false // TODO: Switch on completion
     private var top:SKSpriteNode
-    private var bottom:SKSpriteNode
+    var bottom:SKSpriteNode
     
  
     

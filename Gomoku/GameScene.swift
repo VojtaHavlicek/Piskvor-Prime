@@ -443,7 +443,27 @@ extension GameScene: HUDDelegate {
     }
     
     func didTapNewGame() {
-        restartGame()
+        let restart_action = SKAction.run { [self] in
+            
+            game_log.addEmptyLine()
+            game_log.addMessage("🧠 Started a new game.", style: .gray)
+            
+            let fade_out = SKAction.fadeAlpha(to: 0.0, duration: 0.3)
+            hud_layer.new_game_button.run(fade_out)
+            hud_layer.new_game_button.disabled = true
+            
+            self.door?.open{
+                self.flavor_engine.maybeSay(.opening, probability: 1.0)
+                
+                self.current_player = .X
+                self.current_state = .waiting_for_player
+                self.hud_layer.reset()
+                
+                self.isUserInteractionEnabled = true
+            }
+        }
+        
+        run(restart_action)
     }
 
     func didTapRematch() {
@@ -457,40 +477,28 @@ extension GameScene: HUDDelegate {
         isUserInteractionEnabled = false
         self.hud_layer.reset()
         
-        door?.close {
-            self.stones.values.forEach { $0?.removeFromParent() }
-            self.stones.removeAll()
+        door?.close { [self] in
+            stones.values.forEach { $0?.removeFromParent() }
+            stones.removeAll()
             
-            self.board_state = Array(repeating: Array(repeating: Player.empty, count: BOARD_SIZE),  count:BOARD_SIZE)
+            board_state = Array(repeating: Array(repeating: Player.empty, count: BOARD_SIZE),  count:BOARD_SIZE)
             
+            let wait_action = SKAction.sequence([SKAction.repeat(SKAction.sequence([SKAction.wait(forDuration: 0.5), SKAction.run {game_log.addEmptyLine()} ]), count: 5), SKAction.wait(forDuration: 0.5)])
             
-            let wait_action = SKAction.sequence([SKAction.repeat(SKAction.sequence([SKAction.wait(forDuration: 0.5), SKAction.run {self.game_log.addEmptyLine()} ]), count: 5), SKAction.wait(forDuration: 4.0)])
-            
-            let restart_action = SKAction.run {
-                
-                self.game_log.addEmptyLine()
-                self.game_log.addMessage("🧠 Started a new game.", style: .gray)
-                
+            self.run(wait_action) { [self] in
                 // Show [NEW GAME BUTTON on the door]
                 let fade_in = SKAction.fadeAlpha(to: 1.0, duration: 0.3)
-                self.hud_layer.run(fade_in)
+                hud_layer.new_game_button.run(fade_in)
+                hud_layer.new_game_button.disabled = false
                 
-                self.door?.open{
-                    self.flavor_engine.maybeSay(.opening, probability: 1.0)
-                    
-                    self.current_player = .X
-                    self.current_state = .waiting_for_player
-                    self.hud_layer.reset()
-                    
-                    self.isUserInteractionEnabled = true
-                }
-                    
+                
+                print("new_game _button: fade in")
+                isUserInteractionEnabled = true
             }
-            
-            self.run(SKAction.sequence([wait_action, restart_action]))
         }
     }
 
+    
     func didTapConcede() {
         flavor_engine.maybeSay(.human_concedes, probability: 1.0)
         game_log.addMessage("🧠 Conceded", style: .gray)
