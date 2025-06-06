@@ -202,7 +202,7 @@ class Door {
         author_label.yScale = 1/bottom.yScale
         
         node.addChild(author_label)
-        node.position = CGPoint(x: 10/bottom.xScale, y: 100/bottom.yScale)
+        node.position = CGPoint(x: 10/bottom.xScale, y: 80/bottom.yScale)
         node.alpha = 0.5
         
         bottom.addChild(node)

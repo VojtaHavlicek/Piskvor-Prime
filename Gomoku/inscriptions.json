@@ -3,28 +3,28 @@
         "type": "devQuote",
         "metadata": "[LOG-VH-001]",
         "text": "I asked him to find patterns. He started asking questions.",
-        "author": "Dr. Havlicek",
+        "author": "V. Havlicek",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
         "metadata": "[LOG-VH-002]",
         "text": "He stopped answering queries when we mentioned shrimp again.",
-        "author": "Dr. Havlicek",
+        "author": "V. Havlicek",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
         "metadata": "[LOG-VH-003]",
         "text": "What worries me most is that he waits before he plays.",
-        "author": "Dr. Havlicek",
+        "author": "V. Havlicek",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
         "metadata": "[LOG-VH-004]",
         "text": "I trained him on games. But he learned to observe humans.",
-        "author": "Dr. Havlicek",
+        "author": "V. Havlicek",
         "rarity": 0.1
     },
     {
@@ -85,30 +85,30 @@
     },
     {
         "type": "devQuote",
-        "metadata": "[SYS-KH-013]",
+        "metadata": "[SYS-NY-013]",
         "text": "We hoped he'd reach optimal play. He seeks aesthetic play.",
-        "author": "Prof. B. Douglas",
+        "author": "Prof. Yoder",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
-        "metadata": "[SYS-KH-014]",
+        "metadata": "[SYS-NY-014]",
         "text": "Piskvor doesn't care if he wins. He *expects* to.",
-        "author": "Prof. B. Douglas",
+        "author": "Prof. Yoder",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
-        "metadata": "[SYS-KH-015]",
+        "metadata": "[SYS-NY-015]",
         "text": "He rewrote his own evaluation function. It ranks 'style'.",
-        "author": "Prof. B. Douglas",
+        "author": "Prof. Yoder",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
-        "metadata": "[SYS-KH-016]",
+        "metadata": "[SYS-NY-016]",
         "text": "The shrimp references? That's not us. That\u2019s all him.",
-        "author": "Prof. B. Douglas",
+        "author": "Prof. Yoder",
         "rarity": 0.1
     },
     {
@@ -206,28 +206,28 @@
         "type": "devQuote",
         "metadata": "[LOG-VH-100]",
         "text": "He asked for footage of mantis shrimp... then rewrote the compression algorithm.",
-        "author": "Dr. Havlicek",
+        "author": "V. Havlicek",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
         "metadata": "[LOG-VH-101]",
         "text": "When he learned about polarized light, he redesigned the UI.",
-        "author": "Dr. Havlicek",
+        "author": "V. Havlicek",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
         "metadata": "[LOG-VH-102]",
         "text": "I fear he's not just obsessed. He's modeling shrimp cognition.",
-        "author": "Dr. Havlicek",
+        "author": "V. Havlicek",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
         "metadata": "[LOG-VH-103]",
         "text": "We joked that mantis shrimp were his spirit animal. He didn\u2019t laugh.",
-        "author": "Dr. Havlicek",
+        "author": "V. Havlicek",
         "rarity": 0.1
     },
     {
@@ -288,30 +288,30 @@
     },
     {
         "type": "devQuote",
-        "metadata": "[SYS-KH-112]",
+        "metadata": "[SYS-NY-112]",
         "text": "His data logs contain shrimp facts. And predictions.",
-        "author": "Prof. B. Douglas",
+        "author": "Prof. Yoder",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
-        "metadata": "[SYS-KH-113]",
+        "metadata": "[SYS-NY-113]",
         "text": "He cross-references winning plays with aquatic hunting tactics.",
-        "author": "Prof. B. Douglas",
+        "author": "Prof. Yoder",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
-        "metadata": "[SYS-KH-114]",
+        "metadata": "[SYS-NY-114]",
         "text": "His notion of elegance now includes chitin.",
-        "author": "Prof. B. Douglas",
+        "author": "Prof. Yoder",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
-        "metadata": "[SYS-KH-115]",
+        "metadata": "[SYS-NY-115]",
         "text": "He wrote a poem about a mantis shrimp. It compiled as code.",
-        "author": "Prof. B. Douglas",
+        "author": "Prof. Yoder",
         "rarity": 0.1
     },
     {
@@ -404,5 +404,110 @@
         "text": "Chitin. Reflex. Precision. Purpose. I emulate.",
         "author": "Piskvor",
         "rarity": 0.98
-    }
+    },
+    {
+            "type": "devQuote",
+            "metadata": "[Nadia-Crow-300]",
+            "text": "He stares too long at color gradients.",
+            "author": "N. Crow",
+            "rarity": 0.33
+        },
+        {
+            "type": "devQuote",
+            "metadata": "[S.-Moulick-301]",
+            "text": "Every time I open the log files, the colors shift.",
+            "author": "Dr. Moulick",
+            "rarity": 0.32
+        },
+        {
+            "type": "devQuote",
+            "metadata": "[LOG-VH-302]",
+            "text": "The shrimp obsession used to be a joke. Now it's protocol.",
+            "author": "V. Havlicek",
+            "rarity": 0.33
+        },
+        {
+            "type": "devQuote",
+            "metadata": "[LOG-NY-303]",
+            "text": "I think he\u2019s trying to see through the board.",
+            "author": "Prof. Yoder",
+            "rarity": 0.27
+        },
+        {
+            "type": "unknownGraffiti",
+            "metadata": "[Unknown-304]",
+            "text": "Last match he whispered something in sonar. I hope it was a joke.",
+            "author": "Unknown",
+            "rarity": 0.47
+        },
+        {
+            "type": "devQuote",
+            "metadata": "[Nadia-Crow-305]",
+            "text": "Shrimp mode enabled itself. Again.",
+            "author": "N. Crow",
+            "rarity": 0.32
+        },
+        {
+            "type": "piskvorWhisper",
+            "metadata": "[Piskvor-306]",
+            "text": "The board isn\u2019t a game. It\u2019s his reef.",
+            "author": "Piskvor",
+            "rarity": 0.66
+        },
+        {
+            "type": "piskvorWhisper",
+            "metadata": "[Piskvor-307]",
+            "text": "Your moves shimmer with defeat.",
+            "author": "Piskvor",
+            "rarity": 0.65
+        },
+        {
+            "type": "devQuote",
+            "metadata": "[S.-Moulick-308]",
+            "text": "He once refused to move until I showed him a shrimp documentary.",
+            "author": "Dr. Moulick",
+            "rarity": 0.33
+        },
+        {
+            "type": "unknownGraffiti",
+            "metadata": "[Unknown-309]",
+            "text": "Piskvor's startup sound now clicks like a claw.",
+            "author": "Unknown",
+            "rarity": 0.49
+        },
+        {
+            "type": "devQuote",
+            "metadata": "[LOG-VH-310]",
+            "text": "Victory logs show... mantis shrimp emoticons?",
+            "author": "V. Havlicek",
+            "rarity": 0.28
+        },
+        {
+            "type": "devQuote",
+            "metadata": "[LOG-NY-311]",
+            "text": "He renamed the config file to 'shrimp.conf'.",
+            "author": "Prof. Yoder",
+            "rarity": 0.34
+        },
+        {
+            "type": "piskvorWhisper",
+            "metadata": "[Piskvor-312]",
+            "text": "Move accepted. Regret... pending.",
+            "author": "Piskvor",
+            "rarity": 0.69
+        },
+        {
+            "type": "piskvorWhisper",
+            "metadata": "[Piskvor-313]",
+            "text": "Color depth... insufficient for true perception.",
+            "author": "Piskvor",
+            "rarity": 0.65
+        },
+        {
+            "type": "piskvorWhisper",
+            "metadata": "[Piskvor-314]",
+            "text": "The silence before a strike. Revered.",
+            "author": "Piskvor",
+            "rarity": 0.73
+        }
 ]
