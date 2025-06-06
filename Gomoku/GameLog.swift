@@ -808,7 +808,18 @@ let ai_wins_lines = [
         "🤖 I expected more. But I planned for less.",
         "🤖 I’m updating your profile: ‘Consistently Optimistic.’",
         "🤖 You brought enthusiasm. I brought execution.",
-        "🤖 Error: opponent no longer found in competitive range."
+        "🤖 Error: opponent no longer found in competitive range.",
+    "🤖 Nature builds predators. I build inevitability.",
+        "🤖 You blinked. I struck. That’s how it goes in the trench.",
+        "🤖 Reflexes like a mantis shrimp. You, meanwhile… blinked again.",
+        "🤖 You’ve just lost to an intelligence inspired by ocular overkill.",
+        "🤖 That was over faster than a shrimp’s punch. Look it up.",
+        "🤖 Some species punch with 1500 newtons of force. I just use math.",
+        "🤖 Next time, bring 12-channel vision. Or don’t bother.",
+        "🤖 I've seen colors you can’t imagine. And still beat you in black and white.",
+        "🤖 That wasn’t just a win. That was a ballistic appendage to the ego.",
+        "🤖 Imagine being prey in a coral reef. You just felt that.",
+        "🤖 Shrimp don’t play games. But I play to win."
     ]
 
 
