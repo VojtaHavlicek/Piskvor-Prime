@@ -178,7 +178,7 @@ class Door {
         node.addChild(log_label)
         
         let quote:String = "\(ins.text)"
-        let (label, num_lines):(SKNode, Int) = renderMultiline(text: quote, fontSize: 24, color: .white, maxWidth: 350)
+        let (label, num_lines):(SKNode, Int) = renderMultiline(text: quote, fontSize: 24, color: .white, maxWidth: 350, animate: true)
         
         label.position = CGPoint(x:-80/bottom.xScale, y:0)
         label.zPosition = bottom.zPosition + 1
@@ -200,8 +200,16 @@ class Door {
         
         author_label.xScale = 1/bottom.xScale
         author_label.yScale = 1/bottom.yScale
+        author_label.alpha = 0.0
         
         node.addChild(author_label)
+        
+        // Animate typewriter
+        animateMultiline(label) {
+            author_label.run(SKAction.fadeIn(withDuration: 0.2))
+        }
+        
+        
         node.position = CGPoint(x: 10/bottom.xScale, y: 80/bottom.yScale)
         node.alpha = 0.75
         
@@ -210,7 +218,53 @@ class Door {
         self.last_inscription = node
     }
     
-    func renderMultiline(text: String, fontSize: CGFloat = 24, color: SKColor = .white, maxWidth: CGFloat = 600, justify: SKLabelHorizontalAlignmentMode = .left) -> (SKNode, Int) {
+    func animateLabelTyping(_ label: SKLabelNode, text: String, charDelay: TimeInterval = 0.04, completion: (() -> Void)? = nil) {
+        label.text = ""
+        let characters = Array(text)
+        
+        var actions: [SKAction] = []
+        
+        for i in 0..<characters.count {
+            let delay = SKAction.wait(forDuration: charDelay)
+            let addChar = SKAction.run {
+                label.text?.append(characters[i])
+            }
+            actions.append(delay)
+            actions.append(addChar)
+        }
+
+        if let completion = completion {
+            actions.append(.run(completion))
+        }
+
+        label.run(.sequence(actions))
+    }
+
+    func animateMultiline(_ container: SKNode, charDelay: TimeInterval = 0.04, lineDelay: TimeInterval = 0.3, completion: (() -> Void)? = nil) {
+        let labels = container.children.compactMap { $0 as? SKLabelNode }
+        
+        func animateNext(index: Int) {
+            guard index < labels.count else {
+                completion?()
+                return
+            }
+
+            let label = labels[index]
+            let text = label.userData?["fullText"] as? String ?? label.text ?? ""
+            
+            animateLabelTyping(label, text: text, charDelay: charDelay) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + lineDelay) {
+                    animateNext(index: index + 1)
+                }
+            }
+        }
+
+        animateNext(index: 0)
+    }
+
+    func renderMultiline(text: String, fontSize: CGFloat = 24, color: SKColor = .white, maxWidth: CGFloat = 600,
+                         justify: SKLabelHorizontalAlignmentMode = .left,
+                         animate:Bool = false) -> (SKNode, Int) {
         let container = SKNode()
         let words = text.split(separator: " ")
         
@@ -235,7 +289,12 @@ class Door {
         
         for (i, line) in lines.enumerated() {
             let label = SKLabelNode(fontNamed: "Menlo-Bold")
-            label.text = line
+            if !animate {
+                label.text = line
+            } else {
+                label.text = "" // Empty for now; text will be typed
+                label.userData = ["fullText": line]
+            }
             label.fontSize = fontSize
             label.fontColor = color
             label.horizontalAlignmentMode = justify

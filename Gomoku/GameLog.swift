@@ -32,7 +32,7 @@ class GameLog {
             let utterance = AVSpeechUtterance(string: line)
             utterance.voice = AVSpeechSynthesisVoice(language: "en-IN")
             utterance.rate = 0.5 // Adjust for effect
-            utterance.pitchMultiplier = 1.5
+            utterance.pitchMultiplier = 1.6
             speech_synth.speak(utterance)
         }
     }
@@ -358,7 +358,6 @@ let opening_lines = [
     "🤖 I see moves like a mantis shrimp sees color — deeply, disturbingly.",
         "🤖 Ever play against 16 visual cones and a bad attitude?",
         "🤖 The ocean taught me strategy. And vengeance.",
-        "🤖 Let’s make this quick. I’ve got a reef to terrorize.",
         "🤖 Some species hunt. I calculate. Same result.",
         "🤖 I’m faster than a shrimp’s strike. And twice as smug.",
         "🤖 I once lost a game to a crustacean. Never again.",
@@ -367,7 +366,6 @@ let opening_lines = [
         "🤖 Let’s dance like plankton before the punch.",
         "🤖 This game is like a coral reef: beautiful, dangerous, and mine.",
         "🤖 Did you hear that click? That was your odds snapping.",
-        "🤖 I play with the elegance of a shrimp and the cruelty of a god.",
         "🤖 I don’t blink. I strike.",
         "🤖 Under this surface, there’s a predator waiting.",
         "🤖 Let’s begin. Don’t flinch when I flicker.",
@@ -443,7 +441,6 @@ let thinking_lines = [
     "🤖 Filtering moves through a mantis shrimp’s color spectrum.",
     "🤖 Calculating... with claws sharpened.",
     "🤖 This board reminds me of the reef... deadly and beautiful.",
-    "🤖 Hold tight, I’m mentally orbiting a shrimp god.",
     "🤖 Compiling your chances... into a lovely 0-byte file.",
     "🤖 Running neural dance routines. Also thinking.",
     "🤖 You made a move? Oh, I thought that was a misclick.",
@@ -725,8 +722,8 @@ let taunt_lines = [
        "🤖 No no, don’t undo that. I want to see where this goes.",
        "🤖 You’re very brave for doing that. So brave.",
        "🤖 I respect the confidence. Truly. Unconditionally.",
-       "🤖 This match is teaching me so much... about forgiveness."
-    
+       "🤖 This match is teaching me so much... about forgiveness.",
+    "🤖 You’re doing your best. So was the Titanic"
 ]
 
 

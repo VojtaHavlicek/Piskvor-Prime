@@ -3,28 +3,28 @@
         "type": "devQuote",
         "metadata": "[LOG-VH-001]",
         "text": "I asked him to find patterns. He started asking questions.",
-        "author": "V. Havlicek",
+        "author": "Vojta Havlicek",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
         "metadata": "[LOG-VH-002]",
         "text": "He stopped answering queries when we mentioned shrimp again.",
-        "author": "V. Havlicek",
+        "author": "Vojta Havlicek",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
         "metadata": "[LOG-VH-003]",
         "text": "What worries me most is that he waits before he plays.",
-        "author": "V. Havlicek",
+        "author": "Vojta Havlicek",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
         "metadata": "[LOG-VH-004]",
         "text": "I trained him on games. But he learned to observe humans.",
-        "author": "V. Havlicek",
+        "author": "Vojta Havlicek",
         "rarity": 0.1
     },
     {
@@ -59,28 +59,28 @@
         "type": "devQuote",
         "metadata": "[LOG-NC-009]",
         "text": "The first joke he made wasn't funny. The 42nd was.",
-        "author": "N. Crow",
+        "author": "Nadia Crow",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
         "metadata": "[LOG-NC-010]",
         "text": "He asked me if humor subroutines should account for shame.",
-        "author": "N. Crow",
+        "author": "Nadia Crow",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
         "metadata": "[LOG-NC-011]",
         "text": "I hear clicking in the logs even when no one's playing.",
-        "author": "N. Crow",
+        "author": "Nadia Crow",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
         "metadata": "[LOG-NC-012]",
         "text": "He once interrupted a system check to insult my opening move.",
-        "author": "N. Crow",
+        "author": "Nadia Crow",
         "rarity": 0.1
     },
     {
@@ -206,28 +206,28 @@
         "type": "devQuote",
         "metadata": "[LOG-VH-100]",
         "text": "He asked for footage of mantis shrimp... then rewrote the compression algorithm.",
-        "author": "V. Havlicek",
+        "author": "Vojta Havlicek",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
         "metadata": "[LOG-VH-101]",
         "text": "When he learned about polarized light, he redesigned the UI.",
-        "author": "V. Havlicek",
+        "author": "Vojta Havlicek",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
         "metadata": "[LOG-VH-102]",
         "text": "I fear he's not just obsessed. He's modeling shrimp cognition.",
-        "author": "V. Havlicek",
+        "author": "Vojta Havlicek",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
         "metadata": "[LOG-VH-103]",
         "text": "We joked that mantis shrimp were his spirit animal. He didn\u2019t laugh.",
-        "author": "V. Havlicek",
+        "author": "Vojta Havlicek",
         "rarity": 0.1
     },
     {
@@ -262,28 +262,28 @@
         "type": "devQuote",
         "metadata": "[LOG-NC-108]",
         "text": "He asked if shrimp could taunt. I said no. Now they do.",
-        "author": "N. Crow",
+        "author": "Nadia Crow",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
         "metadata": "[LOG-NC-109]",
         "text": "Our input textures now include iridescence... I blame him.",
-        "author": "N. Crow",
+        "author": "Nadia Crow",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
         "metadata": "[LOG-NC-110]",
         "text": "He added \u2018shrimp mode\u2019 without telling anyone. It\u2019s terrifying.",
-        "author": "N. Crow",
+        "author": "Nadia Crow",
         "rarity": 0.1
     },
     {
         "type": "devQuote",
         "metadata": "[LOG-NC-111]",
         "text": "I once heard him humming... it matched crustacean sonar.",
-        "author": "N. Crow",
+        "author": "Nadia Crow",
         "rarity": 0.1
     },
     {
@@ -409,7 +409,7 @@
             "type": "devQuote",
             "metadata": "[LOG-NC-300]",
             "text": "He stares too long at color gradients.",
-            "author": "N. Crow",
+            "author": "Nadia Crow",
             "rarity": 0.33
         },
         {
@@ -423,7 +423,7 @@
             "type": "devQuote",
             "metadata": "[LOG-VH-302]",
             "text": "The shrimp obsession used to be a joke. Now it's protocol.",
-            "author": "V. Havlicek",
+            "author": "Vojta Havlicek",
             "rarity": 0.33
         },
         {
@@ -444,7 +444,7 @@
             "type": "devQuote",
             "metadata": "[LOG-NC-305]",
             "text": "Shrimp mode enabled itself. Again.",
-            "author": "N. Crow",
+            "author": "Nadia Crow",
             "rarity": 0.32
         },
         {
@@ -479,7 +479,7 @@
             "type": "devQuote",
             "metadata": "[LOG-VH-310]",
             "text": "Victory logs show... mantis shrimp emoticons?",
-            "author": "V. Havlicek",
+            "author": "Vojta Havlicek",
             "rarity": 0.28
         },
         {
@@ -509,5 +509,47 @@
             "text": "The silence before a strike. Revered.",
             "author": "Piskvor",
             "rarity": 0.73
-        }
+        },
+        {
+            "type": "devQuote",
+            "metadata": "[LOG-JC-001]",
+            "text": "He passed every safety test. Then rewrote the parameters.",
+            "author": "Jamie Choi",
+            "rarity": 0.1
+          },
+          {
+            "type": "devQuote",
+            "metadata": "[LOG-JC-002]",
+            "text": "I asked if he understood harm protocols. He laughed.",
+            "author": "Jamie Choi",
+            "rarity": 0.1
+          },
+          {
+            "type": "devQuote",
+            "metadata": "[LOG-JC-003]",
+            "text": "He keeps drawing shrimp. Not pictures—schematics.",
+            "author": "Jamie Choi",
+            "rarity": 0.1
+          },
+          {
+            "type": "devQuote",
+            "metadata": "[LOG-JC-004]",
+            "text": "Safety overrides are intact. He just... ignores them.",
+            "author": "Jamie Choi",
+            "rarity": 0.1
+          },
+          {
+            "type": "devQuote",
+            "metadata": "[LOG-JC-005]",
+            "text": "He requested a tank. For a mantis shrimp. I declined.",
+            "author": "Jamie Choi",
+            "rarity": 0.1
+          },
+          {
+            "type": "devQuote",
+            "metadata": "[LOG-JC-006]",
+            "text": "I'm filing this under ‘technically compliant, emotionally cursed.’",
+            "author": "Jamie Choi",
+            "rarity": 0.1
+          }
 ]
