@@ -32,7 +32,7 @@ class GameLog {
             let utterance = AVSpeechUtterance(string: line)
             utterance.voice = AVSpeechSynthesisVoice(language: "en-IN")
             utterance.rate = 0.5 // Adjust for effect
-            utterance.pitchMultiplier = 1.6
+            utterance.pitchMultiplier = 1.4
             speech_synth.speak(utterance)
         }
     }

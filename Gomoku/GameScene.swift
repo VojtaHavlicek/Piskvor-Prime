@@ -305,14 +305,32 @@ class GameScene: SKScene {
                         
                         isUserInteractionEnabled = false
                         
+                        // For consistency
+                        let snapshotBoard = board_state
+                        let snapshotState = current_state
+                        
                         DispatchQueue.global(qos: .userInitiated).async { [self] in
-                            guard !isGameOver(current_state) else { return } // TODO: is this correct?
-                            guard let move = findBestMove(state: board_state, player: .O) else { return }
+                            // Early check — game already ended
+                            guard case .ai_thinking = snapshotState else {
+                                print("🛑 AI skipped: not in ai_thinking state")
+                                return
+                            }
+                            
+                        
+                            guard let move = findBestMove(state: snapshotBoard, player: .O) else {
+                                print("⚠️ AI failed to find a move")
+                                return }
                             
                             
                             DispatchQueue.main.async {
-                                [self] in
+                                [weak self] in
+                                guard let self = self else { return }
                                 
+                                // Re-check current state before applying move
+                               guard case .ai_thinking = self.current_state else {
+                                   print("🛑 Skipping stale AI callback. Current state: \(self.current_state)")
+                                   return
+                               }
                                 
                                 // Pack this into a function
                                 let stone = Stone(size: tile.size, atlas: "red")
