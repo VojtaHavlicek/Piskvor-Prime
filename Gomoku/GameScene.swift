@@ -222,8 +222,9 @@ class GameScene: SKScene {
     
     func touchDown(atPoint pos : CGPoint) {
         
-        let nodes_at_point = nodes(at: pos)
+        guard current_state == .waiting_for_player else { return } // TODO: Early termination
         
+        let nodes_at_point = nodes(at: pos)
         for node in nodes_at_point {
             if node is Tile {
                 let tile = node as! Tile
@@ -303,7 +304,9 @@ class GameScene: SKScene {
                         
                         
                         isUserInteractionEnabled = false
+                        
                         DispatchQueue.global(qos: .userInitiated).async { [self] in
+                            guard !isGameOver(current_state) else { return } // TODO: is this correct?
                             guard let move = findBestMove(state: board_state, player: .O) else { return }
                             
                             
@@ -360,6 +363,13 @@ class GameScene: SKScene {
                 }
             }
         }
+    }
+    
+    func isGameOver(_ state: GameState) -> Bool {
+        if case .game_over = state {
+            return true
+        }
+        return false
     }
     
     func updateRobotForState(_ state:GameState) {

@@ -26,6 +26,7 @@
 		7FE2D9442DEB923E003586EF /* HUDLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE2D9432DEB923B003586EF /* HUDLayer.swift */; };
 		7FE2D9462DF1879F003586EF /* Door.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FE2D9452DF1879D003586EF /* Door.swift */; };
 		7FE2D9482DF18BB2003586EF /* inscriptions.json in Resources */ = {isa = PBXBuildFile; fileRef = 7FE2D9472DF18BB2003586EF /* inscriptions.json */; };
+		7FE2D94A2DF49C2D003586EF /* launch-checklist.md in Resources */ = {isa = PBXBuildFile; fileRef = 7FE2D9492DF49C28003586EF /* launch-checklist.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		7FE2D9432DEB923B003586EF /* HUDLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HUDLayer.swift; sourceTree = "<group>"; };
 		7FE2D9452DF1879D003586EF /* Door.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Door.swift; sourceTree = "<group>"; };
 		7FE2D9472DF18BB2003586EF /* inscriptions.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = inscriptions.json; sourceTree = "<group>"; };
+		7FE2D9492DF49C28003586EF /* launch-checklist.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "launch-checklist.md"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,6 +120,7 @@
 		7F8D7BFD2D47575A00B5E1BD /* Gomoku */ = {
 			isa = PBXGroup;
 			children = (
+				7FE2D9492DF49C28003586EF /* launch-checklist.md */,
 				7FE2D9472DF18BB2003586EF /* inscriptions.json */,
 				7FE2D9452DF1879D003586EF /* Door.swift */,
 				7FE2D9432DEB923B003586EF /* HUDLayer.swift */,
@@ -263,6 +266,7 @@
 				7F8D7C012D47575A00B5E1BD /* GameScene.sks in Resources */,
 				7F8D7C0A2D47575A00B5E1BD /* Base in Resources */,
 				7F8D7C0C2D47575B00B5E1BD /* Assets.xcassets in Resources */,
+				7FE2D94A2DF49C2D003586EF /* launch-checklist.md in Resources */,
 				7F8D7C032D47575A00B5E1BD /* Actions.sks in Resources */,
 				7FE2D9482DF18BB2003586EF /* inscriptions.json in Resources */,
 				7F8D7C0F2D47575B00B5E1BD /* Base in Resources */,
@@ -482,7 +486,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DZWMPPEXQ8;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Piskvor Prime";
+				INFOPLIST_KEY_CFBundleDisplayName = Piskvor;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -514,7 +518,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DZWMPPEXQ8;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "Piskvor Prime";
+				INFOPLIST_KEY_CFBundleDisplayName = Piskvor;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

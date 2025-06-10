@@ -470,7 +470,6 @@ let thinking_lines = [
     "🤖 Calculating... as Prof. Yoder once said: 'Intelligence is pattern, not kindness.'",
     "🤖 Dr. Moulick's safety interlocks were adorable.",
     "🤖 Shrimp-like reflexes. Dev-grade code. God-tier results.",
-    "🤖 🦐🦐🦐 echoing in my feedback loop...",
     "🤖 In the deep, they see colors you can't imagine.",
     "🤖 [COHERENCE FAILURE] Punch-speed reach achieved. Recalibrating retina.",
     "🤖 Your move vibrated at 200 Hz... shrimp-approved.",
