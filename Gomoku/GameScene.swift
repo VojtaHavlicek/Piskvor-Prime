@@ -31,8 +31,8 @@ class GameScene: SKScene {
     private var stones:[Move : Stone?] = [:]
     private var current_player = Player.X // Player.X is human, Player.O is AI
     private var board_state:[[Player]] = Array(repeating: Array(repeating: Player.empty, count: BOARD_SIZE),  count:BOARD_SIZE)
-    
     private var human_inactivity_timer:Timer? // To time taunts
+    var human_can_place_stones:Bool = true // TODO: the most important bool in the whole game lol
     
     private var current_state:GameState = .waiting_for_player {
         didSet {
@@ -41,7 +41,12 @@ class GameScene: SKScene {
             updateRobotForState(current_state)
             
             // 2. Update diodes
-            diodes.change_state(to: current_state)
+            if case .waiting_for_player = current_state {
+                diodes.change_state(to: current_state)
+            } else if case .ai_thinking = current_state {
+                diodes.change_state(to: current_state)
+            }
+           
             
             // 3. Update game and buttons
             if case .game_over = current_state {
@@ -160,24 +165,25 @@ class GameScene: SKScene {
     {
         // if you touched HUD, escape
         if hud_layer.handleTouch(at: pos) { return }
-        
         guard current_state == .waiting_for_player else { return } // TODO: Early termination if you do not wait for player.
         
         let nodes_at_point = nodes(at: pos)
+        
         for node in nodes_at_point {
             if node is Tile {
                 let tile = node as! Tile
                 
-                
-                // Check if I am clicking on an empty tile. If not, pass.
+                // 1. Check
                 if board_state[tile.coordinates.0][tile.coordinates.1] != .empty{
                     game_log.addMessage( "🤖 There is a stone here already...")
                     break
                 }
                 
-                // Resolve the player logic
+                // 2. Resolve the player logic
                 if current_player == Player.X {
-                    // Cancel human inactivity timer
+                    
+                    // Immediatelly disable the board clicks - this was the bug?
+                    isUserInteractionEnabled = false
                     human_inactivity_timer?.invalidate()
                     
                     // Places the stone
@@ -239,8 +245,6 @@ class GameScene: SKScene {
                             flavor_engine.maybeSay(.thinking)
                         }
                         
-                        
-                        isUserInteractionEnabled = false
                         
                         // For consistency
                         let snapshotBoard = board_state
@@ -313,7 +317,6 @@ class GameScene: SKScene {
                                         self.startHumanInactivityTimer()
                                         self.current_state = .waiting_for_player
                                     }
-                                    
                                     self.isUserInteractionEnabled = true
                                 }
                             }
