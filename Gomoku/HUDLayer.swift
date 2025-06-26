@@ -139,7 +139,7 @@ class GameButton:SKSpriteNode {
     init(text:String) {
         self.label = SKLabelNode(fontNamed: "Menlo-Bold")
         self.label.text = text
-        self.label.fontSize = 24
+        self.label.fontSize = 28
         self.label.fontColor = .white
         self.label.verticalAlignmentMode = .center
         super.init(texture:nil, color: .clear, size: CGSize(width:160, height:48))
@@ -173,6 +173,7 @@ class HUDLayer:SKNode {
     let new_game_button = GameButton(text: "NEW GAME")
     let rematch_button = GameButton(text: "REMATCH")
     let concede_button = GameButton(text: "CONCEDE")
+    let how_to_play_button = GameButton(text: "HOW TO PLAY")
     
     override init() {
         super.init()
