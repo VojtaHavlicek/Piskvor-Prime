@@ -315,17 +315,22 @@ class GameScene: SKScene {
                                     self.stopHumanInactivityTaunts()
                                     self.current_state = .game_over(winner: .O)
                                     self.game_log.addMessage("🤖 Wins!", style: .gray)
-                                } else if checkDraw(state: self.board_state) {
+                                    return
+                                }
+                                
+                                if checkDraw(state: self.board_state) {
                                     self.flavor_engine.maybeSay(.stalemate, probability: 1.0)
                                     self.stopHumanInactivityTaunts()
                                     self.current_state = .game_over(winner: .none)
                                     self.game_log.addMessage("🦐 Stalemate", style: .gray)
-                                } else {
-                                    self.current_player = .X
-                                    self.startHumanInactivityTimer()
-                                    self.current_state = .waiting_for_player
-                                    self.human_can_place_stones = true // Enable this only if there is no win or draw.
+                                    return
                                 }
+                                
+                                self.current_player = .X
+                                self.startHumanInactivityTimer()
+                                self.current_state = .waiting_for_player
+                                self.human_can_place_stones = true // Enable this only if there is no win or draw.
+                                
                             }
                         }
                         }
