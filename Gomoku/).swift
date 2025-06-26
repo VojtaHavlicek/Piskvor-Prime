@@ -91,18 +91,19 @@ class GameScene: SKScene {
     {
         // ---- BOARD BUILDING ----
         let dark_atlas = SKTextureAtlas(named: "dark")
-        let dark_textures = dark_atlas.textureNames.sorted().map {dark_atlas.textureNamed($0)}
+        let dark_textures = dark_atlas.textureNames.sorted().map {dark_atlas.textureNamed($0}
         
         let light_atlas = SKTextureAtlas(named: "light")
         let light_textures = light_atlas.textureNames.sorted().map {light_atlas.textureNamed($0)}
         
-        print("[Textures]: loaded light and dark tiles. Counts: \(light_textures.count), \(dark_textures.count)")
+        print("[Textures]: loaded light and dark tiles. ")
         
         for row in 0..<BOARD_SIZE {
             for col in 0..<BOARD_SIZE {
                 
-                let textures = (col + row) % 2 == 0 ? light_textures : dark_textures
+                let atlas = (col + row) % 2 == 0 ? light_atlas : dark_atlas
                 let random_texture:SKTexture
+                let textures = atlas.textureNames.sorted().map {atlas.textureNamed($0)}
                 
                 if Float.random(in: 0..<1) > 0.95 {
                     random_texture = textures[1...].randomElement()!
