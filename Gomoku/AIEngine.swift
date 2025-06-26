@@ -5,16 +5,14 @@
 //  Created by Vojta Havlicek on 2/2/25.
 //
 
-// TODO: switch this to MCTS, but use the same heuristics?
-// TODO: run AI in background?
-// Works well
+// Works OK
 
 import Foundation
 
 let BOARD_SIZE = 10
 let L = 5
 let WIN_UTIL = 100000
-let MAX_DEPTH = 1 // It's super shallow, but it plays well anyway?
+let MAX_DEPTH = 1 // It's super shallow, but it plays OK anyway?
 
 enum Player: String {
     case X = "X"

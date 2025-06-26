@@ -15,8 +15,8 @@ enum GameState:Hashable {
 
 // TODO: [BUGS]
 //
-// 1. only rebuild board after concession
-// 2. get rid of multiple touchdown
+// 1. only rebuild board after concession - done
+// 2. get rid of multiple touchdown - done
 //
 
 class GameScene: SKScene {
