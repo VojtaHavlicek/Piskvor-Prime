@@ -17,23 +17,27 @@ class GameScene: SKScene {
     private var game_log:GameLog!
     private var flavor_engine:FlavorEngine!
     private var hud_layer:HUDLayer!
-    private var status_label:Diodes!
+    private var diodes:Diodes!
     private var door:Door?
+    private let robot = RobotController()
     
     private var board:SKTileMapNode?
     private var stones:[Move : Stone?] = [:]
-   //   private var animation_state_machine:AnimationStateMachine?
-    private var current_player = Player.X
+    private var current_player = Player.X // Player.X is human, Player.O is AI
     private var board_state:[[Player]] = Array(repeating: Array(repeating: Player.empty, count: BOARD_SIZE),  count:BOARD_SIZE)
     
-    let robot = RobotController()
-    private var human_inactivity_timer:Timer?
+    private var human_inactivity_timer:Timer? // To time taunts
     
     private var current_state:GameState = .waiting_for_player {
         didSet {
+            // On state change:
+            // 1. Update robot state
             updateRobotForState(current_state)
-            status_label.change_state(to: current_state)
             
+            // 2. Update diodes
+            diodes.change_state(to: current_state)
+            
+            // 3. Update game and buttons
             if case .game_over = current_state {
                 hud_layer.concede_button.disabled = true
                 let fade_out = SKAction.fadeAlpha(to: 0.0, duration: 0.3)
@@ -67,19 +71,15 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView)
     {
+        let dark_atlas = SKTextureAtlas(named: "dark")
+        let light_atlas = SKTextureAtlas(named: "light")
+        
         // ---- BOARD ----
-        // Add tiles. TODO: do this on the tilemap directly.
         for row in 0..<BOARD_SIZE {
             for col in 0..<BOARD_SIZE {
                 
-                var texture_atlas_name = "light"
-                
-                // TODO: correct this
-                if (col + row) % 2 == 0 {
-                   texture_atlas_name = "dark"
-                }
-                
-                let atlas = SKTextureAtlas(named: texture_atlas_name)
+                var atlas = (col + row) % 2 == 0 ? light_atlas : dark_atlas
+            
                 let random_texture:SKTexture
                 let textures = atlas.textureNames.sorted().map {atlas.textureNamed($0)}
                 
@@ -140,10 +140,10 @@ class GameScene: SKScene {
         hud_layer.delegate = self
         
         // --- STATUS LABEL --
-        status_label = Diodes()
-        status_label.position = CGPoint(x: 307, y: -360)
-        addChild(status_label)
-        status_label.zPosition = 10
+        diodes = Diodes()
+        diodes.position = CGPoint(x: 307, y: -360)
+        addChild(diodes)
+        diodes.zPosition = 10
         
         // --- DOOR ---
         let door_top = childNode(withName: "door_top") as! SKSpriteNode
@@ -437,7 +437,7 @@ extension GameScene: HUDDelegate {
     }
 
     func restartGame() {
-        status_label.reset()
+        diodes.reset()
         
         stopHumanInactivityTaunts()
         isUserInteractionEnabled = false
