@@ -9,81 +9,15 @@ import SpriteKit
 import GameplayKit
 import AVFoundation
 
-
-
-class Stone:SKSpriteNode {
-    // Places the stone
-    
-    var flash_textures:[SKTexture]
-    var flash_animation:SKAction?
-    
-    var highlight_textures:[SKTexture]
-    var highlight_animation:SKAction?
-    
-    init(size:CGSize, atlas:String) {
-        let atlas = SKTextureAtlas(named: atlas)
-        let textures = atlas.textureNames.sorted().map {atlas.textureNamed($0)}
-        
-        // Flash textures
-        flash_textures = atlas.textureNames.filter {$0.contains("flash")}.sorted().map {atlas.textureNamed($0)}
-        
-        if Bool.random() {
-            flash_textures.reverse()
-        }
-        
-        if !flash_textures.isEmpty {
-            let sequence = SKAction.sequence([SKAction.wait(forDuration: TimeInterval(Float.random(in: 4...8))), SKAction.animate(with: flash_textures, timePerFrame: 0.03)])
-            flash_animation = SKAction.repeatForever(sequence)
-        }
-        
-        // Highlight textutes
-        highlight_textures = atlas.textureNames.filter {$0.contains("highlight")}.sorted().map {atlas.textureNamed($0)} // For some reason, the textures were reversed.
-        
-        if !highlight_textures.isEmpty {
-            let sequence = SKAction.animate(with: highlight_textures.reversed(), timePerFrame: 0.01)
-            let rev_sequence = SKAction.animate(with: highlight_textures, timePerFrame: 0.03)
-            highlight_animation = SKAction.repeatForever(SKAction.sequence([sequence, SKAction.wait(forDuration: 0.1), rev_sequence, SKAction.wait(forDuration: 0.5)]))
-        }
-        
-        super.init(texture: textures[0], color: .clear, size: size)
-        zPosition = 10
-        
-        if flash_animation != nil {
-            run(flash_animation!)
-        }
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-
-class Tile:SKSpriteNode {
-    public var coordinates:(Int, Int)
-    
-    
-    init(texture:SKTexture? = nil, color:UIColor, size:CGSize, coordinates: (Int, Int)) {
-        self.coordinates = coordinates
-        super.init(texture: texture, color: color, size: size)
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
 enum GameState:Hashable {
     case waiting_for_player, ai_thinking, ai_playing, game_over(winner: Player?) // nil = draw
 }
 
 class GameScene: SKScene {
-    
-    
     private var game_log:GameLog!
     private var flavor_engine:FlavorEngine!
     private var hud_layer:HUDLayer!
-    private var status_label:StatusLabel!
+    private var status_label:Diodes!
     private var door:Door?
     
     private var board:SKTileMapNode?
@@ -206,7 +140,7 @@ class GameScene: SKScene {
         hud_layer.delegate = self
         
         // --- STATUS LABEL --
-        status_label = StatusLabel()
+        status_label = Diodes()
         status_label.position = CGPoint(x: 307, y: -360)
         addChild(status_label)
         status_label.zPosition = 10
@@ -242,7 +176,7 @@ class GameScene: SKScene {
                     human_inactivity_timer?.invalidate()
                     
                     // Places the stone
-                    var stone = Stone(size: tile.size, atlas: "blue")
+                    let stone = Stone(size: tile.size, atlas: "blue")
                     stone.position = tile.position
                     stone.zPosition = 10
                     addChild(stone)
@@ -250,7 +184,7 @@ class GameScene: SKScene {
                    
                     
                     
-                    var move = Move(row: tile.coordinates.0, col: tile.coordinates.1)
+                    let move = Move(row: tile.coordinates.0, col: tile.coordinates.1)
                     board_state = applyMove(state: board_state, move: move, player: .X)
                     stones[move] = stone // Add stone
                     
@@ -259,7 +193,7 @@ class GameScene: SKScene {
                     stone.setScale(1.5)
                     stone.run(SKAction.scale(to: 1.0, duration: 0.1)) { [self] in
                         // Check for win condition
-                        if let (winner, streak) = checkWinCondition(state: board_state) {
+                        if let (_, streak) = checkWinCondition(state: board_state) {
                             for (row, col) in streak {
                                 if let stone = stones[Move(row:row, col:col)] {
                                     stone!.removeAllActions()
@@ -309,7 +243,11 @@ class GameScene: SKScene {
                         let snapshotBoard = board_state
                         let snapshotState = current_state
                         
-                        DispatchQueue.global(qos: .userInitiated).async { [self] in
+                        let aiQueue = DispatchQueue(label: "com.piskvor.ai", qos: .userInitiated)
+                        
+                        aiQueue.async { [weak self] in
+                            guard let self = self else { return }
+                            
                             // Early check — game already ended
                             guard case .ai_thinking = snapshotState else {
                                 print("🛑 AI skipped: not in ai_thinking state")
@@ -347,33 +285,33 @@ class GameScene: SKScene {
                                 game_log.addMessage("🤖 Plays (\(move.row), \(move.col))", style: .gray)
                                 
                                 stone.setScale(1.5)
-                                stone.run(SKAction.scale(to: 1.0, duration: 0.1)) { [self] in
+                                stone.run(SKAction.scale(to: 1.0, duration: 0.1)) {
                                     // Check for win condition
-                                    if let (_, streak) = checkWinCondition(state: board_state) {
+                                    if let (_, streak) = checkWinCondition(state: self.board_state) {
                                         // highlight the streak here
                                         
                                         for (row, col) in streak {
-                                            if let stone = stones[Move(row:row, col:col)] {
+                                            if let stone = self.stones[Move(row:row, col:col)] {
                                                 stone!.removeAllActions()
                                                 stone!.run(stone!.highlight_animation!)
                                             }
                                         }
-                                        flavor_engine.maybeSay(.ai_wins, probability: 1.0)
-                                        stopHumanInactivityTaunts()
-                                        current_state = .game_over(winner: .O)
-                                        game_log.addMessage("🤖 Wins!", style: .gray)
-                                    } else if checkDraw(state: board_state) {
-                                        flavor_engine.maybeSay(.stalemate, probability: 1.0)
-                                        stopHumanInactivityTaunts()
-                                        current_state = .game_over(winner: .none)
-                                        game_log.addMessage("🦐 Stalemate", style: .gray)
+                                        self.flavor_engine.maybeSay(.ai_wins, probability: 1.0)
+                                        self.stopHumanInactivityTaunts()
+                                        self.current_state = .game_over(winner: .O)
+                                        self.game_log.addMessage("🤖 Wins!", style: .gray)
+                                    } else if checkDraw(state: self.board_state) {
+                                        self.flavor_engine.maybeSay(.stalemate, probability: 1.0)
+                                        self.stopHumanInactivityTaunts()
+                                        self.current_state = .game_over(winner: .none)
+                                        self.game_log.addMessage("🦐 Stalemate", style: .gray)
                                     } else {
-                                        current_player = .X
-                                        startHumanInactivityTimer()
-                                        current_state = .waiting_for_player
+                                        self.current_player = .X
+                                        self.startHumanInactivityTimer()
+                                        self.current_state = .waiting_for_player
                                     }
                                     
-                                    isUserInteractionEnabled = true
+                                    self.isUserInteractionEnabled = true
                                 }
                             }
                         }
@@ -506,6 +444,9 @@ extension GameScene: HUDDelegate {
         self.hud_layer.reset()
         
         door?.close { [self] in
+            
+            // TODO: is this where the racing is?
+            // If AI glitches, then it may make move after stones and board_state were emptied!
             stones.values.forEach { $0?.removeFromParent() }
             stones.removeAll()
             
@@ -513,7 +454,7 @@ extension GameScene: HUDDelegate {
             
             board_state = Array(repeating: Array(repeating: Player.empty, count: BOARD_SIZE),  count:BOARD_SIZE)
             
-            let wait_action = SKAction.sequence([SKAction.repeat(SKAction.sequence([SKAction.wait(forDuration: 0.5), SKAction.run {game_log.addEmptyLine()} ]), count: 5), SKAction.wait(forDuration: 0.5)])
+            let wait_action = SKAction.sequence([SKAction.repeat(SKAction.sequence([SKAction.wait(forDuration: 0.5), SKAction.run {self.game_log.addEmptyLine()} ]), count: 5), SKAction.wait(forDuration: 0.5)])
             
             self.run(wait_action) { [self] in
                 // Show [NEW GAME BUTTON on the door]

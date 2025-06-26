@@ -63,7 +63,6 @@ func getMoves(state: [[Player]], player:Player, topK: Int = 5) -> [Move] {
                         guard newRow >= 0, newRow < BOARD_SIZE, newCol >= 0, newCol < BOARD_SIZE else { continue }
                                 
                         if state[newRow][newCol] == .empty {
-                            let move = Move(row: newRow, col: newCol)
                             moves.insert(Move(row: newRow, col: newCol))
                         }
                     }

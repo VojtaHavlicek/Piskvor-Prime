@@ -156,11 +156,11 @@ class RobotController:SKNode {
         
         let mouth_up = SKAction.moveBy(x: 0, y: bob_unit, duration: basic_interval)
         let mouth_down = SKAction.moveBy(x:0, y:-bob_unit, duration: basic_interval)
-        let mouth_wair = SKAction.wait(forDuration: basic_interval)
+        //let mouth_wair = SKAction.wait(forDuration: basic_interval)
         
         let head_up = SKAction.moveBy(x: 0, y: bob_unit, duration: basic_interval)
         let head_down = SKAction.moveBy(x:0, y:-bob_unit, duration: basic_interval)
-        let head_wait = SKAction.wait(forDuration: basic_interval)
+        //let head_wait = SKAction.wait(forDuration: basic_interval)
         
         let eyes_up = SKAction.moveBy(x: 0, y: bob_unit/2, duration: basic_interval)
         let eyes_down = SKAction.moveBy(x: 0, y: -bob_unit/2, duration: basic_interval)
@@ -192,7 +192,7 @@ class RobotController:SKNode {
     func look_at_point(_ point: CGPoint) {
         let dx = point.x - position.x
         let dy = point.y - position.y
-        let angle = atan2(dy, dx)
+        //let angle = atan2(dy, dx)
         
         // TODO: rotate the eyes towards the point?
         

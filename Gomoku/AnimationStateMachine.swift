@@ -23,7 +23,7 @@ class AnimationStateMachine {
     var head:SKSpriteNode?
     
     init(scene:SKScene) {
-        head = scene.childNode(withName: "head") as! SKSpriteNode
+        head = (scene.childNode(withName: "head") as! SKSpriteNode)
         on_enter = [.Idle: enters_idle, .Joking: enters_joking, .Winning: enters_winning]
         
         change_state(state: .Idle)

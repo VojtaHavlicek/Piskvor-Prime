@@ -33,7 +33,11 @@ class GameLog {
             utterance.voice = AVSpeechSynthesisVoice(language: "en-IN")
             utterance.rate = 0.5 // Adjust for effect
             utterance.pitchMultiplier = 1.4
-            speech_synth.speak(utterance)
+            
+            let utteranceQueue = DispatchQueue(label: "com.piskvor.utteranceQueue", qos: .default)
+            utteranceQueue.async {
+                self.speech_synth.speak(utterance)
+            }
         }
     }
     
@@ -93,13 +97,13 @@ class GameLog {
     }
     
     func addMessage(_ message: String, style:SKColor = .white, max_chars_per_line:Int = 47) {
-        var clean_message:String
+        /*var clean_message:String
         
         if message.hasPrefix("🤖 ") {
             clean_message = String(message.split(separator: " ").dropFirst().joined(separator: " "))
         }else {
             clean_message = message
-        }
+        }*/
         
         let wrapped_lines = wrapText(message,
                                      max_line_length: max_chars_per_line)

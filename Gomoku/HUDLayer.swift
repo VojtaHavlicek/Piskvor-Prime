@@ -78,7 +78,7 @@ class Diode:SKSpriteNode {
     }
 }
 
-class StatusLabel:SKNode {
+class Diodes:SKNode {
     let blue:Diode
     let red:Diode
     
@@ -226,10 +226,10 @@ class HUDLayer:SKNode {
     func handleTouch(at point: CGPoint) {
             for button in [new_game_button, rematch_button, concede_button, mute_button] {
                 if button.contains(convert(point, from: parent!)) {
-                    print("\(button.name) clicked and disabled? : \(button.disabled)")
+                    print("\(String(describing: button.name)) clicked and disabled? : \(button.disabled)")
                     if !button.disabled {
                         button.highlight()
-                        print("handling touch at \(button.name)")
+                        print("handling touch at \(String(describing: button.name))")
                         switch button.name {
                         case "newGame": delegate?.didTapNewGame()
                         case "rematch": delegate?.didTapRematch()
