@@ -223,7 +223,7 @@ class HUDLayer:SKNode {
         
     }
     
-    func handleTouch(at point: CGPoint) {
+    func handleTouch(at point: CGPoint) -> Bool {
             for button in [new_game_button, rematch_button, concede_button, mute_button] {
                 if button.contains(convert(point, from: parent!)) {
                     print("\(String(describing: button.name)) clicked and disabled? : \(button.disabled)")
@@ -235,11 +235,14 @@ class HUDLayer:SKNode {
                         case "rematch": delegate?.didTapRematch()
                         case "concede": delegate?.didTapConcede()
                         case "mute": delegate?.didTapMute()
-                        default: break
+                        default: return true
                         }
+                        return true
                     }
                 }
             }
+        return false
+        
         }
 }
 

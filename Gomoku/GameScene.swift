@@ -13,6 +13,12 @@ enum GameState:Hashable {
     case waiting_for_player, ai_thinking, ai_playing, game_over(winner: Player?) // nil = draw
 }
 
+// TODO: [BUGS]
+//
+// 1. only rebuild board after concession
+// 2. get rid of multiple touchdown
+//
+
 class GameScene: SKScene {
     private var game_log:GameLog!
     private var flavor_engine:FlavorEngine!
@@ -71,15 +77,13 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView)
     {
+        // ---- BOARD BUILDING ----
         let dark_atlas = SKTextureAtlas(named: "dark")
         let light_atlas = SKTextureAtlas(named: "light")
-        
-        // ---- BOARD ----
         for row in 0..<BOARD_SIZE {
             for col in 0..<BOARD_SIZE {
                 
-                var atlas = (col + row) % 2 == 0 ? light_atlas : dark_atlas
-            
+                let atlas = (col + row) % 2 == 0 ? light_atlas : dark_atlas
                 let random_texture:SKTexture
                 let textures = atlas.textureNames.sorted().map {atlas.textureNamed($0)}
                 
@@ -94,8 +98,6 @@ class GameScene: SKScene {
                                      size: board!.tileSize,
                                      coordinates: (row, col))
                 tile.position = board!.centerOfTile(atColumn: col, row: row)
-                
-                // TODO: clean up
                 tile.position.x += board!.position.x
                 tile.position.y += board!.position.y
                 tile.zPosition = 0
@@ -104,7 +106,7 @@ class GameScene: SKScene {
         }
         
         // --- GAME LOG ---
-        game_log = GameLog(position: .zero)//GameLog(position: CGPoint(x: -338, y: -417))
+        game_log = GameLog(position: .zero)
         
         if let maskGuide = childNode(withName: "crop_node") as? SKSpriteNode {
             let crop_node = SKCropNode()
@@ -120,11 +122,11 @@ class GameScene: SKScene {
             
             crop_node.addChild(game_log.getNode())
             addChild(crop_node)
-            
         } else {
             addChild(game_log.getNode())
         }
         
+        // --- FLAVOR ENGINE ---
         flavor_engine = FlavorEngine(game_log: game_log, robot: robot)
         flavor_engine.maybeSay(.opening, probability: 1.0)
         
@@ -151,12 +153,15 @@ class GameScene: SKScene {
         let door_mask = childNode(withName: "door_mask") as! SKSpriteNode
         door = Door(top: door_top, bottom: door_bottom, mask: door_mask)
         door?.open()
-        
     }
     
-    func touchDown(atPoint pos : CGPoint) {
+    
+    func touchUp(atPoint pos : CGPoint)
+    {
+        // if you touched HUD, escape
+        if hud_layer.handleTouch(at: pos) { return }
         
-        guard current_state == .waiting_for_player else { return } // TODO: Early termination
+        guard current_state == .waiting_for_player else { return } // TODO: Early termination if you do not wait for player.
         
         let nodes_at_point = nodes(at: pos)
         for node in nodes_at_point {
@@ -182,8 +187,6 @@ class GameScene: SKScene {
                     addChild(stone)
                     
                    
-                    
-                    
                     let move = Move(row: tile.coordinates.0, col: tile.coordinates.1)
                     board_state = applyMove(state: board_state, move: move, player: .X)
                     stones[move] = stone // Add stone
@@ -364,30 +367,11 @@ class GameScene: SKScene {
     }
     
     
-    func touchMoved(toPoint pos : CGPoint) {
-        
-    }
-    
-    func touchUp(atPoint pos : CGPoint) {
-        
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
-    }
-    
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
-    }
-    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
+        
         let location = touch.location(in: self)
-        hud_layer.handleTouch(at: location)
-    }
-    
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+        self.touchUp(atPoint: location)
     }
     
     
