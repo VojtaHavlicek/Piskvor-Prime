@@ -263,7 +263,7 @@ func heuristic(state: [[Player]], player: Player) -> Int {
         ([.empty, .O, .O, .empty], -WIN_UTIL / 1000),
         ([.empty, .X, .empty], WIN_UTIL / 10000),
         ([.empty, .O, .empty], -WIN_UTIL / 10000)
-    ]
+    ] // TODO: learn utility function? 
 
     let directions = [(0, 1), (1, 0), (1, 1), (1, -1)]
     var cost = 0

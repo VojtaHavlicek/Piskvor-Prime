@@ -112,11 +112,8 @@ class Diodes:SKNode {
     
     func change_state(to state:GameState) {
         switch state {
-        case .ai_thinking:
+        case .ai_thinking, .ai_playing:
             red.set_state(state: true)
-            blue.set_state(state: false)
-        case .ai_playing:
-            red.set_state(state: false)
             blue.set_state(state: false)
         case .waiting_for_player:
             red.set_state(state: false)

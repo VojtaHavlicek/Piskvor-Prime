@@ -41,12 +41,7 @@ class GameScene: SKScene {
             updateRobotForState(current_state)
             
             // 2. Update diodes
-            if case .waiting_for_player = current_state {
-                diodes.change_state(to: current_state)
-            } else if case .ai_thinking = current_state {
-                diodes.change_state(to: current_state)
-            }
-            
+            diodes.change_state(to: current_state)
             
             // 3. Update game and buttons
             switch current_state {
@@ -244,10 +239,10 @@ class GameScene: SKScene {
                     // --------- AI -----------
                     // Switches the player
                     current_player = .O
-                    
+                    current_state = .ai_thinking
+                        
                     // Wait a little so it doesn't look like you think too fast
                     run(SKAction.wait(forDuration: 0.2))
-                    current_state = .ai_thinking
                 
                     if evaluateState(state: board_state, player: .O) < 0 {
                         flavor_engine.maybeSay(.taunt)
@@ -296,7 +291,7 @@ class GameScene: SKScene {
                             board_state = applyMove(state: board_state, move: move, player: .O)
                             stones[move] = stone // Add stone
                             
-                            current_state = .ai_playing
+                            //current_state = .ai_playing
                             game_log.addMessage("🤖 Plays (\(move.row), \(move.col))", style: .gray)
                             
                             stone.setScale(1.5)
@@ -330,7 +325,6 @@ class GameScene: SKScene {
                                 self.startHumanInactivityTimer()
                                 self.current_state = .waiting_for_player
                                 self.human_can_place_stones = true // Enable this only if there is no win or draw.
-                                
                             }
                         }
                         }
@@ -468,6 +462,7 @@ extension GameScene: HUDDelegate {
     func didTapConcede() {
         flavor_engine.maybeSay(.human_concedes, probability: 1.0)
         game_log.addMessage("🧠 Conceded", style: .gray)
+        self.current_state = .game_over(winner: .O)
         
         
         restartGame()
